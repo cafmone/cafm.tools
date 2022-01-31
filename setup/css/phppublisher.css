@@ -1,0 +1,530 @@
+html,body {
+	height: 100%;
+}
+body {
+	overflow-y: scroll;
+	padding-left: 0;
+	font: 1.0em "Verdana",Helvetica,Arial,sans-serif;
+}
+h2 {
+	font-size: 1.5em;
+	margin: 0 0 40px 0;
+}
+h3 {
+	font-size: 1.3em;
+	margin: 0 0 15px 0;
+}
+h4 {
+	font-size: 1.1em;
+	margin: 0 0 15px 0;
+}
+
+/* --------------------------------------------
+ Page
+-----------------------------------------------*/
+#Page {
+	position: relative;
+	min-height: 100%;
+}
+
+#Header {
+	margin: 0 0 15px 0;
+}
+#Logobar {
+	display: table;
+	position: relative;
+	overflow: hidden;
+	margin: 12px 0 10px 15px;
+	height: 78px;
+}
+#Logobar .row {
+	display: table-row;
+}
+#Logobar .cell {
+	display: table-cell;
+}
+#Logobar #Label.cell {
+	text-align: left;
+	padding: 0 0 0 60px;
+	font-size: 1.8em;
+	vertical-align: middle;
+	color: gray;
+	font-weight: 900;
+}
+#Topbar {
+	background: #0a5a83;
+	color: white;
+}
+#Topbar a{
+	color: white;
+	padding: 0 15px 0 0;
+	font-size: 1.3em;
+}
+#Topbar a:hover {
+	text-decoration: none;
+	color: #ccc;
+}
+#Canvas {
+	display: table;
+	width: 100%;
+	position: relative;
+	overflow: hidden;
+}
+#Canvas div.row{
+	display: table-row;
+}
+#Canvas .cell {
+	display: table-cell;
+}
+#Canvas #Content.cell {
+	display: table-cell;
+	padding: 15px;
+	width: 100%;
+	vertical-align: top;
+	position: relative;
+	min-height: 400px;
+}
+
+#Leftbar {
+	min-width: 400px;
+	max-width: 400px;
+	background: transparent;
+	transition: all 0.3s;
+	padding: 15px;
+}
+#Leftbar.active {
+	margin-left: -400px;
+}
+#Leftbar .icon {
+	margin: 0 15px 0 0;
+}
+#Leftbar .card {
+	margin-bottom: 20px;
+}
+#Leftbar .card-body {
+	padding: 0;
+}
+/* Footer */
+#Canvas {
+	padding-bottom: 55px;
+}
+#Footer {
+	position: absolute;
+	bottom: 0;
+	width: 100%;
+	display: table;
+	width: 100%;
+	overflow: hidden;
+	background: #0a5a83;
+	color: white;
+	margin: 0 0 0 0;
+	padding: 15px;
+}
+#Footer a {
+	color: white;
+	display: inline-block;
+	margin: 0 15px 0 0;
+}
+#Footer .row {
+	display: table-row;
+}
+#Footer .cell {
+	display: table-cell;
+	text-align: right;
+}
+
+/* --------------------------------------------
+ Bugfix
+-----------------------------------------------*/
+.form-control.checkbox,
+.form-control.radio {
+	width: auto;
+	min-height: auto;
+}
+th.row,
+td.row {
+	display: table-cell;
+	margin: 0;
+}
+
+/* --------------------------------------------
+ Buttons
+-----------------------------------------------*/
+.buttons {
+	float:none;
+	margin: 25px 0 0 0;
+	text-align: center;
+}
+.buttons .btn {
+	display: inline;
+	width: auto;
+}
+
+/* boostrap buttons */
+.btn-default {
+	color: #333;
+	background-color: #fff;
+	border-color: #ccc;
+}
+.btn-default:focus,
+.btn-default.focus {
+	color: #333;
+	background-color: #e6e6e6;
+	border-color: #8c8c8c;
+}
+.btn-default:hover {
+	color: #333;
+	background-color: #e6e6e6;
+	border-color: #adadad;
+}
+.btn-default:active,
+.btn-default.active,
+.open > .dropdown-toggle.btn-default {
+	color: #333;
+	background-color: #e6e6e6;
+	border-color: #adadad;
+}
+.btn-default:active:hover,
+.btn-default.active:hover,
+.open > .dropdown-toggle.btn-default:hover,
+.btn-default:active:focus,
+.btn-default.active:focus,
+.open > .dropdown-toggle.btn-default:focus,
+.btn-default:active.focus,
+.btn-default.active.focus,
+.open > .dropdown-toggle.btn-default.focus {
+	color: #333;
+	background-color: #d4d4d4;
+	border-color: #8c8c8c;
+}
+.btn-default:active,
+.btn-default.active,
+.open > .dropdown-toggle.btn-default {
+	background-image: none;
+}
+.btn-default.disabled:hover,
+.btn-default[disabled]:hover,
+fieldset[disabled] .btn-default:hover,
+.btn-default.disabled:focus,
+.btn-default[disabled]:focus,
+fieldset[disabled] .btn-default:focus,
+.btn-default.disabled.focus,
+.btn-default[disabled].focus,
+fieldset[disabled] .btn-default.focus {
+	background-color: #fff;
+	border-color: #ccc;
+}
+.btn-default .badge {
+	color: #fff;
+	background-color: #333;
+}
+
+.btn-xs,
+.btn-group-xs > .btn {
+	padding: 1px 5px;
+	font-size: 12px;
+	line-height: 1.5;
+	border-radius: 3px;
+}
+
+/* --------------------------------------------
+ Htmlobjects
+-----------------------------------------------*/
+.floatbreaker {
+	clear:both;
+	height:0px !important;
+	position:relative;
+	line-height:0px;
+	font-size:0px;
+	border:0px none;
+	margin:0;
+	padding:0;
+	overflow:hidden;
+	width:0px;
+}
+
+/* Box */
+.htmlobject_box{
+	margin-bottom: 5px;
+	height: auto;
+}
+.htmlobject_box .left{
+	padding: 0 15px 0 0;
+	float:left;
+	width: 35%;
+	text-align: right;
+}
+.htmlobject_box .left .control-label {
+	line-height: calc(1.5em + 0.75rem + 2px);
+	display: inline-block;
+	margin: 0;
+}
+.htmlobject_box .right{
+	float:left;
+}
+.htmlobject_box .right .form-control-static {
+	line-height: calc(1.5em + 0.75rem + 2px);
+	display: inline-block;
+	padding: 0 0.75rem; 
+}
+
+.htmlobject_box.autosize {
+	margin-left: 0;
+	margin-right: 0;
+}
+.htmlobject_box.autosize .left{
+	width: auto;
+}
+
+/* inverted box */
+.form-horizontal .htmlobject_box.inverted .control-label {
+	margin-bottom: 0;
+	text-align: left;
+}
+
+.htmlobject_box.nowrap {
+	white-space: nowrap;
+	overflow: visible;
+}
+.htmlobject_box.inverted .left{
+	margin-left: -1000px;
+	float: right;
+	width: 100%;
+	text-align: left;
+}
+.htmlobject_box.inverted .right{
+	float:left;
+}
+.htmlobject_box.inverted.checkbox .left{
+	margin-right: -25px;
+}
+.htmlobject_box.inverted.checkbox input[type="checkbox"] {
+	margin-left: 0px;
+}
+.htmlobject_box.inverted.checkbox .right{
+	width: 20px;
+}
+.htmlobject_box.inverted.text .left,
+.htmlobject_box.inverted.select .left{
+	margin-right: -190px;
+}
+.htmlobject_box.inverted.text .right,
+.htmlobject_box.inverted.select .right{
+	width: 175px;
+}
+
+/* Form Group Box */
+.htmlobject_box.formgroup .content {
+	width: 300px;
+	height: 300px;
+	overflow:auto;
+	border:1px solid #ddd;
+	padding-left:10px;
+}
+
+/* elements added to box */
+.htmlobject_box .right .checkbox.included {
+	margin-right:-22px;
+	margin-top:-38px;
+	float:right;
+}
+.htmlobject_box .right select.date.included {
+	padding-right: 2px;
+	padding-left: 2px;
+	margin-right:-44px;
+	margin-top:-34px;
+	width: 40px;
+	float:right;
+}
+
+/* Errors */
+.htmlobject_box span.error {
+	color: red;
+}
+input.htmlobject.error {
+	border: 1px solid red;
+}
+
+/* Tabs */
+.tab-content {
+	padding: 25px 15px 25px 15px;
+	border-left: 1px solid #ddd;
+	border-right: 1px solid #ddd;
+	border-bottom: 1px solid #ddd;
+}
+.tab-content.noborder {
+	padding: 0;
+	border-left: 0px none;
+	border-right: 0px none;
+	border-bottom: 0px none;
+}
+.tabs.right .nav-tabs > li,
+.htmlobject_tabs.right .nav-tabs > li {
+	float: right;
+}
+.tabs.right,
+.htmlobject_tabs.right {
+	border-bottom: 1px solid #ddd;
+}
+.tabs.right .nav-tabs,
+.htmlobject_tabs.right .nav-tabs {
+	display: block;
+	border-bottom: 0px none;
+}
+
+/* Table */
+.htmlobject_table .sort_box {
+	float: right;
+	margin: 0 0 15px 0;
+}
+.htmlobject_table .sort_box .refresh {
+	vertical-align:top;
+}
+.htmlobject_table .sort_box select{
+	width: auto;
+	display: inline;
+	padding: 5px;
+	max-width: 100px;
+	margin-right: 2px;
+}
+.htmlobject_table .sort_box .offset{
+	display: none;
+}
+.htmlobject_table .htmlobject_th a {
+	display: block;
+	text-decoration: none;	
+}
+.htmlobject_table .htmlobject_th a small {
+	display: block;
+	float: right;
+	padding-top: -10px;	
+}
+.htmlobject_table .htmlobject_td.head {
+	border-top: 1px solid transparent;
+	border-left: 1px solid transparent;
+	border-right: 1px solid transparent;
+	border-bottom: 1px solid transparent;
+}
+
+/* Table actions */
+.htmlobject_table .htmlobject_td.actions {
+	border: 1px solid transparent;
+}
+.htmlobject_table .actiontable {
+	padding: 5px 0 0 0;
+	text-align: right;
+}
+.htmlobject_table .actiontable .btn{
+	margin: 0 0 0 3px;
+}
+.htmlobject_table .selecttable {
+	margin: 0 15px 0 0;
+}
+.htmlobject_table .htmlobject_td.action {
+	width: 90px;
+	vertical-align: top;
+	text-align: center;
+}
+.htmlobject_table .htmlobject_td.action a {
+	display: block;
+	margin: 0 0 2px 0;
+}
+.htmlobject_table .htmlobject_td.identifier {
+	width: 20px;
+	vertical-align: top;
+}
+
+/* Table pageturn */
+.htmlobject_table .htmlobject_td.pageturn_head {
+	border-top: 1px solid transparent;
+	border-left: 1px solid transparent;
+	border-right: 1px solid transparent;
+	padding-bottom: 0;
+}
+.htmlobject_table .htmlobject_td.pageturn_bottom {
+	border: 1px solid transparent;
+}
+.htmlobject_table .pageturn_table {
+	margin-bottom: 15px;
+	margin-left:auto;
+	margin-right:auto;
+}
+.htmlobject_table .pageturn_table td {
+	white-space: nowrap;
+	border: 0px none;
+	margin: 0px;
+	padding: 0px;
+}
+.htmlobject_table .pageturn_table .pageturn_middle {
+	width: 180px;
+	text-align: center;
+	font-size: small;
+	padding-top: 6px;
+}
+.htmlobject_table .pageturn_box {
+	margin: 5px 0 0 0;
+}
+.htmlobject_table .pageturn_box a {
+	margin: 0 3px 0 0;
+}
+
+/* --------------------------------------------
+ Wait
+-----------------------------------------------*/
+.modal-header {
+	padding: 15px 15px 15px 20px;
+	background-color: rgba(0, 0, 0, 0.03);
+}
+.modal-header .close {
+	font-size: 1.2rem;
+}
+.modal-overlay {
+	position: fixed;
+	top:0; 
+	left:0;
+	bottom: 0;
+	right: 0;
+	width: 100%; 
+	height:100%;
+	background: #999;
+	opacity:0.3; 
+	z-index: 1002;
+}
+.modal-box {
+	position: fixed;
+	width: 300px;
+	height:150px;
+	padding: 10px 30px;
+	font-size:13px;
+	border: 8px solid #999;
+	background: #ffffff url('loading.gif') no-repeat center 65px;
+	text-align: center;
+	z-index: 1003;
+}
+.modal-box p {
+	color: #6d6d6d;
+	margin: 4px 0 0 0;
+	font-size: 14px;
+	font-weight: bold;
+	line-height: 20px;
+}
+
+/* --------------------------------------------
+ Custom
+-----------------------------------------------*/
+.nav-link {
+	display: block;
+	padding: 0.8rem 1rem
+}
+.nav-item.disabled a{
+	color: #ccc;
+	cursor: not-allowed;
+}
+.table {
+	font-size: 0.9em;
+}
+
+/* workaround bostrap 3 */
+.card .panel-body {
+	padding: 15px;
+}

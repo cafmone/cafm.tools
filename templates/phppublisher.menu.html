@@ -1,0 +1,45 @@
+<div id="plugins" style="position:relative;">
+	<input
+		class=""
+		type="button"
+		id="pluginsclosebutton"
+		value=""
+		onclick="pluginsmenu_toggle();this.blur();"
+		title="{toggle_menu}">
+	<div id="pluginsmenu" style="display:block;">
+	{content}
+	</div>
+</div>
+<script type="text/javascript">
+if(document.cookie) {
+	a = document.cookie;
+	while(a != '') {
+		key   = a.substr(0,a.search('='));
+		last  = a.search(';');
+		value = a.substring(a.search('=')+1,last);
+		if(last == -1){
+			value = a.substr(a.search('=')+1,a.length);
+		}
+		i = a.search(';')+1;
+		if(i == 0){ i = a.length; }
+		a = a.substring(i,a.length);
+		if(key == 'menu') {
+			document.getElementById('pluginsmenu').style.display = value;
+			pluginsmenu_toggle();
+			break;
+		}
+	}
+}
+function pluginsmenu_toggle() {
+	a = new Date();
+	a = new Date(a.getTime() +1000*60*60*24*365);
+	element = document.getElementById('pluginsmenu');
+	if(element.style.display == 'block') {
+		element.style.display = 'none';
+		document.cookie = 'menu=block;expires='+a.toGMTString()+';';
+	} else {
+		element.style.display = 'block';
+		document.cookie = 'menu=none;expires='+a.toGMTString()+';';
+	}
+}
+</script>

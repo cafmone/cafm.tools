@@ -1,0 +1,42 @@
+<div id="bestandsverwaltung">
+<!-- <h1>{label}</h1> //-->
+<form action="{thisfile}" method="GET" enctype="multipart/form-data">
+	{form}
+
+	<fieldset>
+		<legend>Info</legend>
+		{anlage}
+		{bezeichner}
+		{id}
+	</fieldset>
+
+	<fieldset>
+		<legend>Kopfdaten</legend>
+		{kopfdaten}
+	</fieldset>
+
+	<fieldset>
+		<legend>Komponenten</legend>
+		{komponenten}
+	</fieldset>
+
+	<fieldset>
+		<legend>Merkmale</legend>
+		{merkmale}
+	</fieldset>
+
+	<div style="text-align:center; margin: 5px 0 0 0;">{submit}&#160;{cancel}</div>
+</form>
+
+	<fieldset>
+		<legend>Dateien</legend>
+		<div style="float:left;">
+			{files}
+		</div>
+		<div style="float:right;">
+			{upload}
+		</div>
+	</fieldset>
+
+
+</div>

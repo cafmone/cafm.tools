@@ -1,0 +1,81 @@
+<div style="position: relative;">
+	<form action="{thisfile}" method="POST" enctype="multipart/form-data" id="insert_form" class="form-horizontal">
+		{form}
+
+		<div class="infobox" style="float:left;margin-bottom: 20px;">
+			<h3 class="bezeichner">{bezeichner}</h3>
+			{id}<br>
+			{date}
+		</div>
+		<div style="float:right;">
+			{anchor_down}
+		</div>
+		<div style="clear:both;" class="floatbreaker">&#160;</div>
+		{LOST}
+		{SYSTEM}
+		{CUSTOM}
+		{TODO}
+
+		<div>
+			<div style="float:right;margin: 5px 10px 0 35px">{anchor_up}</div>
+			<div class="buttons noprint" style="float:right;margin: 0 0 0 0">{submit}&#160;{cancel}</div>
+		</div>
+
+		{back}
+		{todos_export}
+	</form>
+</div>
+
+<script type="text/javascript">
+function toggle_arbeitskarte() {
+	var element = document.getElementById('todogroups');
+	var button = document.getElementById('todopanel').getElementsByTagName('button')[0];
+	var close = document.createElement("span");
+	close.id = 'todoclosebutton';
+	close.className = 'close';
+	close.innerHTML = '&times;';
+	close.style.marginLeft = '-30px';
+	close.style.marginTop = '-3px';
+	close.setAttribute('data-dismiss', 'modal');
+
+	if(element.style.display == 'none') {
+		element.style.display = 'block';
+		button.appendChild(close);
+	} else {
+		button.removeChild(document.getElementById('todoclosebutton'));
+		element.style.display = 'none';
+	}
+}
+</script>
+
+<script type="text/javascript">
+// open select when media print
+function toggle_select(mode) {
+	selects = document.getElementsByTagName('select');
+	for(i=1;i<selects.length;i++) {
+		if(mode == 'close') {
+			selects[i].size = 1;
+		}
+		else if (mode == 'open') {
+			selects[i].size = selects[i].options.length;
+		}
+	}
+}
+if(typeof window.onbeforeprint != "undefined") {
+	window.onbeforeprint = function () {
+		toggle_select('open');
+	}
+	window.onafterprint = function () {
+		toggle_select('close');
+	}
+} else {
+	if ('matchMedia' in window) {
+		window.matchMedia('print').addListener(function (media) {
+			toggle_select('open');
+			window.matchMedia('screen').addListener(function (media) {
+				toggle_select('close');
+			});
+		});
+	}
+}
+</script>

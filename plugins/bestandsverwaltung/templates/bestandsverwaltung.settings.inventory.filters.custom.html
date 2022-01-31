@@ -1,0 +1,39 @@
+<script>
+var attribs = {
+	element : '',
+	modalid : '',
+	popup : function(id) {
+		this.element = document.getElementById(id);
+		phppublisher.modal.width = '450px';
+		phppublisher.modal.label = 'Attribs';
+		str = '<div id="attribsBox" style="overflow:auto;max-height:395px;outline:0;" tabindex="2" onmouseover="this.focus();">'+document.getElementById('attribs').innerHTML+'</div>';
+		this.modalid = phppublisher.modal.init(str);
+		$('#'+this.modalid).modal({ backdrop: true, show: true, keyboard: true});
+		document.getElementById('attribsBox').focus();
+	},
+	print : function(str) {
+		this.element.value = str;
+		$('#'+this.modalid).modal('toggle');
+	}
+}
+</script>
+
+<div class="form">
+	<form action="{thisfile}" method="POST" class="form-horizontal">
+		{form}
+		<div style="text-align:center; margin-top: 25px;">
+			<div style="display:inline-block;margin-left:-40px;">
+				{filter}
+			</div>
+		</div>
+		<div class="buttons" style="clear:both;">{submit}</div>
+	</form>
+
+
+	<div id="attribs" style="display:none;">
+		
+		{attribs}
+		</div>
+	</div>
+
+</div>

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<AddressBook>
+  <Address>
+    	<FileAs>{bezeichner_lang}</FileAs>
+    		<Data>{id}{bezeichner_lang}
+{bezeichner_ergaenzung}
+{WE} {GEB}
+{RAUM}
+{EQUIPMENT_NR}
+</Data>
+  	</Address>
+</AddressBook>

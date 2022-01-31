@@ -1,0 +1,83 @@
+<script language="JavaScript" type="text/javascript">
+var filter = new Object();
+filter.add = function( ){
+	var b  = document.getElementById('filter_box');
+	if(b.childNodes.length < 6) {
+
+		var id = 'id'+Math.floor((1 + Math.random()) * 0x10000).toString(10).substring(1);
+		var d  = document.createElement("div");
+		var f  = document.getElementById('tpl_field').cloneNode(true);
+		var n  = document.getElementById('tpl_not').cloneNode(true);
+		var o  = document.getElementById('tpl_operator').cloneNode(true);
+		var v  = document.getElementById('tpl_value').cloneNode(true);
+
+		var a  = document.createElement("a");
+		a.innerHTML = '-';
+		a.className = 'btn btn-sm btn-default';
+		a.style.marginLeft = '5px';
+		a.href = '#';
+		a.onclick = function() { filter.remove(id); return false; };
+
+		f.name = 'filter['+id+'][field]';
+		n.name = 'filter['+id+'][not]';
+		o.name = 'filter['+id+'][operator]';
+		v.name = 'filter['+id+'][value]';
+
+		d.id = id;
+		//d.style.margin = '0 0 3px 0';
+
+		d.appendChild(f);
+		d.appendChild(n);
+		d.appendChild(o);
+		d.appendChild(v);
+		d.appendChild(a);
+
+		b.appendChild(d);
+	}
+	return false;
+};
+filter.remove = function(id){
+	var b = document.getElementById('filter_box');
+	var d = document.getElementById(id);
+	b.removeChild(d);
+	return false;
+};
+</script>
+
+
+<div id="query" style="position:relative;">
+<form action="{thisfile}" method="POST" class="form-horizontal">
+	<input type="submit" name="filter_submit" value="filter" style="display:none;">
+
+	<div id="descrition_box" class="col-xs-12">
+		{form}
+		{description}
+		<div class="floatbreaker">&#160;</div>
+		<div style="display:none;">
+			{tpl_field}
+			{tpl_not}
+			{tpl_operator}
+			{tpl_value}
+		</div>
+	</div>
+
+	<div id="flush_box" style="position:absolute;right:0px;">
+		{insert}
+		<a class="btn btn-sm btn-default" onclick="toggle_columns('columns_table'); return false;" href="#">Export</a>
+		{flush}
+	</div>
+
+	<div class="col-xs-12">
+		<div style="float:left;padding: 7px 0 0 0;margin:0 18px 10px 0;"><a onclick="filter.add();return false;" href="#" class="pill">Filter</a></div>
+		<div style="float:left;" id="filter_box">{filter}</div>
+		<div class="floatbreaker" style="clear:both;">&#160;</div>
+	</div>
+
+	<div class="floatbreaker" style="clear:both;">&#160;</div>
+
+	<div style="overflow:auto; margin-top: 15px;">
+		{table}
+	</div>
+
+	</form>
+</div>

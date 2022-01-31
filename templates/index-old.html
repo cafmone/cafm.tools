@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>{title}</title>
+<meta name=viewport content="width=device-width, initial-scale=1">
+<meta http-equiv="content-type" content="text/html;charset=utf-8">
+
+<link rel="stylesheet" type="text/css" href="{cssurl}bootstrap.css">
+<link rel="stylesheet" type="text/css" href="{cssurl}phppublisher.css">
+<link rel="stylesheet" type="text/css" href="{cssurl}icons.css">
+<link rel="stylesheet" type="text/css" href="{cssurl}print.css" media="print">
+{style}
+
+<script src="{jsurl}jquery.min.js"></script>
+<script src="{jsurl}bootstrap.min.js"></script>
+<script src="{jsurl}phppublisher.js"></script>
+{script}
+
+</head>
+<body>
+<div id="page">
+	<nav id="toplinks" class="navbar navbar-inverse navbar-static-top">
+		<div class="container">
+			<div class="navbar-header">
+				<button style="float:left;" class="navbar-toggle collapsed" aria-controls="navbar" aria-expanded="false" data-target="#navbar-left" data-toggle="collapse" type="button">
+				<span class="icon-bar"></span>
+				<span class="icon-bar"></span>
+				<span class="icon-bar"></span>
+				</button>
+				<a class="navbar-brand" href="{thisfile}">{label}</a>
+				<button class="navbar-toggle collapsed" aria-controls="navbar" aria-expanded="false" data-target="#navbar-top" data-toggle="collapse" type="button">
+				<span class="icon-bar"></span>
+				<span class="icon-bar"></span>
+				<span class="icon-bar"></span>
+				</button>
+			</div>
+			<div id="navbar-top" class="navbar-collapse collapse">
+				{login}
+			</div>
+		</div>
+	</nav>
+	<div id="wrapper">
+		<div class="col-sm-3" id="menu">
+			<div id="navbar-left" class="navbar-collapse collapse">
+				{plugins}
+			</div>
+		</div>
+		<div class="col-sm-9" id="content">
+			{content}
+		</div>
+		<div style="clear:both;" class="floatbreaker">&#160;</div>
+	</div>
+	<div id="footer" style="margin: 0 0 20px 0;">
+		<div style="clear:both;" class="floatbreaker">&#160;</div>
+	</div>
+</div>
+
+<script language="JavaScript" type="text/javascript">
+	phppublisher.init();
+</script>
+</body>
+</html>

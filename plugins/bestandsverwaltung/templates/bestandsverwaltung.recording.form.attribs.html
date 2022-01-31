@@ -1,0 +1,84 @@
+<div id="attribs">
+
+	<div style="margin: 10px 10px 20px 0;" class="noprint">
+		<form action="{thisfile}" method="GET" enctype="multipart/form-data" id="attribs_form" class="form-horizontal">
+		{form}
+		<div class="float-left" style="padding: 11px 0 0 0;margin: 0 20px 0 10px;">{counter}</div>
+		<div class="float-left">
+			{new}
+		</div>
+		<div class="float-right">
+			<div class="buttons">{submit}</div>
+		</div>
+		<div class="float-right" style="width: 300px; margin: 0 20px 0 30px;">
+			{tables}
+			{filter}
+		</div>
+		</form>
+		<div style="clear:both;" class="floatbreaker">&#160;</div>
+	</div>
+	<div style="clear:both;" class="floatbreaker">&#160;</div>
+
+
+<!--
+	<div style="margin: 20px 0 40px 0;" class="noprint">
+		<div style="float:left;" class="col-xs-8">
+			<form action="{thisfile}" method="GET" enctype="multipart/form-data" id="identifiers_form" class="form-horizontal">
+			{form}
+			<div class="col-xs-9">
+				{tables}
+				{filter}
+			</div>
+			<div class="col-xs-3">
+				{submit}
+			</div>
+			</form>
+		</div>
+		<div style="float:right;text-align: right;" class="col-xs-4">
+			{new}
+		</div>
+		<div style="clear:both;" class="floatbreaker">&#160;</div>
+	</div>
+	<div style="clear:both;" class="floatbreaker">&#160;</div>
+//-->
+
+
+
+
+	<div id="settings_attribs">
+		<form class="form-horizontal">
+			{data}
+		</form>
+	</div>
+</div>
+<script type="text/javascript">
+// open select while printing
+function toggle_select(mode) {
+	selects = document.getElementsByTagName('select');
+	for(i=0;i<selects.length;i++) {
+		if(mode == 'close') {
+			selects[i].size = 1;
+		}
+		else if (mode == 'open') {
+			selects[i].size = selects[i].options.length;
+		}
+	}
+}
+if(typeof window.onbeforeprint != "undefined") {
+	window.onbeforeprint = function () {
+		toggle_select('open');
+	}
+	window.onafterprint = function () {
+		toggle_select('close');
+	}
+} else {
+	if ('matchMedia' in window) {
+		window.matchMedia('print').addListener(function (media) {
+			toggle_select('open');
+			window.matchMedia('screen').addListener(function (media) {
+				toggle_select('close');
+			});
+		});
+	}
+}
+</script>

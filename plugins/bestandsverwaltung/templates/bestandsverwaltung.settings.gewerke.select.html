@@ -1,0 +1,302 @@
+<div id="gewerkeselect">
+
+	<div class="noprint">{label}<span style="float:right; margin: 7px 15px 0 0;">{insert} {clip} {pdf} {debug}</span></div>
+	<div style="line-height:0px;height:0px;clear:both;" class="floatbreaker">&#160;</div>
+
+<!-- 
+
+<span class="count" style="float:right;margin: 0 10px 0 0;">{count}</span> 
+<span onclick="btoggle_all('gewerkeselect')" style="cursor:pointer;float:right;margin: 6px 0 0 0;" id="toggleall">&#9660;</span>
+
+
+//-->
+
+
+{selector}
+
+
+	<div id="filter_box" class="noprint">
+		<form action="{thisfile}" method="GET" onsubmit="phppublisher.wait();">
+		<div style="float:left;">
+			{form}
+			<!-- {filter} //-->
+		</div>
+		<div style="float:left;">
+			{submit}
+		</div>
+		<div style="line-height:0px;height:0px;clear:both;" class="floatbreaker">&#160;</div>
+		</form>
+	</div>
+
+	<div style="line-height:0px;height:0px;clear:both;" class="floatbreaker">&#160;</div>
+
+	{table}
+</div>
+
+<div id="gewerk" style="display:none;" class="popunder function-box panel panel-default col-xs-10 col-md-5">
+	<div class="panel-heading">
+		<div class="functionbox-capation">
+			<h3 class="panel-title">&#160;
+				<button 
+					type="button" 
+					class="btn btn-xs btn-default shut float-right"
+					 onclick="gewerk.close();">x</button>
+			</h3>
+		</div>
+	</div>
+	<div class="popunderbox" style="min-height:210px;position:relative;" id="gewerkbox">&#160;</div>
+</div>
+
+<div id="bezeichner" style="display:none;" class="popunder function-box panel panel-default">
+	<div class="panel-heading">
+		<div class="functionbox-capation">
+			<h3 class="panel-title">&#160;
+				<button 
+					type="button" 
+					class="btn btn-xs btn-default shut float-right"
+					 onclick="bezeichner.close();">x</button>
+			</h3>
+		</div>
+	</div>
+	<div class="popunderbox" style="width:480px;min-height:280px;position:relative;" id="bezeichnerbox">&#160;</div>
+</div>
+
+<div id="todoswrapper" style="width:580px;display:none;position:fixed;top:15;left:15px;">
+<div id="todospicker" class="function-box panel panel-default noprint" style="height:450px;">
+	<div class="panel-heading"
+			onclick="MousePosition.init();"
+			onmousedown="Drag.init(document.getElementById('todoswrapper'));"
+			onmouseup="document.getElementById('todoswrapper').onmousedown = null;">
+		<div class="functionbox-capation">
+			<h3 class="panel-title">
+				<span id="todos_title">&#160;</span>
+				<button 
+					type="button" 
+					class="btn btn-xs btn-default shut float-right"
+					 onclick="document.getElementById('todoswrapper').style.display = 'none';">x</button>
+				<button 
+					typ="button" 
+					class="btn btn-xs btn-default resize float-right" 
+					style="margin-right:3px;" 
+					onclick="phppublisher.editor.fullscreen('','todoswrapper','todospicker');">+</button>
+			</h3>
+		</div>
+	</div>
+	<div id="todos_canvas" class="canvas" style="overflow:auto;padding:15px;"></div>
+</div>
+</div>
+
+<script language="JavaScript" type="text/javascript">
+var todospicker = {
+	init : function( bezeichner, id ) {
+		//this.element = element;
+		mouse = MousePosition.get();
+		doc = 'todoswrapper';
+		document.getElementById('todos_canvas').innerHTML = '<div style="text-align:center;"><img src="{cssurl}/loading.gif" style="margin:150px 0 0 0;"></div>';
+		document.getElementById(doc).style.left = '0px';
+		document.getElementById(doc).style.top = '0px';
+		document.getElementById(doc).style.display = 'block';
+		document.getElementById(doc).style.position = 'fixed';
+		document.getElementById(doc).style.zIndex = '1001';
+		document.getElementById('todos_canvas').style.height = '92%';
+
+		document.getElementById('todos_title').innerHTML = "T&auml;tigkeiten "+bezeichner;
+
+		params = "&plugin=cafm.one&cafm_one_action=todos&id="+id+"&bezeichner="+bezeichner;
+		vdma = $.ajax({
+			url: "api.php",
+			global: false,
+			type: "GET",
+			data: params,
+			dataType: "text",
+			async: false,
+			cache: false
+		}).responseText;
+		document.getElementById('todos_canvas').innerHTML = vdma;
+	},
+	insert : function(value) {
+		document.getElementById(this.element).value = value;
+		document.getElementById('todospicker').style.display = 'none';
+	}
+}
+
+var gewerk = {
+	body : document.getElementsByTagName('body')[0],
+	outer : document.createElement("div"),
+	box : document.getElementById('gewerk'),
+	output : document.getElementById('gewerkbox'),
+	loadinggif : '<div style="padding: 75px 0 0 0; text-align: center;"><img src="{cssurl}loading.gif"></div>',
+	path : '',
+	open : function(path, mode) {
+		size = WindowSize();
+		this.output.innerHTML = this.loadinggif;
+		this.outer.className = 'modal-overlay';
+		this.body.appendChild(this.outer);
+		this.body.appendChild(this.box);
+		this.box.style.display = 'block';
+		this.box.style.top = ((size.height / 2) - (this.box.offsetHeight / 2 ) - 10)+'px';
+		this.box.style.left = ((size.width / 2) - (this.box.offsetWidth / 2 ))+'px';
+		this.path = path;
+		this.submit(null, mode);
+	},
+	close : function() {
+		this.box.style.display = 'none';
+		this.body.removeChild(this.outer);
+	},
+	submit : function(form, mode) {
+		if(form) {
+			params = serialize(form);
+			this.output.innerHTML = this.loadinggif;
+			ajax(params, 'gewerkCallback');
+
+		} else {
+			params = 'plugin=bestandsverwaltung&bestand_action=gewerke';
+			if(mode == 'insert') {
+				params += '&jsaction=insert&key='+this.path;
+			}
+			else if(mode == 'update') {
+				params += '&jsaction=update&key='+this.path;
+			}
+			else if(mode == 'delete') {
+				params += '&jsaction=delete&key='+this.path;
+			}
+			ajax(params, 'gewerkCallback');
+		}
+	},
+	print: function(html) {
+		if(html == 'ok') {
+			this.box.style.display = 'none';
+			this.body.removeChild(this.outer);
+			html = 'success';
+			window.location.hash = this.path;
+			phppublisher.wait('Reloading');
+			location.reload(true);
+			return;
+		} else {
+			this.output.innerHTML = html;
+			gf = document.getElementById('gewerkeform');
+			gf.onsubmit = function() { gewerk.submit(this); return false; };
+			gc = document.getElementById('gewerkecancel');
+			gc.onclick = function() { gewerk.close(); return false; };
+		}
+	}
+}
+
+var bezeichner = {
+	body : document.getElementsByTagName('body')[0],
+	outer : document.createElement("div"),
+	box : document.getElementById('bezeichner'),
+	output : document.getElementById('bezeichnerbox'),
+	loadinggif : '<div style="padding: 75px 0 0 0; text-align: center;"><img src="{cssurl}loading.gif"></div>',
+	gewerk : '',
+	open : function(gewerk, mode) {
+		size = WindowSize();
+		this.output.innerHTML = this.loadinggif;
+		this.outer.className = 'modal-overlay';
+		this.body.appendChild(this.outer);
+		this.body.appendChild(this.box);
+		this.box.style.display = 'block';
+		this.box.style.top = ((size.height / 2) - (this.box.offsetHeight / 2 ) - 10)+'px';
+		this.box.style.left = ((size.width / 2) - (this.box.offsetWidth / 2 ))+'px';
+		this.gewerk = gewerk;
+		this.submit(null, mode);
+	},
+	close : function() {
+		this.box.style.display = 'none';
+		this.body.removeChild(this.outer);
+	},
+	submit : function(form, mode) {
+		if(form) {
+			params = serialize(form);
+			this.output.innerHTML = this.loadinggif;
+			ajax(params, 'bezeichnerCallback');
+		} else {
+			if(mode == 'insert') {
+				params = 'plugin=bestandsverwaltung&bestand_action=bezeichner&subaction=insert&key='+this.gewerk;
+				ajax(params, 'bezeichnerCallback');
+			}
+			else if(mode == 'delete') {
+				params = 'plugin=bestandsverwaltung&bestand_action=bezeichner&subaction=delete&key='+this.gewerk;
+				ajax(params, 'bezeichnerCallback');
+			}
+		}
+	},
+	print : function (html) {
+		if(html == 'ok') {
+			this.box.style.display = 'none';
+			this.body.removeChild(this.outer);
+			html = 'success';
+			window.location.hash = this.gewerk;
+			phppublisher.wait('Reloading');
+			location.reload(true);
+			return;
+		} else {
+			this.output.innerHTML = html;
+			gf = document.getElementById('bezeichnerform');
+			gf.onsubmit = function() { bezeichner.submit(this); return false; };
+			gc = document.getElementById('bezeichnercancel');
+			gc.onclick = function() { bezeichner.close(); return false; }
+		}
+	}
+}
+
+function gewerkCallback(response) {
+	gewerk.print(response);
+
+}
+function bezeichnerCallback(response) {
+	bezeichner.print(response);
+
+}
+
+function ajax(params, callback){
+	html = $.ajax({
+		url: "api.php",
+		global: false,
+		type: "POST",
+		data: params,
+		dataType: 'html',
+		async: true,
+		cache: false,
+		success: function(response){
+			eval(callback)(response);
+		}
+	});
+}
+
+
+
+
+// Tooltip //
+/*
+$(function() {
+	$( '.jqtooltip' ).tooltip({
+		track: false,
+		content: function() {
+			var element = $( this );
+			var bezeichner = element.attr( "title" );
+			var params = "&plugin=bestandsverwaltung&bestand_action=help&bezeichner="+bezeichner;
+			var text = $.ajax({
+				url: "api.php",
+				global: false,
+				type: "POST",
+				data: params,
+				dataType: "text",
+				async: false,
+				cache: false
+			}).responseText;
+			if( text == '' ) {
+				text = 'Zu '+bezeichner+' liegt keine Hilfe vor';
+			}
+			return text;
+		},
+	position: {
+		my: "left+25 top+10",
+		at: "left bottom",
+	}
+
+	});
+});
+*/
+</script>
+

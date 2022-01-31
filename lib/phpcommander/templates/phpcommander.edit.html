@@ -1,0 +1,128 @@
+{ColorPicker}
+
+<div id="{editorid}wrapper" style="">
+	<div id="file_edit">
+		<div id="{editorid}" class="card">
+			<div class="functionbox-capation-box card-header" id="{editorid}_small"
+					onclick="MousePosition.init();"
+					onmousedown="Drag.init(document.getElementById('{editorid}'), null, 0, null, 0);"
+					onmouseup="document.getElementById('{editorid}').onmousedown = null;">
+				<div class="functionbox-capation">
+				<h3 class="panel-title">
+					<span id="{editorid}_caption_small">{lang_headline}</span>
+					<!-- {close} //-->
+					<button 
+						typ="button" 
+						class="btn btn-xs btn-default resize float-right" 
+						style="margin-right:3px;" 
+						onclick="phppublisher.editor.fullscreen('','{editorid}wrapper','{editorid}');">+</button>
+				</h3>
+				</div>
+			</div>
+			<div id="content_wrap" class="canvas" style="padding:15px;">
+				<form action="{thisfile}" name="file_form" id="file_form" method="POST" enctype="application/x-www-form-urlencoded">
+				{form}
+				<div style="position:relative;" class="col-sm-2 float-right">
+					<div id="editor_navi">
+						<div class="editor_functions">
+							{submit}
+							{delete}
+							{cancel}
+						</div>
+						<div style="line-height:0px;clear:both;" class="floatbreaker">&#160;</div>
+					</div>
+				</div>
+				<div id="source_box" class="source_box col-sm-10 float-left" style="overflow:auto;height: 450px;">{content}</div>
+				<div style="line-height:0px;clear:both;" class="floatbreaker">&#160;</div>
+				</form>
+			</div>
+		</div>
+	</div>
+</div>
+
+<script language="JavaScript" type="text/javascript">
+var editor = new Object();
+/*
+editor.resize = {
+	editor : function( arg ){
+		var body   = document.getElementsByTagName('body')[0];
+		var html   = document.getElementsByTagName('html')[0];
+		var full   = document.getElementById('{editorid}');
+		var source = document.getElementById('file_edit');
+		if(!arg){
+			arg = $('.functionbox-resizebutton').val();
+		}
+		if(arg == "+") {
+			source.removeChild(full);
+			full.className = full.className.replace(/ fullscreen/g, "") + ' fullscreen';
+			body.style.height = '0';
+			body.style.overflow = 'auto';
+			html.height = '0';
+			source.appendChild(full);
+			size = WindowSize();
+			$('.source_box textarea').css('width', ($('#{editorid}').innerWidth() -140) + "px");
+			$('.source_box textarea').css('height', (size.height -70) + "px");
+			$('.functionbox-resizebutton').val('-');
+			$('.functionbox-resizebutton').attr('title', '{lang_small}');
+			window.onresize = function(){ editor.resize.editor('+'); };
+		}
+		if(arg == "-") {
+			source.removeChild(full);
+			full.className = full.className.replace(/ fullscreen/g, "");
+			body.style.height = '';
+			html.style.height = '';
+			source.appendChild(full);
+			$('.source_box textarea').css('width', ($('#{editorid}').innerWidth() -140) + "px");
+			$('.source_box textarea').css('height', "420px");
+			$('.functionbox-resizebutton').val('+');
+			$('.functionbox-resizebutton').attr('title', '{lang_big}');
+			window.onresize = function(){  editor.resize.editor('-'); };
+		}
+	}
+}
+*/
+editor.colors = function( color ){
+	element = document.getElementById('{content_id}');
+	SelectionRange.insert(element, color);
+}
+editor.ajax = function(data){
+	html = $.ajax({
+		url: "{thisfile}",
+		global: false,
+		type: "POST",
+		data: data,
+		dataType: "html",
+		async: false,
+		cache: false
+	}).responseText;
+	return html;
+}
+editor.save = function(){
+	params  = '&js=true&{submit_name}=true';
+	params += '&'+ $('#file_form').serialize();
+	html    = this.ajax(params);
+	if(html != ''){
+		alert(html);
+	}
+}
+editor.keys = function(e) {
+	element = document.getElementById( '{content_id}' );
+	len     = element.value.length;
+	var keycode;
+	if (window.event) keycode = window.event.keyCode;
+	else if (e) keycode = e.which;
+	if(keycode == 9) {
+		replacement = "\t"; 
+		SelectionRange.insert(element, replacement);
+		return false;
+	}
+}
+
+function Color( color ){
+	editor.colors( color );
+}
+
+//editor.resize.editor('-');
+$('#{content_id}').bind('keydown', editor.keys);
+//$('#{submit_id}').click(function(element){ editor.save(); return false; });
+</script>

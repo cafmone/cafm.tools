@@ -1,0 +1,197 @@
+/* Filefunctions */
+.filebrowser {
+	width: 100%;
+	position: relative;
+	overflow: hidden;
+	margin: 0;
+	padding: 0;
+}
+.filebrowser.panel-default {
+	border: 0 none transparent;
+}
+.filebrowser .status_panel{
+	border: 1px solid #ddd;
+	background-color: #f5f5f5;
+}
+.filebrowser .status_panel .pageturn_table {
+	float: right;
+	margin: 0 10px 0 0;
+}
+.filebrowser_files {
+	text-align: left;
+	padding: 0 0 0 0;
+	background: transparent;
+	float:none;
+}
+.filebrowser_files .htmlobject_table {
+	border-collapse:collapse !important;
+	border-top: 0px none !important;
+	border-bottom: 0px none !important;
+	border-left: 0px none !important;
+	border-right: 0px none !important;
+	font-size: 12px !important;
+	font-family: arial !important;
+}
+.filebrowser_files .htmlobject_table th {
+	border-top: 0px none !important;
+	border-right: 0px none !important;
+	border-bottom: 1px solid #ddd !important;
+	background: #f5f5f5 !important;
+	padding: 5px;
+}
+.filebrowser_files .htmlobject_table th.firstcol,
+.filebrowser_files .htmlobject_table td.firstcol {
+	border-left: 0px none !important;
+}
+.filebrowser_files .htmlobject_table .htmlobject_tr.last td {
+	border-bottom: 1px solid #ddd !important;
+}
+.filebrowser_files .htmlobject_table th a,
+.filebrowser_files .htmlobject_table th a:hover {
+	display: block !important;
+	color: #0000ff !important;
+	font-size: 12px !important;
+	font-weight: normal !important;
+	text-decoration: none !important;
+	background: transparent !important;
+	letter-spacing: 0px !important; 
+}
+.filebrowser_files .htmlobject_table td {
+	border-bottom: 0px none !important;
+	border-right: 0px none !important;
+	background: transparent !important;
+}
+.filebrowser_files .htmlobject_table .headrow{
+	background: #F0F0EE;
+}
+.filebrowser_files .htmlobject_td{
+	padding: 5px !important;
+}
+.filebrowser_files .htmlobject_table .htmlobject_td.date,
+.filebrowser_files .htmlobject_table .htmlobject_th.date {
+	text-align:center;
+	width:120px;
+}
+.filebrowser_files .htmlobject_table .htmlobject_th.filesize
+{
+	text-align:right;
+	padding-right: 10px !important;
+}
+.filebrowser_files .htmlobject_table .htmlobject_td.filesize
+{
+	text-align:right;
+	width: 110px;
+	padding-right: 10px !important;
+}
+.filebrowser_files .file_id{
+	display: none;
+}
+.filebrowser_files .filebrowser_buttons {
+	text-align: right;
+	margin: 0;
+	padding: 0 0 0 0;
+	height: 30px;
+	border-bottom: 0px none gray;
+}
+.filebrowser_files .pageturn_box table {
+	display:inline;
+	font-size: 12px;
+	padding:0;
+}
+.filebrowser_files .pageturn_box input {
+	margin: 1px;
+}
+.filebrowser_files .htmlobject_td.pageturn_bottom {
+	display: none;
+}
+.filebrowser_files .table_panel {
+	display:block;
+	float: none;
+	background: white;
+	height: 300px;
+	margin: 0px;
+	padding: 0px;
+	overflow-y:auto;
+	overflow-x:auto;
+	width: auto;
+	border-left: 1px solid #ddd;
+	border-right: 1px solid #ddd;
+}
+.filebrowser_files .table_panel_spacer{
+	width: 100%;
+	margin: 0;
+	padding: 0;
+}
+.filebrowser_files .table_panel table {
+	width: 100%;
+	margin: 0;
+}
+.filebrowser_files .table_panel.small {
+	height: 150px;
+}
+.filebrowser_functions {
+	position: relative;
+	left: 0px;
+	bottom: 0px;
+	right: 0px;
+	display: block;
+	height: 150px;
+	overflow: hidden;
+	text-align: left;
+	background: transparent;
+	padding: 5px 5px 5px 5px;
+	border: 1px solid #ddd;
+	border-top: 0 none #ddd;
+	background-color: #f5f5f5;
+}
+.filebrowser_functions .fieldset {
+	position: relative;
+	height: 100px;
+	margin: 0;
+	padding: 5px 10px 10px 10px;
+	border: 0px none;
+}
+.filebrowser_functions .legend {
+	background-color: transparent;
+	line-height: 18px;
+	border: 0px none;	
+	padding: 0 0 0 0;
+	margin: 0;
+	font-size: 12px;
+}
+.filebrowser_functions .preview_panel .info_panel {
+	float: left;
+}
+.filebrowser_functions .preview_panel .info_panel .info_box {
+	float: right;
+}
+.filebrowser_functions .preview_panel .info_panel .picture_box {
+	float: left;
+	width: 160px;
+}
+.filebrowser_functions .preview_panel .preview_buttons {
+	position: relative;
+	padding: 20px 0 0 0;
+	width: 100px;
+	overflow: hidden;
+	float: right;	
+}
+.filebrowser_functions .preview_panel .preview_buttons button {
+	width: 100px;
+	margin: 0 0 2px 0;
+}
+.filebrowser_functions .rename_panel {
+	padding: 20px 0 0 0;
+	text-align: center;
+	display: none;
+}
+.filebrowser_functions .delete_panel {
+	padding: 20px 0 0 0;
+	text-align: center;
+	display: none;
+}
+.filebrowser_functions .delete_panel button,
+.filebrowser_functions .rename_panel button{
+	width: 100px;
+	margin: 0 0 2px 0;
+}

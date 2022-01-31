@@ -1,0 +1,197 @@
+<div id="recording_process_billing">
+<!--
+	<div class="header printonly">
+		Header
+	</div>
+//-->
+	<div id="filter_box" class="noprint">
+		<form action="{thisfile}" method="GET" class="form-horizontal">
+		<div class="col-xs-6">
+			{form}
+			{filter}
+
+		</div>
+		<div class="col-xs-2">
+			{submit}
+		</div>
+		<div class="col-xs-2">
+			{bill}
+		</div>
+		<div class="col-xs-2" style="padding: 7px 0 0 8px;">
+			{showdetails}
+		</div>
+		<div style="line-height:0px;height:0px;clear:both;" class="floatbreaker">&#160;</div>
+		</form>
+	</div>
+
+
+
+	<div>{summary}</div>
+
+	<div id="detailsbox">&#160;</div>
+	<div id="progress" style="display:none;" class="popunder">
+		<div style="margin:0 auto;width:320px;">
+			<div id="max" style="float:left;width:60px;padding:3px;">&#160;</div>
+			<div id="bar_outer" style="width:160px;border:1px solid;padding:0px;float:left;">
+				<div id="bar" style="width:0px;background:red;">&#160;</div>
+			</div>
+			<div id="count" style="float:left;width:60px;padding:3px;text-align: right;">0</div>
+			<div style="line-height:0px;clear:both;">&#160;</div>
+		</div>
+	</div>
+
+
+
+	<div id="process" style="display:none;" class="popunder"></div>
+
+</div>
+<script type="text/javascript">
+{jsparams}
+var details = {
+	count : document.getElementById('count'),
+	bar : document.getElementById('bar'),
+	step : 100 / jsparams.length,
+	box : document.getElementById('detailsbox'),
+	outer : document.createElement("div"),
+	progress : document.getElementById('progress'),
+	maximum : document.getElementById('max'),
+	body : document.getElementsByTagName('body')[0],
+	open : function() {
+		//document.getElementById('filter_box').style.display = 'none';
+		size = WindowSize();
+		this.outer.className = 'modal-overlay';
+		this.body.appendChild(this.outer);
+		this.body.appendChild(this.progress);
+		this.maximum.innerHTML = jsparams.length;
+		this.box.innerHTML = '';
+		this.progress.style.display = 'block';
+		this.progress.style.top = ((size.height / 2) - (progress.offsetHeight / 2 ) - 40)+'px';
+		this.progress.style.left = ((size.width / 2) - (progress.offsetWidth / 2 ))+'px';
+		setTimeout(function(){ details.run(0); },10);
+	},
+	run : function(num) {
+		if(num < jsparams.length) {
+			html = ajax('plugin=bestandsverwaltung&bestand_action=details&id='+jsparams[num]+'&mode=text');
+			var div = document.createElement("div");
+			div.innerHTML = html;
+			div.className = 'data';
+			this.box.appendChild(div);
+			this.count.innerHTML = num+1;
+			this.bar.style.width = ((num+1)*this.step)+'%';
+			setTimeout(function(){ details.run(num+1); },10);
+		} else {
+			this.body.removeChild(this.outer);
+			this.progress.style.display = 'none';
+			this.count.innerHTML = '';
+			this.bar.style.width = '0%';
+		}
+	}
+}
+
+
+var process = {
+	count : document.getElementById('count'),
+	bar : document.getElementById('bar'),
+	step : 100 / jsparams.length,
+	outer : document.createElement("div"),
+	progress : document.getElementById('progress'),
+	process : document.getElementById('process'),
+	maximum : document.getElementById('max'),
+	body : document.getElementsByTagName('body')[0],
+	params : '',
+	open : function() {
+
+		html = ajax('plugin=bestandsverwaltung&bestand_action=process');
+		size = WindowSize();
+		this.outer.className = 'modal-overlay';
+		this.body.appendChild(this.outer);
+		this.body.appendChild(this.process);
+		this.process.innerHTML = html;
+		this.process.style.display = 'block';
+		this.process.style.width = '500px';
+		this.process.style.top = ((size.height / 2) - (this.process.offsetHeight / 2 ) - 40)+'px';
+		this.process.style.left = ((size.width / 2) - (this.process.offsetWidth / 2 ))+'px';
+
+		$("#process form").keypress(function(e) {
+			//Enter key
+			if (e.which == 13) {
+				return false;
+			}
+		});
+
+		submit = document.createElement("button");
+		submit.id = 'processsubmit';
+		submit.style.marginRight = '3px';
+		submit.innerHTML = 'submit';
+		submit.onclick = function() {
+			process.run(0);
+		}
+		cancel = document.createElement("button");
+		cancel.id = 'processcancel';
+		cancel.innerHTML = 'cancel';
+		cancel.onclick = function() {
+			process.close();
+		}
+		var div = document.createElement("div");
+		div.style.textAlign = 'center';
+		div.style.marginTop = '20px';
+		div.appendChild(submit);
+		div.appendChild(cancel);
+		this.process.appendChild(div);
+	},
+	run : function(num) {
+		if(num == 0) {
+			this.body.appendChild(this.progress);
+			this.maximum.innerHTML = jsparams.length;
+			this.progress.style.display = 'block';
+			this.progress.style.top = ((size.height / 2) - (progress.offsetHeight / 2 ) - 40)+'px';
+			this.progress.style.left = ((size.width / 2) - (progress.offsetWidth / 2 ))+'px';
+
+			submit = document.getElementById('processsubmit');
+			submit.disabled = 'disabled';
+			cancel = document.getElementById('processcancel');
+			cancel.disabled = 'disabled';
+
+			form = document.getElementById('processform');
+			this.params = serialize(form);
+		}
+		if(num < jsparams.length) {
+			html = ajax(this.params+'&id='+jsparams[num]);
+			if(html == 'ok') {
+				//var div = document.createElement("div");
+				//div.innerHTML = html;
+				//div.className = 'data';
+				this.count.innerHTML = num+1;
+				this.bar.style.width = ((num+1)*this.step)+'%';
+				setTimeout(function(){ process.run(num+1); },10);
+			} else {
+				alert(html);
+			}
+		} else {
+			//this.body.removeChild(this.outer);
+			this.progress.style.display = 'none';
+			this.count.innerHTML = '';
+			this.bar.style.width = '0%';
+			this.close();
+		}
+	},
+	close : function() {
+		this.process.style.display = 'none';
+		this.body.removeChild(this.outer);
+	}
+}
+
+function ajax(id){
+	html = $.ajax({
+		type: "GET",
+		url: "api.php",
+		global: false,
+		type: "GET",
+		data: id,
+		dataType: "html",
+		async: false,
+		cache: false
+	}).responseText;
+	return html;
+}
+</script>

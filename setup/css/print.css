@@ -1,0 +1,49 @@
+html, body {
+	margin: 0;
+	padding: 0;
+	font-size:12px;
+}
+#page {
+	border: 0px none;
+	margin: 0;
+	margin-left:auto;
+	margin-right:auto; 
+	padding:0;
+	width: auto;
+}
+#head {
+	display: none;
+}
+#wrapper {
+	padding: 0px;
+	margin: 0px;
+	border: 0px none;
+}
+#menu {
+	display: none;
+}
+#content {
+	position: relative;
+	width: auto;
+	border: 0px none;
+	padding: 0px;
+	float: none;
+	height: auto;
+}
+.tab-content {
+	margin: 0px;
+	padding: 0px;
+	border: 0px none;
+}
+.noprint {
+	display: none !important;
+}
+
+
+@media print {
+	a[href]:after {
+		content: "";
+	}
+}
+
+

@@ -1,0 +1,42 @@
+<script type="text/javascript">
+function move(direction) {
+	index = document.getElementById('{id}').selectedIndex;
+	count = document.getElementById('{id}').options.length -1;
+	if(direction == 'up') {
+		if(index != -1 && index != 0) {
+			$("#{id} option:eq("+(index)+")").insertBefore('#{id} option:eq('+(index-1)+')');
+		}
+	}
+	if(direction == 'down') {
+		if(index != -1 && index != count) {
+			$("#{id} option:eq("+(index)+")").insertAfter("#{id} option:eq("+(index+1)+")");
+		}
+	}
+}
+function selectAll(box) {
+	box = document.getElementById(box);
+	for(var i=0; i<box.length; i++) {
+		box[i].selected = true;
+	}	 
+	 document.combo_box.submit();
+}
+</script>
+<div id="data_sort">
+<form action="{thisfile}" name="combo_box" method="GET" onsubmit="selectAll('{id}'); return true;">
+{form}
+<table cellpadding="4" cellspacing="0" border="0" style="width:auto;margin: 40px auto 0px auto;">
+<tr>
+	<td valign="top">{select}</td>
+	<td align="center" valign="middle">
+		<input class="btn btn-sm btn-default" style="border-bottom: 0px none" type="button" onClick="move('up')" value="&#9652;" id="button1" name="button1">
+		<br>
+		<input class="btn btn-sm btn-default" type="button" onClick="move('down')" value="&#9662" id="button2" name="button2">
+	</td>
+</tr>
+<tr>
+	<td align="right"><div class="buttons">{submit}&#160;{cancel}</div></td>
+	<td align="right">&#160;</td>
+</tr>
+</table>
+</form>
+</div>

@@ -1,0 +1,81 @@
+<div class="filebrowser panel panel-default">
+
+	<div class="filebrowser_menu panel-heading">
+		<h3 class="panel-title" style="line-height:34px;">{label_files} <div style="float:right;">{upload}</div></h3>
+		<div style="line-height:0px;clear:both;" class="floatbreaker">&#160;</div>
+	</div>
+
+	<div class="filebrowser_files list-group">
+		<div class="table_panel" style="margin: 0 0 0 0;">
+			<div class="table_panel_spacer">{table}</div>
+		</div>
+	</div>
+
+	<div class="status_panel">
+		{pageturn}
+		<div style="clear:both;line-height:0;height:0px;" class="floatbreaker">&#160;</div>
+	</div>
+
+	<div class="filebrowser_functions" id="filebrowser_functions" style="display:none;">
+		<form action="{thisfile}" name="reloadform" id="reloadform">
+		<input type="hidden" id="path" name="path" value="{path}">
+		<input type="hidden" id="url" name="url" value="{url}">
+		<input type="hidden" id="file">
+		<input type="hidden" id="filetype">
+		<input type="hidden" id="message">
+		<input type="hidden" id="new_dir" name="new_dir">
+		<input type="hidden" id="new_0" name="new[0]">
+		<input type="hidden" id="identifier" name="{identifier}">
+		<input type="hidden" name="{actions_name}">
+		{params}
+		</form>
+		<div class ="fieldset">
+			<div>
+				<div class="legend" id="info_name" style="float:left;visibility:hidden;">&#160;</div>
+				<input type="button" title="{lang_close}" value="x" class="btn btn-xs btn-default float-right" onclick="FileBrowser.pre(false);">
+				<div style="line-height:0px;clear:both;">&#160;</div>
+			</div>
+			<div class="preview_panel">
+				<div class="info_panel" style="padding: 10px 0 0 30px;">
+					<div class="picture_box">&#160;</div>
+				</div>
+				<div class="preview_buttons">
+					<button class="btn btn-default btn-xs" type="button" class="readonly" onclick="
+							$('.preview_panel').css('display','none');
+							$('.delete_panel').css('display','block');">
+					{lang_delete}</button>
+					<button class="btn btn-default btn-xs" type="button" class="readonly" onclick="
+							$('.preview_panel').css('display','none');
+							$('.rename_panel').css('display','block');">
+					{lang_rename}</button>
+	 				<button class="btn btn-default btn-xs" type="button" onclick="FileBrowser.download()">{lang_download}</button>
+				</div>
+				<div style="line-height:0px;clear:both;">&#160;</div>
+			</div>
+			<div class="rename_panel">
+				<input class="form-control text" style="width: 50%; display: inline-block;" type="text" id="new_name" name="new_name"><br><br>
+				<button class="btn btn-default btn-xs" id="FileBrowserRename" type="button" onclick="FileBrowser.rename('{actions_name}')">
+				{lang_rename}</button>
+				<button class="btn btn-default btn-xs" type="button" onclick="
+						$('.preview_panel').css('display','block');
+						$('.rename_panel').css('display','none');">
+				{lang_cancel}</button>
+			</div>
+			<div class="delete_panel">
+				{lang_delete_confirm}<br><br>
+				<button class="btn btn-default btn-xs" id="FileBrowserDel" type="button" onclick="FileBrowser.del('{actions_name}')">
+				{lang_delete}</button>
+				<button class="btn btn-default btn-xs" type="button" onclick="
+						$('.preview_panel').css('display','block');
+						$('.delete_panel').css('display','none');">
+				{lang_cancel}</button>
+			</div>
+			<div style="line-height:0px;clear:both;" class="floatbreaker">&#160;</div>
+		</div>
+	</div>
+
+</div>
+
+<script type="text/javascript">
+var lang_loading = '{lang_loading}';
+</script>

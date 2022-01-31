@@ -1,0 +1,91 @@
+<div class="filebrowser">
+
+	<div class="filebrowser_menu">
+		<div class="breadcrumps_panel">
+			<button onclick="ButtonPanelToggle('-')" class="button_panel_full functionbox-closebutton">&gt;</button>
+			{breadcrumps}
+		</div>
+		<div class="button_panel" style="display:none;">
+			<div style="float:left;"><input type="button" onclick="FileBrowser.newfile('{actions_name}', 'insert_folder');this.blur();" value="{lang_new_folder}"></div>
+			<div style="float:left;">{upload}</div>
+			<div style="float:left;">{filter}</div>
+			<div style="line-height:0px;clear:both;" class="floatbreaker">&#160;</div>
+			<button onclick="ButtonPanelToggle('+')" class="button_panel_full functionbox-closebutton">&lt;</button>
+		</div>
+	</div>
+
+	<div class="filebrowser_folders" style="width:170px;">{folders}</div>
+
+	<div class="filebrowser_files">
+		<div class="table_panel" style="margin: 0 0 0 0;">
+			<div class="table_panel_spacer">{table}</div>
+		</div>
+
+		<div class="filebrowser_functions" id="filebrowser_functions" style="display:none;">
+			<form action="#" name="reloadform" id="reloadform">
+			<input type="hidden" id="path" name="path" value="{path}">
+			<input type="hidden" id="url" name="url" value="{url}">
+			<input type="hidden" id="file">
+			<input type="hidden" id="filetype">
+			<input type="hidden" id="message">
+			<input type="hidden" id="new_dir" name="new_dir">
+			<input type="hidden" id="new_0" name="new[0]">
+			<input type="hidden" id="identifier" name="{identifier}">
+			{params}
+			<div class ="fieldset">
+				<div class="legend" id="info_name" style="visibility:hidden;">&#160;</div>
+				<input type="button" title="{lang_close}" value="X" class="functionbox-closebutton" onclick="FileBrowser.pre(false);">
+				<div class="preview_panel">
+					<div class="info_panel" style="padding: 10px 0 0 0;">
+						<div class="picture_box">&#160;</div>
+					</div>			
+					<div class="preview_buttons">
+		 				<button type="button" onclick="FileBrowser.insert()">{lang_insert}</button>
+						<button type="button" class="readonly" onclick="
+								$('.preview_panel').css('display','none');
+								$('.delete_panel').css('display','block');">
+						{lang_delete}</button>
+						<button type="button" class="readonly" onclick="
+								$('.preview_panel').css('display','none');
+								$('.rename_panel').css('display','block');">
+						{lang_rename}</button>
+					</div>
+					<div style="line-height:0px;clear:both;">&#160;</div>
+				</div>
+				<div class="rename_panel">
+					<input type="text" name="new_name"><br><br>
+					<button type="button" onclick="FileBrowser.rename(this.form.new_name.value, '{actions_name}')">
+					{lang_rename}</button>
+					<button type="button" onclick="
+							$('.preview_panel').css('display','block');
+							$('.rename_panel').css('display','none');">
+					{lang_cancel}</button>
+				</div>
+				<div class="delete_panel">
+					{lang_delete_confirm}<br><br>
+					<button type="button" onclick="FileBrowser.del('{actions_name}')">
+					{lang_delete}</button>
+					<button type="button" onclick="
+							$('.preview_panel').css('display','block');
+							$('.delete_panel').css('display','none');">
+					{lang_cancel}</button>
+				</div>
+				<div style="line-height:0px;clear:both;" class="floatbreaker">&#160;</div>
+			</div>
+			</form>
+		</div>
+	</div>
+
+	<div class="status_panel">
+		<div style="float:left;">{folders_num}</div>
+		{pageturn}
+		<div style="clear:both;line-height:0;height:0px;" class="floatbreaker">&#160;</div>
+	</div>
+
+	<div class="filebrowser_preload" style="display:none;"><div class="preload">{lang_loading}</div></div>
+</div>
+
+
+
+{script}
+

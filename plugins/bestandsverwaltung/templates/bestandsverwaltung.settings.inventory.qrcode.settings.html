@@ -1,0 +1,73 @@
+<script type="text/javascript">
+function qrcode_toggle(element) {
+	option = element.options[element.selectedIndex].value;
+	try {
+		size = document.getElementById('qrcode_size');
+		replacement = document.getElementById('qrcode_replacements');
+		url = document.getElementById('qrcode_url');
+
+		if(option == 'barcode') {
+			size.style.display = 'block';
+			replacement.style.display = 'block';
+			url.style.display = 'none';
+		}
+		else if (option == 'qrcode') {
+			size.style.display = 'block';
+			replacement.style.display = 'block';
+			url.style.display = 'block';
+		}
+		else if (option == 'leitz_icon') {
+			size.style.display = 'none';
+			replacement.style.display = 'block';
+			url.style.display = 'none';
+		}
+
+	} catch(e) { alert(e); }
+}
+</script>
+
+<div class="form">
+<form action="{thisfile}" method="GET" class="form-horizontal">
+{form}
+
+<fieldset>
+	<legend>{lang_type}</legend>
+	{qrcode_type}
+</fieldset>
+
+<fieldset id="qrcode_size">
+	<legend>{lang_size}</legend>
+	{qrcode_heigth}
+	{qrcode_width}
+	{qrcode_border}
+	{qrcode_font}
+</fieldset>
+
+<fieldset id="qrcode_url">
+	<legend>{lang_url}</legend>
+	{qrcode_url_1}
+	{qrcode_url_2}
+	<div>
+		<div style="float:left;width:100%;margin-right:-61%;text-align:right;">{qrcode_url_3}</div>
+		<div style="float:left;width: 40%;">{qrcode_url_input}</div>
+		<div class="floatbreaker">&#160;</div>
+	</div>
+</fieldset>
+
+<fieldset id="qrcode_replacements">
+	<legend>{lang_replacements}</legend>
+	{qrcode_qr_0}
+	{qrcode_qr_1}
+	{qrcode_qr_2}
+	{qrcode_qr_3}
+	{qrcode_qr_4}
+	{qrcode_qr_5}
+</fieldset>
+
+<div class="buttons">{submit}</div>
+</form>
+</div>
+<script type="text/javascript">
+element = document.getElementById('qrcode_type');
+qrcode_toggle(element);
+</script>

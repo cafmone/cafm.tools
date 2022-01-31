@@ -1,0 +1,52 @@
+<script type="text/javascript">
+function move(direction) {
+	index = document.getElementById('languages_select').selectedIndex;
+	count = document.getElementById('languages_select').options.length -1;
+	if(direction == 'up') {
+		if(index != -1 && index != 0) {
+			$("#languages_select option:eq("+(index)+")").insertBefore('#languages_select option:eq('+(index-1)+')');
+		}
+	}
+	if(direction == 'down') {
+		if(index != -1 && index != count) {
+			$("#languages_select option:eq("+(index)+")").insertAfter("#languages_select option:eq("+(index+1)+")");
+		}
+	}
+}
+function selectAll(box) {
+
+	box = document.getElementById(box);
+
+     for(var i=0; i<box.length; i++) {
+     box[i].selected = true;
+     }
+	 
+	 document.combo_box.submit();
+}
+</script>
+<div id="data_sort">
+<noscript><div class="noscript">{noscript}</div></noscript>
+<h3>{headline}</h3>
+
+<form action="{thisfile}" name="combo_box" method="POST" onsubmit="selectAll('languages_select'); return true;" class="form-horizontal">
+
+{form}
+<table cellpadding="4" cellspacing="0" border="0" style="width: auto;margin: 0 auto;">
+<tr>
+	<td valign="top">{select}</td>
+	<td align="center" valign="middle">
+		<input class="btn btn-sm btn-default" style="border-bottom: 0px none" type="button" onClick="move('up')" value="&and;" id="button1" name="button1">
+		<br>
+		<input class="btn btn-sm btn-default" type="button" onClick="move('down')" value="&or;" id="button2" name="button2">
+	</td>
+</tr>
+<tr>
+	<td align="right"><div class="buttons">{submit}&#160;{cancel}</div></td>
+	<td align="right">&#160;</td>
+</tr>
+</table>
+
+</form>
+</div>
+
+

@@ -1,0 +1,56 @@
+<div id="FileBrowser" class="filebrowser">
+<div style="margin:0 0 10px 0;" id="breadcrumps">{breadcrumps}</div>
+
+	<div class="button_panel" style="margin:0 0 10px 0;">
+		<div style="float:right; overflow:hidden;">
+			<div class="browse_button" style="float:left; margin: 0 5px 0 0;">
+				<form  action="{thisfile}">
+					{newform}
+					<div style="float:left; margin: 0 5px 0 0;">
+						<div style="float:left;margin: 0 3px 0 0;position:relative;">{copy}</div>
+						<div style="float:left;margin: 0 10px 0 -10px;">{clear}</div>
+						<div style="clear:both;line-height:0;" class="floatbreaker">&#160;</div>
+					</div>
+					<div style="float:left;">
+						{new}
+					</div>
+
+					<div style="clear:both;line-height:0;" class="floatbreaker">&#160;</div>
+				</form>
+			</div>
+			<div style="float:left; margin: 0 5px 0 0;">
+				{filter}
+			</div>
+			<div style="float:left;">
+				{upload}
+			</div>
+			<div style="clear:both;line-height:0;" class="floatbreaker">&#160;</div>
+		</div>
+		<div style="clear:both;line-height:0;" class="floatbreaker">&#160;</div>
+	</div>
+
+	<div class="mainbox">
+		<form  action="{thisfile}">
+		{script}
+		{pageturn}
+		{params}
+		<div id="filestable">{table}</div>
+		{actions}
+		</form>	
+	</div>
+
+</div>
+<script>
+	var elements=document.getElementById('breadcrumps').getElementsByTagName('a');
+	for (var j=0; j<elements.length; j++){
+		elements[j].onclick=function(){
+			phppublisher.wait();
+		}
+	}
+	var elements=document.getElementById('filestable').getElementsByTagName('a');
+	for (var j=0; j<elements.length; j++){
+		elements[j].onclick=function(){
+			phppublisher.wait();
+		}
+	}
+</script>

@@ -1,0 +1,58 @@
+<script language="JavaScript" type="text/javascript">
+function UserLogout() {
+	path = window.location.protocol+"//dummy:dummy@"+window.location.host+""+window.location.pathname+'?'+Math.random()*11;
+	try{
+		var agt=navigator.userAgent.toLowerCase();
+		if (agt.indexOf("msie") != -1) {
+			// IE clear HTTP Authentication
+			document.execCommand("ClearAuthenticationCache");
+		} else {
+			var data = $.ajax({
+				url : path,
+				type: "POST",
+				cache: false,
+				async: false,
+				dataType: "text",
+				success : function () { }
+			}).responseText;
+		}
+		location.reload(true);
+	} catch(e) { alert(e); }
+}
+</script>
+
+<div id="account">
+<h1>{login} {logout}</h1>
+<form action="{thisfile}" method="POST" class="form-horizontal">
+
+{form}
+{user}
+{lang}
+{group}
+
+{pass1}
+{pass2} 
+
+{email}
+{phone}
+{cellphone}
+
+{salutation}
+{title}
+{forename}
+{lastname}
+{date}
+
+{address}
+{city}
+{zip}
+{state}
+{country}
+{firm}
+{office}
+
+{comment}
+
+<div class="buttons">{submit}&#160;{cancel}</div>
+</form>
+</div>

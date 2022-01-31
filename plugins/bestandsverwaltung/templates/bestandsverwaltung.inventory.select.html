@@ -1,0 +1,755 @@
+<script src="{jsurl}jquery-ui.min.js" type="text/javascript"></script>
+<script language="JavaScript" type="text/javascript">
+/*
+var updatepicker = {
+	id : '',
+	init : function( element, id ) {
+		this.id = id;
+		size = WindowSize();
+		document.getElementById('update_canvas').innerHTML = '<img src="{cssurl}/loading.gif" style="position:absolute;top:150px;left:250px;">';
+
+		document.getElementById('update_canvas').style.height = '92%';
+		document.getElementById(element).position = 'fixed';
+		if(document.getElementById(element).style.left == 0) {
+			document.getElementById(element).style.left = '0px';
+			document.getElementById(element).style.top = '0px';
+		}
+		document.getElementById(element).style.display = 'block';
+		document.getElementById(element).style.zIndex = '1000';
+
+		document.getElementById('update_title').innerHTML = 'Update '+id;
+
+		params = "&plugin=bestandsverwaltung&bestand_action=update&id="+id,
+		ajax(params, updatepickerCallback);
+	},
+	print : function(response) {
+		document.getElementById('update_canvas').innerHTML = response;
+		this.handlers();
+	},
+	update : function( element ) {
+		document.getElementById('update_canvas').innerHTML = '<img src="{cssurl}/loading.gif" style="position:absolute;top:150px;left:300px;">';
+		params = '';
+		for (i = 0; i < element.length ;i++) {
+			if(
+				element.elements[i].name && 
+				element.elements[i].name != 'response[cancel]' && 
+				element.elements[i].name != 'bestand_recording_action[copy]' && 
+				element.elements[i].name != 'bestand_recording_action[todos][pdf]' && 
+				element.elements[i].name != 'bestand_recording_action[todos][csv]' && 
+				element.elements[i].name != 'bestand_recording_action[todos][doc]'
+			) {
+				params += "&"+element.elements[i].name+"="+element.elements[i].value;
+			}
+		}
+		ajax(params, updatepickerCallback);
+	},
+	handlers : function() {
+		// change download form 
+		$(".Filedata").change(function(data){ 
+			$("#phpcommander_upload_form").submit( function(data) {
+				var submittingForm = $(this);
+				var frameName	  = ("upload"+(new Date()).getTime());
+				var uploadInput	= $(".Filedata");
+				var uploadFrame	= $("<iframe src=\"#\" name=\""+frameName+"\">");
+				uploadFrame.css("display", "none");
+				uploadFrame.load(function(data){
+					body = parent.frames[frameName].document.getElementsByTagName('body')[0];
+					setTimeout(function(){
+						uploadFrame.remove();
+					},100);
+					document.getElementById('update_canvas').innerHTML = body.innerHTML;
+					uploadInput.val('');
+					updatepicker.handlers();
+				});
+				$("body:first").append(uploadFrame);
+				submittingForm.attr("target", frameName);
+			}).submit();
+		});
+		// redirect update form
+		document.getElementById('insert_form').onsubmit = function() { updatepicker.update(this); return false; };
+		// redirect file delete function
+		document.getElementById('FileBrowserDel').onclick = function() {
+			form = document.forms['reloadform'];
+			form.elements['pc[folders_action]'].value = 'delete';
+			document.getElementById('identifier').value = document.getElementById('file').value;
+			updatepicker.update(form);
+			return false;
+		};
+		// redirect file rename function
+		document.getElementById('FileBrowserRename').onclick = function() {
+			form = document.forms['reloadform'];
+			file    = document.getElementById('new_name').value;
+			if(	file != '' ) {
+				form.elements['pc[folders_action]'].value = 'rename';
+				document.getElementById('identifier').value = document.getElementById('file').value;
+				form.elements['new[0]'].value = file;
+				updatepicker.update(form);
+			}
+			return false;
+		};
+		// change url for download
+		document.getElementById('url').value = '{href_download}'+this.id+'/';
+		// change target for up link 
+		document.getElementById('insertbottom').setAttribute('href', '#recording_insert_top');
+		// disable sort
+		ths = document.getElementById('FileBrowserTable').getElementsByTagName('th');
+		for (i=0;i<ths.length;i++) {
+			if(ths[i].getElementsByTagName('a')[0]) {
+				ths[i].getElementsByTagName('a')[0].onclick = function() {
+					return false;
+				};
+			}
+		}
+
+	},
+	close : function(element) {
+		document.getElementById('update_canvas').innerHTML = '';
+		document.getElementById(element).style.display = 'none';
+	}
+}
+*/
+
+/*
+var changelogpicker = {
+	init : function( id ) {
+		document.getElementById('changelog_canvas').innerHTML = '<div style="text-align:center;"><img src="{cssurl}/loading.gif" style="margin:150px 0 0 0;"></div>';
+
+		doc = 'changelogwrapper';
+		if(document.getElementById(doc).style.left == 0) {
+			document.getElementById(doc).style.left = '0px';
+			document.getElementById(doc).style.top = '37px';
+		}
+		document.getElementById(doc).style.display = 'block';
+		document.getElementById(doc).style.position = 'fixed';
+		document.getElementById(doc).style.zIndex = '1000';
+		document.getElementById('changelog_canvas').style.height = '92%';
+
+		document.getElementById('changelog_title').innerHTML = 'Changelog '+id;
+		params = "&plugin=bestandsverwaltung&bestand_action=changelog&id="+id;
+		ajax(params, 'changelogpickerCallback');
+	},
+	print : function(response) {
+		document.getElementById('changelog_canvas').innerHTML = response;
+	}
+}
+*/
+
+var copy = {
+	confirm : function( element, id ) {
+		var modalid = phppublisher.modal.init('');
+		var c = document.createElement("div");
+		c.style.textAlign = 'center';
+		c.style.margin = '30px';
+		var t = document.createElement("div");
+		t.innerHTML = 'Copy '+id+'?<br><br>';
+		var b = document.createElement("button");
+		b.className = 'btn btn-sm btn-default';
+		b.innerHTML = 'ok';
+		b.type = 'button';
+		b.onclick = function() {
+			$('#'+modalid).modal('hide');
+			phppublisher.wait();
+			location.href = element.href;
+		}
+		c.appendChild(t);
+		c.appendChild(b);
+
+		$('#'+modalid).modal('show');
+ 		phppublisher.modal.print(c);
+		b.focus();
+	}
+}
+
+var raumbuchpicker = {
+	init : function( raumbuch, id ) {
+		document.getElementById('raumbuch_canvas').innerHTML = '<div style="text-align:center;"><img src="{cssurl}/loading.gif" style="margin:150px 0 0 0;"></div>';
+
+		if(document.getElementById('raumbuchwrapper').style.left == 0) {
+			document.getElementById('raumbuchwrapper').style.left = '0px';
+			document.getElementById('raumbuchwrapper').style.top = '74px';
+		}
+		document.getElementById('raumbuchwrapper').style.display = 'block';
+		document.getElementById('raumbuchwrapper').style.position = 'fixed';
+		document.getElementById('raumbuchwrapper').style.zIndex = '1000';
+		document.getElementById('raumbuch_canvas').style.height = '92%';
+
+		document.getElementById('raumbuch_title').innerHTML = 'Standort '+id;
+		params = "&plugin=bestandsverwaltung&bestand_action=raumbuch&id="+raumbuch;
+		ajax(params, 'raumbuchpickerCallback');
+	},
+	print : function(response) {
+		document.getElementById('raumbuch_canvas').innerHTML = response;
+	}
+}
+var todospicker = {
+	init : function( bezeichner, id, prefix, interval ) {
+		document.getElementById('todos_canvas').innerHTML = '<div style="text-align:center;"><img src="{cssurl}/loading.gif" style="margin:150px 0 0 0;"></div>';
+
+		doc = 'todoswrapper';
+		document.getElementById(doc).style.display = 'block';
+		if(document.getElementById(doc).style.left == 0) {
+			document.getElementById(doc).style.left = '0px';
+			document.getElementById(doc).style.top = '111px';
+		}
+		document.getElementById(doc).style.position = 'fixed';
+		document.getElementById(doc).style.zIndex = '1000';
+		document.getElementById('todos_canvas').style.height = '92%';
+		if(id !== '') {
+			document.getElementById('todos_title').innerHTML = "T&auml;tigkeiten "+id;
+		} else {
+			document.getElementById('todos_title').innerHTML = "T&auml;tigkeiten "+bezeichner;
+		}
+		params = "&plugin=cafm.one&cafm_one_action=todos&id="+id+"&bezeichner="+bezeichner+"&prefix="+prefix+"&interval="+interval;
+		ajax(params, 'todospickerCallback');
+	},
+	print : function(response) {
+		document.getElementById('todos_canvas').innerHTML = response;
+	},
+	modal : {
+		id : '',
+		element : '',
+		prefix : '',
+		todoid : '',
+		modalid : '',
+		init : function( elementid, id, prefix, todoid ){
+			this.id = id;
+			this.element = document.getElementById(elementid);
+			this.prefix = prefix;
+			this.todoid = todoid;
+			this.modalid = phppublisher.modal.init('<div style="text-align:center;margin: 30px 0 0 0;"><img src="{cssurl}/loading.gif"></div>');
+			$('#'+this.modalid).modal('show');
+			params = "&plugin=taetigkeiten&taetigkeiten_action=disable&id="+id+"&prefix="+prefix+"&todo="+todoid;
+			ajax(params, 'todospickerModalCallback');
+		},
+		print : function(response) {
+			if(response == 'on') {
+				this.element.getElementsByTagName('span')[0].style.textDecoration = 'none';
+				this.element.getElementsByTagName('button')[0].value = 'off';
+				this.element.getElementsByTagName('button')[0].innerHTML = 'off';
+				$('#'+this.modalid).modal('hide');
+			}
+			else if(response == 'off') {
+				this.element.getElementsByTagName('span')[0].style.textDecoration = 'line-through';
+				this.element.getElementsByTagName('button')[0].value = 'on';
+				this.element.getElementsByTagName('button')[0].innerHTML = 'on';
+				$('#'+this.modalid).modal('hide');
+			} else {
+				phppublisher.modal.print(response);
+				// redirect form
+				document.getElementById('todos_disable_form').onsubmit = function() {
+					todospicker.modal.submit(this); return false;
+				};
+			}
+		},
+		submit : function(element) {
+			data = '<div style="text-align:center;margin: 30px 0 0 0;"><img src="{cssurl}/loading.gif"></div>';
+			modal = phppublisher.modal.print(data);
+			params = '';
+			for (i = 0; i < element.length ;i++) {
+				if(
+					element.elements[i].name && 
+					element.elements[i].name != 'response[cancel]'
+				) {
+					params += "&"+element.elements[i].name+"="+element.elements[i].value;
+				}
+			}
+			ajax(params, 'todospickerModalCallback');
+		}
+	}
+}
+
+var marker = {
+	init : function(element, id) {
+		color = element.style.color;
+		if(color == '') {
+			element.style.color = 'lime';
+			element.className = 'icon icon-star';
+		}
+		else if(color == 'lime') {
+			element.style.color = 'gold';
+			element.className = 'icon icon-star';
+		}
+		else if(color == 'gold') {
+			element.style.color = 'red';
+			element.className = 'icon icon-star';
+		}
+		else if(color == 'red') {
+			element.style.color = '';
+			element.className = 'icon icon-star-empty';
+		}
+		params = "&plugin=bestandsverwaltung&bestand_action=marker&id="+id+"&color="+element.style.color;
+		ajax(params, 'markerCallback');
+	},
+	print : function(response) {
+		if(response != '') {
+			alert(response);
+		}
+	}
+}
+
+/*
+function updatepickerCallback(response) {
+	updatepicker.print(response);
+}
+*/
+function todospickerCallback(response) {
+	todospicker.print(response);
+}
+function todospickerModalCallback(response) {
+	todospicker.modal.print(response);
+}
+function todosfilterCallback(response) {
+	todosfilter.print(response);
+}
+function changelogpickerCallback(response) {
+	changelogpicker.print(response);
+}
+function raumbuchpickerCallback(response) {
+	raumbuchpicker.print(response);
+}
+function markerCallback(response) {
+	marker.print(response);
+}
+
+function ajax(params, callback){
+	html = $.ajax({
+		url: "api.php",
+		global: false,
+		type: "POST",
+		data: params,
+		dataType: "html",
+		async: true,
+		cache: false,
+		success: function(response){
+			eval(callback)(response);
+		}
+	});
+}
+
+function toggle_box(box) {
+	box0 = document.getElementById('active_filters');
+	box1 = document.getElementById('filter_section');
+	box2 = document.getElementById('export_section');
+	box3 = document.getElementById('printout_section');
+	if(box == 'filter') {
+		if(box1.style.display == 'block') {
+			box0.style.display = 'block';
+			box1.style.display = 'none';
+		} else {
+			box0.style.display = 'none';
+			box1.style.display = 'block';
+			box2.style.display = 'none';
+			box3.style.display = 'none';
+		}
+	}
+	else if(box == 'export') {
+		if(box2.style.display == 'block') {
+			box0.style.display = 'block';
+			box2.style.display = 'none';
+		} else {
+			box0.style.display = 'none';
+			box2.style.display = 'block';
+			box1.style.display = 'none';
+			box3.style.display = 'none';
+		}
+	}
+	else if(box == 'printout') {
+		if(box3.style.display == 'block') {
+			box0.style.display = 'block';
+			box3.style.display = 'none';
+		} else {
+			box0.style.display = 'none';
+			box3.style.display = 'block';
+			box1.style.display = 'none';
+			box2.style.display = 'none';
+		}
+	}
+}
+MousePosition.init();
+
+function get_help(bezeichner) {
+	alert(bezeichner);
+}
+</script>
+<script language="JavaScript" type="text/javascript">
+function doExport(form) {
+	var hiddenField = document.createElement("input");
+	hiddenField.setAttribute("type", 'hidden');
+	hiddenField.setAttribute("name", 'doexport');
+	hiddenField.setAttribute("value", "export");
+	form.appendChild(hiddenField);
+
+	form.setAttribute("target", "formresult");
+	reswindow = window.open('api.php', 'formresult', 'scrollbars=yes,menubar=no,height=180,width=400,resizable=yes,toolbar=no,status=no,location=no');
+	reswindow.document.title = 'Export';
+
+	img  = '<div style="text-align:center;margin-top:50px;">';
+	img += '<img src="'+window.location.protocol+'//'+window.location.host+'{cssurl}/loading.gif">';
+	img += '</div>';
+
+	reswindow.document.body.innerHTML = img;
+	//reswindow.document.body.innerHTML = 'Loading ...';
+	reswindow.focus();
+	form.submit();
+	form.setAttribute("target", "");
+	form.removeChild(hiddenField);
+}
+</script>
+
+<div id="bestandselect" style="position:relative;">
+
+	<form action="{thisfile}" method="POST" class="form-horizontal">
+	<div id="filter_box" style="display:{filterdisplay};" class="noprint">
+		{form}
+		<div style="text-align: right;margin-bottom: 20px;">
+			<a onclick="toggle_box('filter');return false;" href="#" class="btn btn-sm {filtered}" style="margin: 0 0 0 6px;width:35px;display:block;float:left;" title="{button_title_filter}"><span class="icon icon-filter"></span></a>
+
+		<!-- {add} //-->
+			<div style="float:right;margin: 0 0 0 0;">
+				{filter_group}
+
+
+
+			<a onclick="toggle_box('export');return false;" href="#" class="btn btn-sm btn-default" style="margin: 0 6px 0 6px;width:35px;;display:block;float:left;" title="{button_title_export}"><span class="icon icon-export"></span></a>
+			<a onclick="toggle_box('printout');return false;" href="#" class="btn btn-sm btn-default" style="margin: 0 0 0 0;width:35px;display:block;float:left;" title="{button_title_print}"><span class="icon icon-print"></span></a>
+	
+
+				<input class="btn btn-sm btn-default float-left submit" style="margin: 0 0 0 6px;" title="{button_title_refresh}" name="bestand_select[action]" value="&#8635;" type="submit">
+				<div id="anchortop" class="noprint" style="float:left;padding: 4px 0 0 0; margin: 0 15px 0 20px;"><a href="#anchorbottom" title="{button_title_down}"><span class="icon icon-menu-down"></span></a></div>
+			</div>
+			<div style="line-height:0px;height:0px;clear:both;" class="floatbreaker">&#160;</div>
+		</div>
+
+		<div id="active_filters" style="display:block; margin: 0 0 0 10px;">
+			{active_filters}
+		</div>
+
+		<div id="filter_section" style="display:none;">
+
+			<div id="filter_form">
+
+				<ul class="nav nav-tabs">
+					<li style="" class="nav-item" class="nav-item active"><a class="nav-link active" data-toggle="tab" href="#filter_default">{tab_filter_default}</a></li>
+					<li style="display:{css_tab_filter_custom};" class="nav-item"><a class="nav-link" data-toggle="tab" href="#filter_custom">{tab_filter_custom}</a></li>
+					<li style="display:{css_tab_filter_prozess};" class="nav-item"><a class="nav-link" data-toggle="tab" href="#filter_process">{tab_filter_process}</a></li>
+					<li style="display:{css_tab_filter_todos};" class="nav-item"><a class="nav-link" data-toggle="tab" href="#filter_todos">{tab_filter_todos}</a></li>
+					<li style="" class="nav-item"><a class="nav-link" data-toggle="tab" href="#filter_link">{tab_filter_link}</a></li>
+
+				</ul>
+
+				<div class="tab-content">
+					<div id="filter_default" class="tab-pane active">
+						{filter_id}
+						{filter_user}
+						<div>
+							{filter_bezeichner}
+							<div style="line-height:0px;height:0px;clear:both;" class="floatbreaker">&#160;</div>
+						</div>
+						{filter_raumbuch}
+						{filter_gewerk}
+						<div>
+							{filter_date}
+							<div style="line-height:0px;height:0px;clear:both;" class="floatbreaker">&#160;</div>
+						</div>
+						<script type="text/javascript">
+							$(function() {
+								$( "#filter_date" ).datepicker(
+								{
+									changeMonth: true,
+									changeYear: true,
+									//showButtonPanel: true,
+									dateFormat: 'yy-mm-dd'
+								});
+								$( "#filter_date" ).datepicker( "option",$.datepicker.regional['fr']);
+							});
+						</script>
+					</div>
+					<div id="filter_custom" class="tab-pane">
+						{custom}
+					</div>
+					<div id="filter_process" class="tab-pane">
+						{filter_prozess}
+					</div>
+					<div id="filter_todos" class="tab-pane" style="min-height: 100px;">
+						{filter_prefix}
+						<div id="filter_todos_interval">
+							{filter_interval}
+							{filter_todo_attribs}
+						</div>
+					</div>
+					<div id="filter_link" class="tab-pane clearfix">
+						<div class="col-11 float-left">{linkbox}</div>
+						<div class="col-1 float-right" style="text-align:right; padding-right: 5px;">
+							<a href="#" class="btn btn-default icon icon-copy" title="{button_title_link2clipboard}" onclick="phppublisher.clipboard('LinkBox');"></a>
+						</div>
+					</div>
+
+				</div>
+
+			</div>
+
+<!--
+			<div id="filter_submit" class="col-sm-5 col-xs-12">
+				<div style="margin-right:10px;">
+					<div style="float:right;clear:both;">{filter_group_s}</div>
+					<div style="float:right;clear:both;">{filter_group_m}</div>
+					<div style="float:right;clear:both;">{filter_group_b}</div>
+					<div style="float:right;clear:both;margin-bottom:15px;">{submit}</div>
+					<div style="float:right;clear:both;">{linkbox}</div>
+					<div style="line-height:0px;height:0px;clear:both;" class="floatbreaker">&#160;</div>
+				</div>
+			</div>
+//-->
+			<div style="line-height:0px;height:0px;clear:both;" class="floatbreaker">&#160;</div>
+		</div>
+
+		<div id="export_section" style="display:none;margin: 0 0 30px 0;">
+			<div class="col-xs-12" style="text-align:center;">
+				<div style="display:inline-block;">
+					<div class="float-right">
+						<div style="margin: 0px 0 0 0;">
+							{bom}
+							{inline}
+						</div>
+						<div style="padding: 30px 0 0 0;clear:both;">{export}</div>
+					</div>
+					<div class="float-right" style="margin: 0 30px 0 0;">
+						<div style="float:right;">{export_table}</div>
+						<div style="line-height:0px;height:0px;clear:both;" class="floatbreaker">&#160;</div>
+					</div>
+					<div class="float-right" style="margin: 0 30px 0 0;">
+						<div style="float:right;clear:both;">{linefeed}</div>
+						<div style="float:right;clear:both;">{delimiter}</div>
+						<div style="float:right;clear:both;">{enclosure}</div>
+						<div style="line-height:0px;height:0px;clear:both;" class="floatbreaker">&#160;</div>
+					</div>
+					<div style="line-height:0px;height:0px;clear:both;" class="floatbreaker">&#160;</div>
+				</div>
+			</div>
+			<div style="line-height:0px;height:0px;clear:both;" class="floatbreaker">&#160;</div>
+		</div>
+
+		<div id="printout_section" style="display:none;margin: 0 0 30px 0;">
+			<div class="col-xs-12" style="text-align:center;">
+				<div style="display:inline-block; width:200px;">
+					<div style="float:right;clear:both;">{printout_mode}</div>
+					<div style="line-height:0px;height:0px;clear:both;" class="floatbreaker">&#160;</div>
+					{printout}
+				</div>
+			</div>
+		</div>
+
+		<div style="line-height:0px;height:0px;clear:both;" class="floatbreaker">&#160;</div>
+	</div>
+
+	{table}
+	<div id="detailsbox">&#160;</div>
+	<div class="noprint" id="anchorbottom" style="text-align:right;padding:10px 10px 0 0; margin: 0 15px 0 20px;"><a href="#top" title="{button_title_up}"><span class="icon icon-menu-up"></span></a></div>
+	</form>
+	
+</div>
+
+<div id="progress" style="display:none;" class="popunder">
+	<div style="margin:0 auto;width:320px;">
+		<div id="max" style="float:left;width:60px;padding:3px;">&#160;</div>
+		<div id="bar_outer" style="width:160px;border:1px solid;padding:0px;float:left;">
+			<div id="bar" style="width:0px;background:red;">&#160;</div>
+		</div>
+		<div id="count" style="float:left;width:60px;padding:3px;text-align: right;">0</div>
+		<div style="line-height:0px;clear:both;">&#160;</div>
+	</div>
+</div>
+
+<div id="updatewrapper" style="width:580px;display:none;position:fixed;top:0px;left:0px;">
+<div id="updatepicker" class="function-box panel panel-default noprint" style="width:580px;height:550px;position:absolute;left:0;top:0;">
+	<div id="updatehead" class="panel-heading" 
+			onmousedown="Drag.init(document.getElementById('updatewrapper'));"
+			onmouseup="document.getElementById('updatewrapper').onmousedown = null;">
+		<div class="functionbox-capation">
+			<h3 class="panel-title">
+				<span id="update_title">&#160;</span>
+				<button 
+					type="button" 
+					class="btn btn-xs btn-default float-right shut" 
+					onclick="updatepicker.close('updatewrapper');">x</button>
+				<button 
+					typ="button" 
+					class="btn btn-xs btn-default resize float-right" 
+					style="margin-right:3px;" 
+					onclick="phppublisher.editor.fullscreen('','updatewrapper','updatepicker');">+</button>
+			</h3>
+		</div>
+	</div>
+		<div id="update_canvas" class="canvas" style="overflow:auto;padding:15px 15px 15px 15px;"></div>
+</div>
+</div>
+
+<!--
+<div id="changelogwrapper" style="width:580px;display:none;">
+<div id="changelogpicker" class="function-box panel panel-default noprint" style="width:580px;height:450px;position:absolute;left:0;top:0;">
+	<div class="panel-heading"
+			onmousedown="Drag.init(document.getElementById('changelogwrapper'));"
+			onmouseup="document.getElementById('changelogwrapper').onmousedown = null;">
+		<div class="functionbox-capation">
+			<h3 class="panel-title">
+				<span id="changelog_title">&#160;</span>
+				<button 
+					type="button" 
+					class="btn btn-xs btn-default shut float-right"
+					 onclick="document.getElementById('changelogwrapper').style.display = 'none';">x</button>
+				<button 
+					typ="button" 
+					class="btn btn-xs btn-default resize float-right" 
+					style="margin-right:3px;" 
+					onclick="phppublisher.editor.fullscreen('','changelogwrapper','changelogpicker');">+</button>
+			</h3>
+		</div>
+	</div>
+	<div id="changelog_canvas" class="canvas" style="height:350px;overflow:auto;"></div>
+</div>
+</div>
+//-->
+
+<div id="raumbuchwrapper" style="width:580px;display:none;">
+<div id="raumbuchpicker" class="function-box card noprint" style="width:580px;height:450px;position:absolute;left:0;top:0;">
+	<div class="card-header"
+			onmousedown="Drag.init(document.getElementById('raumbuchwrapper'));"
+			onmouseup="document.getElementById('raumbuchwrapper').onmousedown = null;">
+		<div class="functionbox-capation">
+				<span id="raumbuch_title">&#160;</span>
+				<button 
+					type="button" 
+					class="btn btn-xs btn-default float-right shut"
+					 onclick="document.getElementById('raumbuchwrapper').style.display = 'none';">&times;</button>
+				<button 
+					typ="button" 
+					class="btn btn-xs btn-default resize float-right" 
+					style="margin-right:3px;" 
+					onclick="phppublisher.editor.fullscreen('','raumbuchwrapper','raumbuchpicker');">+</button>
+
+		</div>
+	</div>
+	<div id="raumbuch_canvas" class="card-body" style="overflow:auto;padding:15px;"></div>
+</div>
+</div>
+
+<div id="todoswrapper" style="width:580px;display:none;">
+<div id="todospicker" class="function-box card noprint" style="width:580px;height:450px;position:absolute;left:0;top:0;">
+	<div class="card-header"
+			onmousedown="Drag.init(document.getElementById('todoswrapper'));"
+			onmouseup="document.getElementById('todoswrapper').onmousedown = null;">
+		<div class="functionbox-capation">
+				<span id="todos_title">&#160;</span>
+				<button 
+					type="button" 
+					class="btn btn-xs btn-default shut float-right"
+					 onclick="document.getElementById('todoswrapper').style.display = 'none';">&times;</button>
+				<button 
+					typ="button" 
+					class="btn btn-xs btn-default resize float-right" 
+					style="margin-right:3px;" 
+					onclick="phppublisher.editor.fullscreen('','todoswrapper','todospicker');">+</button>
+		</div>
+	</div>
+	<div id="todos_canvas" class="card-body" style="overflow:auto;padding:15px;"></div>
+</div>
+</div>
+
+<script type="text/javascript">
+{jsparams}
+
+var todosfilter = {
+	target : document.getElementById('filter_todos_interval'),
+	init : function( element ) {
+		this.target.innerHTML = '<div style="text-align:center;"><img src="{cssurl}/loading.gif" style="width: 20px; height: 20px; margin:15px 0 0 30px;"></div>';
+		prefix = element.options[element.selectedIndex].value;
+		if(prefix != '') {
+			params = "&plugin=taetigkeiten&taetigkeiten_action=interval&prefix="+prefix;
+			ajax(params, 'todosfilterCallback');
+		} else {
+			this.target.innerHTML = '';
+		}
+	},
+	print : function(response) {
+		this.target.innerHTML = response;
+	}
+}
+
+var details = {
+	count : document.getElementById('count'),
+	bar : document.getElementById('bar'),
+	step : 100 / jsparams.length,
+	box : document.getElementById('detailsbox'),
+	outer : document.createElement("div"),
+	progress : document.getElementById('progress'),
+	maximum : document.getElementById('max'),
+	body : document.getElementsByTagName('body')[0],
+	open : function() {
+		document.getElementById('filter_box').style.display = 'none';
+		document.getElementById('anchortop').style.display = 'none';
+		size = WindowSize();
+		this.outer.className = 'modal-overlay';
+		this.body.appendChild(this.outer);
+		this.body.appendChild(this.progress);
+		this.maximum.innerHTML = jsparams.length;
+		this.box.innerHTML = '';
+		this.progress.style.display = 'block';
+		this.progress.style.top = ((size.height / 2) - (progress.offsetHeight / 2 ) - 40)+'px';
+		this.progress.style.left = ((size.width / 2) - (progress.offsetWidth / 2 ))+'px';
+		setTimeout(function(){ details.run(0); },10);
+	},
+	run : function(num) {
+		if(num < jsparams.length) {
+			/* handle filter group  */
+			if(group) {
+				if(group == 'bezeichner' && printoutmode == 'todos') {
+					html = this.ajax('plugin=bestandsverwaltung&bestand_action=printtodos&bezeichner='+jsparams[num]+'&prefix='+todoprefix+'&interval='+todointerval);
+				} else {
+					html = this.ajax('plugin=bestandsverwaltung&bestand_action=details&id='+jsparams[num]+'&mode='+printoutmode+'&prefix='+todoprefix+'&interval='+todointerval);
+				}
+			} else {
+				alert('Error group param');
+				return;
+			}
+			var div = document.createElement("div");
+			div.innerHTML = html+'<hr>';
+			div.className = 'data';
+			this.box.appendChild(div);
+			this.count.innerHTML = num+1;
+			this.bar.style.width = ((num+1)*this.step)+'%';
+			setTimeout(function(){ details.run(num+1); },10);
+		} else {
+			this.body.removeChild(this.outer);
+			this.progress.style.display = 'none';
+			this.count.innerHTML = '';
+			this.bar.style.width = '0%';
+		}
+	},
+	ajax : function(id) {
+		html = $.ajax({
+			type: "GET",
+			url: "api.php",
+			global: false,
+			type: "GET",
+			data: id,
+			dataType: "html",
+			async: false,
+			cache: false
+		}).responseText;
+		return html;
+	}
+}
+
+// handle marker select color
+$(document).ready(function() {
+	$('#marker').css('color', $("#marker option:selected").val());
+	$('#marker').change(function() {
+		color = $("option:selected", this).val();
+		if (color != 'null') {
+			$('#marker').css('color',color);
+		} else {
+			$('#marker').css('color',color);
+		}
+	}); 
+});
+</script>

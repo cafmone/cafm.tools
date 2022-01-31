@@ -1,0 +1,248 @@
+<div id="filebrowser_search">
+	{breadcrumps}
+	<div style="padding: 20px 0;">
+		<div id="SearchCount"></div>
+		<div id="SearchMd5ButtonBox">
+			<button id="SearchMd5Button" type="button" class="btn btn-default" onclick="">Md5</button>
+		</div>
+		<div id="SearchInputBox">
+			<input id="SearchInput" type="text" placeholder="Search" class="form-control" onkeyup="filebrowserSearch.print(this.value);">
+		</div>
+		<div style="clear:both;"></div>
+	</div>
+	<div id="SearchCanvas" style="clear:both;overflow: auto;"></div>
+</div>
+
+<div id="SearchProgress" style="display:none;">
+	<div style="margin:0 auto;">
+		<div id="SearchMd5Max" style="float:left;width:60px;padding:0;margin-right:-60px;">&#160;</div>
+		<div id="SearchMd5Counter" style="float:right;width:60px;padding:0;text-align:right;margin-left:-60px;">0</div>
+		<div id="bar_outer" style="border:1px solid;padding:0px;margin: 0 70px 0 70px;">
+			<div id="bar" style="width:0px;background:red;">&#160;</div>
+		</div>
+		<div style="line-height:0px;clear:both;">&#160;</div>
+	</div>
+	<div id="SearchMd5File">&#160;</div>
+</div>
+
+<script>
+{script}
+
+filebrowserSearch = {
+	i : 0,
+	modalid : null,
+	check : [],
+	errors : [],
+	md5path : [],
+	counter : null,
+	bar : null,
+	progress : null,
+	maximum : null,
+	box : document.createElement("div"),
+	canvas : document.getElementById("SearchCanvas"),
+	count : document.getElementById("SearchCount"),
+	filter : document.getElementById("SearchInput"),
+	md5Button : document.getElementById("SearchMd5Button"),
+
+	init : function() {
+		if(typeof(files) != 'undefined' && files.length > 0) {
+			this.files = files;
+			this.box.id = 'SearchResultBox';
+
+			// handle action button
+			this.md5Button.innerHTML = 'Md5';
+			this.md5Button.onclick = function() {
+				filebrowserSearch.i = 0;
+				filebrowserSearch.md5();
+			}
+
+			// handle md5
+			for( i in files ) {
+				this.md5path[i] = files[i].dir+''+files[i].file;
+			}
+
+			//this.files.sort(
+			//	function(a, b){
+			//		var x = a.date.toLowerCase();
+			//		var y = b.date.toLowerCase();
+			//		if (x < y) {return 1;}
+			//		if (x > y) {return -1;}
+			//		return 0;
+			//	});
+
+			this.print();
+		}
+	},
+
+	print : function() {
+		if(typeof(this.files) != 'undefined' && this.files.length > 0) {
+			filter = this.filter.value;
+			count = 0;
+			str = '';
+			str += '<div class="tr">';
+			str += '<div class="td num">&#160;</div>';
+			str += '<div class="td"><b>Dir</b></div>';
+			str += '<div class="td"><b>File</b></div>';
+			if(typeof(this.files[0].date) !== 'undefined') {
+				str += '<div class="td"><b>Date</b></div>';
+			}
+			if(typeof(this.files[0].size) !== 'undefined') {
+				str += '<div class="td"><b>Size</b></div>';
+			}
+			if(typeof(this.files[0].md5) !== 'undefined') {
+				str += '<div class="td"><b>Md5</b></div>';
+			}
+			str += '</div>';
+			for( i in this.files ) {
+				regex = new RegExp(filter, "gi");
+				result = this.files[i].file.search(regex);
+				if(result != -1) {
+					regex = new RegExp('('+filter+')', "gi");
+					num = parseInt(i) +1;
+					href = '{download_params}&file='+encodeURIComponent(this.files[i].dir+this.files[i].file);
+					str += '<div class="tr">';
+					str += '<div class="td num">'+num+'</div>';
+					str += '<div class="td dir">'+this.files[i].dir+'</div>';
+					str += '<div class="td"><a class="file" href="'+href+'">'+this.files[i].file.replace(regex, '<b>$1</b>')+'</a></div>';
+					if(typeof(this.files[i].date) !== 'undefined') {
+						str += '<div class="td date">'+this.files[i].date+'</div>';
+					}
+					if(typeof(this.files[i].size) !== 'undefined') {
+						str += '<div class="td size">'+this.files[i].size+'</div>';
+					}
+					if(typeof(this.files[i].md5) !== 'undefined') {
+						str += '<div class="td md5">'+this.files[i].md5+'</div>';
+					}
+					str += '</div>';
+					count++;
+				}
+			}
+			this.box.innerHTML = str;
+			this.canvas.appendChild(this.box);
+			this.count.innerHTML = count;
+		}
+	},
+
+	md5 : function(response) {
+		if(typeof(this.md5path) != 'undefined' && this.md5path.length > 0) {
+
+			if(this.i == 0 && typeof(response) == 'undefined') {
+
+				this.step = 100 / this.md5path.length;
+				this.counter = document.getElementById('SearchMd5Counter');
+				this.bar = document.getElementById('bar');
+				this.progress = document.getElementById('SearchProgress');
+				this.maximum = document.getElementById('SearchMd5Max');
+				this.output = document.getElementById('SearchMd5File');
+
+				this.output.innerHTML = '&#160;';
+
+				this.progress.style.display = 'block';
+				this.maximum.innerHTML = this.md5path.length;
+				this.bar.style.width = '0px';
+
+				this.check = [];
+				this.errors = [];
+				phppublisher.modal.width = '50%';
+				phppublisher.modal.label = 'Md5';
+				this.modalid = phppublisher.modal.init(this.progress);
+				$('#'+this.modalid).modal({ backdrop: true, show: true, keyboard: true});
+			}
+
+			if(typeof(response) != 'undefined' && typeof(response.file) != 'undefined') {
+
+				this.counter.innerHTML = this.i+1;
+				this.bar.style.width = ((this.i+1)*this.step)+'%';
+				this.output.innerHTML = '<span style="display:inline-block;margin: 10px 0 0 70px;">'+response.file+'</span>';
+				this.check.push({md5 : response.md5, file: response.file});
+
+				key = this.md5path.indexOf(response.file);
+				if(key != -1) {
+
+					if(typeof(this.md5path[key+1]) != 'undefined') {
+						this.i = key+1;
+					} else {
+
+						this.i = -1;
+						this.progress.style.display = 'none';
+						$('#'+this.modalid).modal('hide');
+
+						const lookup = this.check.reduce((a, e) => {
+							a[e.md5] = ++a[e.md5] || 0;
+							return a;
+						}, {});
+
+						this.errors = this.check.filter(e => lookup[e.md5]);
+						if(this.errors.length > 0) {
+							this.files = [];
+							link = '';
+							this.errors.sort(
+								function(a, b){
+									var x = a.md5.toLowerCase();
+									var y = b.md5.toLowerCase();
+									if (x < y) {return -1;}
+									if (x > y) {return 1;}
+									return 0;
+								});
+
+							for(e in this.errors) {
+								dir = this.errors[e].file.match(/.*\//);
+								if(dir == null) {
+									dir = '';
+								}
+								this.files[e] = {
+									'dir'  : dir,
+									'file' : this.errors[e].file.replace(/.*\//, ''),
+									'md5'  : this.errors[e].md5
+								}
+							}
+
+							// handle action button
+							this.md5Button.innerHTML = 'Reset';
+							this.md5Button.onclick = function() {
+								filebrowserSearch.i = 0;
+								filebrowserSearch.init();
+							}
+							this.print();
+
+						} else {
+							// TODO better message box
+							alert('No Matches');
+						}
+					}
+				} else {
+					this.i = -1;
+					//this.canvas.innerHTML = '<span style="display:inline-block;margin: 10px 0 0 70px;">Error: File '+response.file+' not found</span>';
+				}
+			}
+
+			if(this.i != -1 && this.i != (this.md5path.length)) {
+				params = "{md5_params}&file="+encodeURIComponent(this.md5path[this.i]);
+				ajax(params, 'md5Callback');
+			}
+
+		}
+	},
+}
+
+function md5Callback(response) {
+	filebrowserSearch.md5(response);
+}
+
+function ajax(params, callback){
+	html = $.ajax({
+		url: "api.php",
+		global: false,
+		type: "POST",
+		data: params,
+		dataType: "json",
+		async: true,
+		cache: false,
+		success: function(response){
+			eval(callback)(response);
+		}
+	});
+}
+
+filebrowserSearch.init();
+</script>

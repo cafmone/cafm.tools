@@ -1,0 +1,83 @@
+<script language="JavaScript" type="text/javascript">
+function ChangeOptions(id) {
+	element = document.getElementById(id);
+	selected = element.options[element.selectedIndex].text;
+	if(
+		selected.toLowerCase() == 'select' || 
+		selected.toLowerCase() == 'multiple'
+	) {
+		document.getElementById('option').disabled  = '';
+		document.getElementById('minimum').disabled = 'disabled';
+		document.getElementById('maximum').disabled = 'disabled';
+	}
+	else if(
+		selected.toLowerCase() == 'text' || 
+		selected.toLowerCase() == 'textarea' || 
+		selected.toLowerCase() == 'integer'
+	) {
+		document.getElementById('option').disabled  = 'disabled';
+		document.getElementById('minimum').disabled = '';
+		document.getElementById('maximum').disabled = '';
+	} else {
+		document.getElementById('option').disabled  = 'disabled';
+		document.getElementById('minimum').disabled = 'disabled';
+		document.getElementById('maximum').disabled = 'disabled';
+	}
+}
+</script>
+<div id="settings_insert">
+<form action="{thisfile}" method="POST" enctype="multipart/form-data" id="insert_form" class="form-horizontal">
+	{form}
+	{row}
+	{table}
+	{id}
+	{label}
+	{datentyp}
+	{options}
+	{pflichtfeld}
+	{minimum}
+	{maximum}
+
+<!--
+	<div class="htmlobject_box formgroup">
+		<div class="left"><label class="control-label">Bezeichner</label></div>
+		<div class="right content">
+			{bezeichner}
+		</div>
+		<div class="floatbreaker" style="text-align:center;clear:both;">&#160;</div>
+	</div>
+//-->
+
+<div style="position:relative;margin: 10px 40px 0 40px;">
+
+	<div style="margin: 15px 0 15px 0;">
+		<b>{bezeichner_label}</b> <span style="padding: 0 0 0 15px;">{counter}</span>
+		<div class="floatbreaker" style="text-align:center;clear:both;">&#160;</div>
+	</div>
+
+	<div class="clearfix">
+	<ul class="nav nav-tabs">
+	<li id="tab0" class="active nav-item"><a data-toggle="tab" class="nav-link active"  href="#bez_tab0" onclick="this.blur(); return false;">On</a></li>
+	<li id="tab1" class="nav-item"><a data-toggle="tab" class="nav-link" href="#bez_tab1" onclick="this.blur(); return false;">Off</a></li>
+	</ul>
+	</div>
+
+	<div class="tab-content" style="margin: 0; padding:0;">
+		<div class="tab-pane active" id="bez_tab0" style="margin: 0;height: 240px; overflow:auto;padding: 15px;">
+			{selected}
+		</div>
+		<div class="tab-pane" id="bez_tab1" style="margin: 0;height: 240px; overflow:auto;padding: 15px;">
+			{available}
+		</div>
+	</div>
+
+</div>
+
+
+
+	<div class="buttons">{submit}&#160;{cancel}</div>
+</form>
+</div>
+<script language="JavaScript" type="text/javascript">
+ChangeOptions('datentyp');
+</script>

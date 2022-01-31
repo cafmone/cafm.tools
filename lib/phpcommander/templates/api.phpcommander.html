@@ -1,0 +1,83 @@
+<script type="text/javascript">
+function tr_hover(element) {
+	x = element.className.match(/tr_hover/g);
+	if(x == null) { element.className = element.className + " tr_hover"; }
+	else { element.className = element.className.replace(/ tr_hover/g, ""); }
+}
+function tr_click(element, arg) {
+	FileBrowser.preview( document.getElementById(arg).value );
+}
+</script>
+
+
+
+<div style="overflow:hidden;whitespace:nowrap;height:20px; line-height:20px; padding: 0 10px 5px 10px; background:white;">{breadcrumps}</div>
+
+
+    <div id="FileFunctions_menu">
+		<div class="upload_button">{upload}</div>
+		<div class="browse_button">
+		<form action="{thisfile}" id="dirsform" id="dirsform" style="display:inline;">{dirsform}</form>
+		<form action="{thisfile}" name="reloadform" id="reloadform" style="display:inline;">{form}<input type="submit" value="&#10227;" style="font-size:14px"></form>
+		</div>
+		<div style="line-height:0px;clear:both;">&#160;</div>
+	</div>
+    <div id="FileFunctions_data">
+		<div class="pageturn_box">
+			{pageturn}
+		</div>
+		<div class="table_panel" id="table_panel">
+			{table}
+		</div>		
+	</div>
+
+	<div id="FileFunctions_functions" style="display:none;">
+		<div class ="fieldset">
+		<div class="legend" id="info_name" style="visibility:hidden;">&#160;</div>
+		<input type="button" title="{lang_close}" value="X" class="functionbox-closebutton" onclick="FileBrowser.pre(false);">
+		<form action="#">
+		<div class="preview_panel">
+			<div class="info_panel" style="padding: 10px 0 0 0;">
+				<div class="picture_box">&#160;</div>
+			</div>			
+			<div class="preview_buttons">
+ 				<button type="button" onclick="FileBrowser.insert()">{lang_insert}</button>
+
+
+				<button type="button" onclick="
+						$('.preview_panel').css('display','none');
+						$('.delete_panel').css('display','block');">
+				{lang_delete}</button>
+
+				<button type="button" onclick="
+						$('.preview_panel').css('display','none');
+						$('.rename_panel').css('display','block');">
+				{lang_rename}</button>
+
+			</div>
+			<div style="line-height:0px;clear:both;">&#160;</div>
+		</div>
+		<div class="rename_panel">
+			<input type="text" name="new_name"><br><br>
+			<button type="button" onclick="FileBrowser.rename(this.form.new_name.value)">{lang_rename}</button>
+			<button type="button" onclick="
+					$('.preview_panel').css('display','block');
+					$('.rename_panel').css('display','none');">
+			{lang_cancel}</button>
+		</div>
+		<div class="delete_panel">
+			{lang_delete_confirm}<br><br>
+			<button type="button" onclick="FileBrowser.del()">{lang_delete}</button>
+			<button type="button" onclick="
+					$('.preview_panel').css('display','block');
+					$('.delete_panel').css('display','none');">
+			{lang_cancel}</button>
+		</div>
+		</form>
+		<div style="line-height:0px;clear:both;">&#160;</div>
+		</div>
+	</div>
+
+	<div id="FileFunctions_preload"><div class="preload">{lang_loading}</div>
+
+

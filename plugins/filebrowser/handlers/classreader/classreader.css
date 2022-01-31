@@ -1,0 +1,64 @@
+.apidoc {
+	display: block;
+}
+.apidoc .backlink {
+	display: block;
+	width: 80px;
+	padding: 10px 0;
+	text-decoration: none;
+}
+.apidoc h1 {
+	font-size: 18px;
+	border: 0px none !important;
+	margin: 0 0 10px 0 !important;
+}
+.apidoc h3 {
+	font-size: 14px;
+	border: 0px none !important;
+	margin: 0 0 10px 0 !important;
+}
+.apidoc code {
+	border:1px dotted;
+	display:block;
+	padding:10px;
+	margin: 10px 0 0 0;
+	background:#eee;
+}
+.apidoc .attribs {
+	background: #FFFFE0;
+	padding: 10px;
+	border: 1px solid;
+	display: block;
+}
+.apidoc .methods {
+	background: #E4EEFF;
+	padding: 10px;
+	border: 1px solid;
+	display: block;
+}
+
+.apidoc .attribs a, .apidoc .methods a{
+	display:block;
+	text-align:right;
+	margin: 10px 0 0 0;
+	padding:10px;
+	font-size:12px;
+	color:black;
+	text-decoration:none;
+}
+.apidoc .attribs div, .apidoc .methods div {
+	background: white;
+	border:1px solid;
+	margin: 0 0 0 0;
+	padding:10px;
+}
+.apidoc .attribs pre, .apidoc .methods pre {
+	margin: 0;
+	padding: 0;
+}
+.apidoc .attribs .indent, .apidoc .methods .indent {
+	margin: 0;
+	border: none 0px;
+	padding: 15px 10px 0px 35px;
+	font-size:15px;
+}
