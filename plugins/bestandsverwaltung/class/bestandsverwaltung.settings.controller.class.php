@@ -82,15 +82,9 @@ var $lang = array(
 		'button_title_download' => 'Download PDF',
 		'button_title_debug' => 'Debug trades',
 	),
-	'raumbuch' => array(
-		'tab' => 'Standort',
-		//'label_select' => '&Uuml;bersicht',
-		//'label_form' => 'Formular',
-	),
 	'export' => array(
 		'tab' => 'Export',
 	),
-
 );
 
 	//--------------------------------------------
@@ -157,19 +151,11 @@ var $lang = array(
 					default:
 					case 'inventory':
 						$content[] = $this->inventory( true );
-						#$content[] = $this->raumbuch();
-						$content[] = $this->gewerke();
-						#$content[] = $this->export();
-					break;
-					case 'raumbuch':
-						$content[] = $this->inventory();
-						#$content[] = $this->raumbuch( true );
 						$content[] = $this->gewerke();
 						#$content[] = $this->export();
 					break;
 					case 'gewerke':
 						$content[] = $this->inventory();
-						#$content[] = $this->raumbuch();
 						$content[] = $this->gewerke( true );
 						#$content[] = $this->export();
 					break;
@@ -258,34 +244,6 @@ var $lang = array(
 		$content['onclick'] = false;
 		$content['css']     = 'noborder';
 		if($this->action === 'gewerke'){
-			$content['active']  = true;
-		}
-		return $content;
-	}
-
-	//--------------------------------------------
-	/**
-	 * Raumbuch
-	 *
-	 * @access public
-	 * @return htmlobject_template
-	 */
-	//--------------------------------------------
-	function raumbuch($visible = false) {
-		$data = '';
-		if($visible === true) {
-			require_once($this->classdir.'bestandsverwaltung.settings.raumbuch.controller.class.php');
-			$controller = new bestandsverwaltung_settings_raumbuch_controller($this);
-			$controller->tpldir = $this->tpldir;
-			#$controller->lang  = $this->lang['raumbuch'];
-			$data = $controller->action();
-		}
-		$content['label']   = $this->lang['raumbuch']['tab'];
-		$content['value']   = $data;
-		$content['target']  = $this->response->html->thisfile;
-		$content['request'] = $this->response->get_array($this->actions_name, 'raumbuch' );
-		$content['onclick'] = false;
-		if($this->action === 'raumbuch'){
 			$content['active']  = true;
 		}
 		return $content;
