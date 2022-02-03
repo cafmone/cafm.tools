@@ -47,16 +47,17 @@ var $lang = array();
 		$this->db         = $controller->db;
 		$this->file       = $controller->file;
 		$this->response   = $controller->response;
+		$this->user = $controller->user;
 		$this->controller = $controller;
 
 		require_once(CLASSDIR.'plugins/bestandsverwaltung/class/gewerke.class.php');
 		$this->gewerke = new gewerke($this->db);
 
 		$this->plugins = $this->file->get_ini(PROFILESDIR.'/plugins.ini');
-		if(in_array('taetigkeiten', $this->plugins)) {
-			require_once(CLASSDIR.'plugins/taetigkeiten/class/taetigkeiten.class.php');
-			$this->taetigkeiten = new taetigkeiten($this->file, $this->response);
-			$this->taetigkeiten = $this->taetigkeiten->tables();
+		if(in_array('cafm.one', $this->plugins)) {
+			require_once(CLASSDIR.'plugins/cafm.one/class/cafm.one.class.php');
+			$this->taetigkeiten = new cafm_one($this->file, $this->response, $this->db, $this->user);
+			$this->taetigkeiten = $this->taetigkeiten->prefixes();
 		}
 	}
 

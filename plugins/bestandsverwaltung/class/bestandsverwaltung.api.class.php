@@ -17,12 +17,12 @@
  *  along with this file (see ../LICENSE.TXT) If not, see 
  *  <http://www.gnu.org/licenses/>.
  *
- *  Copyright (c) 2015-2016, Alexander Kuballa
+ *  Copyright (c) 2015-2022, Alexander Kuballa
  *
  * @package phppublisher
  * @author Alexander Kuballa [akuballa@users.sourceforge.net]
  * @author Uwe Pochadt
- * @copyright Copyright (c) 2008 - 2016, Alexander Kuballa
+ * @copyright Copyright (c) 2008 - 2022, Alexander Kuballa
  * @license GNU GENERAL PUBLIC LICENSE Version 2 (see ../LICENSE.TXT)
  * @version 1.0
  */
