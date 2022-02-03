@@ -246,6 +246,7 @@ var $lang = array(
 					$form->set_error('permissions[dir]', 'error dir');
 				}
 			}
+
 			// handle httpdocs folders
 			if(isset($request['folders']) && !$form->get_errors()) {
 				foreach($request['folders'] as $k => $v) {
@@ -275,16 +276,19 @@ var $lang = array(
 							}
 						}
 					}
+					// handle static custom.css
+					if($k === 'css') {
+						if(! $this->file->exists($target.'custom.css')) {
+							$error = $this->file->mkfile($target.'custom.css', '');
+						}
+					}
+
 					if($error !== '') {
 						$form->set_error('folders['.$k.']', $error);
 					}
 				}
 			}
 
-## TODO add static custom.css
-			
-			
-			
 			// handle login folder
 			if(isset($request['folders']['login']) && !$form->get_errors()) {
 				if(!isset($GLOBALS['settings']['folders']['login'])) {
@@ -632,7 +636,7 @@ var $lang = array(
 	 */
 	//--------------------------------------------
 	function __htaccess() {
-		$s  = 'AuthName "PHPPublisher"'."\n";
+		$s  = 'AuthName "CAFM.TOOLS"'."\n";
 		$s .= 'AuthType Basic'."\n";
 		$s .= 'AuthUserFile '.$this->PROFILESDIR.'.htpasswd'."\n";
 		$s .= 'require valid-user'."\n";

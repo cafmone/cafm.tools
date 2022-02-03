@@ -51,6 +51,10 @@ h4 {
 	color: gray;
 	font-weight: 900;
 }
+#Logo {
+	width: 198px;
+	height: 78px;
+}
 #Topbar {
 	background: #0a5a83;
 	color: white;
