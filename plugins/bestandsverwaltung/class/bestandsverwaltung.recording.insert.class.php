@@ -727,9 +727,9 @@ var $__delimiter = '[~]';
 		}
 
 		// handle plugins
-		if(in_array('taetigkeiten', $this->plugins)) {
-			require_once(CLASSDIR.'plugins/taetigkeiten/class/taetigkeiten.class.php');
-			$this->taetigkeiten = new taetigkeiten($this->file, $this->response);
+		if(in_array('cafm.one', $this->plugins)) {
+			require_once(CLASSDIR.'plugins/cafm.one/class/cafm.one.class.php');
+			$this->taetigkeiten = new cafm_one($this->file, $this->response);
 			$fields = array();
 			if(isset($this->fields['TODO'])) {
 				$fields = $this->fields['TODO'];
@@ -738,7 +738,7 @@ var $__delimiter = '[~]';
 			$prefixes = $this->response->html->request()->get('prefix');
 			if(!is_array($prefixes)) {
 				$prefixes = array();
-				$tmp = $this->taetigkeiten->tables(true);
+				$tmp = $this->taetigkeiten->prefixes(true);
 				if(is_array($tmp)) {
 					foreach($tmp as $k => $v) {
 						if(isset($v['bezeichner']) && (in_array('*', $v['bezeichner']) || in_array($this->bezeichner,$v['bezeichner']))) {
@@ -768,9 +768,10 @@ var $__delimiter = '[~]';
 				$d['TODO_ERROR']['object'] = $e;
 			}
 			else {
-				$d['TODO_NODATA'] = '';
+				#$d['TODO_NODATA'] = '';
 			}
 		}
+
 		// ID
 		if(!isset($this->id)) {
 			$columns = $this->db->handler()->columns($this->db->db, 'bestand');
@@ -829,7 +830,7 @@ var $__delimiter = '[~]';
 			$str  = '<div style="position: absolute;top: 40px;right: 10px;text-align: right;" id="todopanel">';
 			$str .= '<button type="button" class="form-control btn btn-default btn-inline" label="'.$this->lang['button_labor_card'].'" onclick="toggle_arbeitskarte();">'.$this->lang['button_labor_card'].'</button>';
 			$str .= '<div id="todogroups" class="tab-content" style="display:none;background-color:white;">';
-			$tables = $this->taetigkeiten->tables();
+			$tables = $this->taetigkeiten->prefixes();
 			if(is_array($tables)) {
 				$str .= '<div style="margin-right:500px;">';
 				foreach($tables as $table) {

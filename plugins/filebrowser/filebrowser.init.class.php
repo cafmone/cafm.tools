@@ -61,7 +61,7 @@ var $lang = array(
 		$files = array('filebrowser.ini');
 		foreach($files as $file) {
 			if(!$this->file->exists(PROFILESDIR.$file)) {
-				$error = $this->file->copy(CLASSDIR.'plugins/filebrowser/'.$file, PROFILESDIR.$file);
+				$error = $this->file->copy(CLASSDIR.'plugins/filebrowser/setup/'.$file, PROFILESDIR.$file);
 				if($error !== '') {
 					$errors[] = $error;
 				}

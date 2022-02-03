@@ -233,12 +233,12 @@ var $lang = array(
 
 					}
 					if($error !== '') {
-						$this->response->redirect($this->response->get_url($this->actions_name, 'select', $this->message_param, $error));
+						$this->response->redirect($this->response->get_url($this->actions_name, 'select', $this->message_param.'[error]', $error));
 					} else {
 						// copy files
 						$error = $this->__copy_files($p);
 						if($error !== '') {
-							$this->response->redirect($this->response->get_url($this->actions_name, 'select', $this->message_param, $error));
+							$this->response->redirect($this->response->get_url($this->actions_name, 'select', $this->message_param.'[error]', $error));
 						}
 					}
 				}
@@ -249,7 +249,7 @@ var $lang = array(
 			}
 			$error = $this->file->make_ini( $this->settings, $this->ini, null );
 			if($error !== '') {
-				$this->response->redirect($this->response->get_url($this->actions_name, 'select', $this->message_param, $error));
+				$this->response->redirect($this->response->get_url($this->actions_name, 'select', $this->message_param.'[error]', $error));
 			} else {
 				$this->response->redirect(
 					$this->response->get_url(
