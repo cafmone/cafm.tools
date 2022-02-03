@@ -34,7 +34,7 @@ h4 {
 	display: table;
 	position: relative;
 	overflow: hidden;
-	margin: 12px 0 10px 15px;
+	padding: 12px 0 10px 15px;
 	height: 78px;
 }
 #Logobar .row {

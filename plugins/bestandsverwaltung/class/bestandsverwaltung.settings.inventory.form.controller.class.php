@@ -50,17 +50,7 @@ var $identifier_name = 'settings_form_ident';
 
 var $tpldir;
 
-var $lang = array(
-	'form' => array(
-		'label' => 'Formular',
-		'label_index' => 'Index',
-		'label_devices' => 'Anlagen',
-		'label_identifiers' => 'Bezeichner',
-		'label_attribs' => 'Merkmale',
-		'label_options' => 'Options',
-		'msg_sorted' => 'Index neu sortiert',
-	),
-);
+var $lang = array();
 
 
 	//--------------------------------------------
@@ -99,7 +89,7 @@ var $lang = array(
 		require_once($this->classdir.'bestandsverwaltung.recording.form.controller.class.php');
 		$controller = new bestandsverwaltung_recording_form_controller($this);
 		$controller->tpldir = $this->tpldir;
-		$controller->lang  = $this->lang['form'];
+		$controller->lang  = $this->lang;
 		$data = $controller->action();
 
 		return $data;

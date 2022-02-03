@@ -188,7 +188,7 @@ var $lang = array();
 			#$controller->lang  = $this->lang['select'];
 			$data = $controller->action();
 		}
-		$content['label']   = $this->lang['label_attribs'];
+		$content['label']   = $this->lang['tab_attribs'];
 		$content['value']   = $data;
 		$content['target']  = $this->response->html->thisfile;
 		$content['request'] = $this->response->get_array($this->actions_name, 'attribs' );
@@ -218,7 +218,7 @@ var $lang = array();
 			#$controller->lang  = $this->lang['select'];
 			$data = $controller->action();
 		}
-		$content['label']   = $this->lang['label_options'];
+		$content['label']   = $this->lang['tab_options'];
 		$content['value']   = $data;
 		$content['target']  = $this->response->html->thisfile;
 		$content['request'] = $this->response->get_array($this->actions_name, 'options' );
@@ -248,7 +248,7 @@ var $lang = array();
 			#$controller->lang  = $this->lang['select'];
 			$data = $controller->action();
 		}
-		$content['label']   = $this->lang['label_attribs'];
+		$content['label']   = $this->lang['tab_attribs'];
 		$content['value']   = $data;
 		$content['target']  = $this->response->html->thisfile;
 		$content['request'] = $this->response->get_array($this->actions_name, 'attribs' );
@@ -278,7 +278,7 @@ var $lang = array();
 			$controller->lang  = $this->lang;
 			$data = $controller->action();
 		}
-		$content['label']   = $this->lang['label_index'];
+		$content['label']   = $this->lang['tab_index'];
 		$content['value']   = $data;
 		$content['target']  = $this->response->html->thisfile;
 		$content['request'] = $this->response->get_array($this->actions_name, 'index' );
@@ -308,7 +308,7 @@ var $lang = array();
 			#$controller->lang  = $this->lang['select'];
 			$data = $controller->action();
 		}
-		$content['label']   = $this->lang['label_identifiers'];
+		$content['label']   = $this->lang['tab_identifiers'];
 		$content['value']   = $data;
 		$content['target']  = $this->response->html->thisfile;
 		$content['request'] = $this->response->get_array($this->actions_name, 'identifiers' );

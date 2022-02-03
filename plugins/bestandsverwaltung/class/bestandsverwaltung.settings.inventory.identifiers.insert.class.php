@@ -100,7 +100,7 @@ var $lang = array();
 			$t->add($response->form);
 			$t->group_elements(array('param_' => 'form'));
 			if(isset($response->error)) {
-				$_REQUEST[$this->message_param] = $response->error;
+				$_REQUEST[$this->message_param]['error'] = $response->error;
 			}
 			return $t;
 		} else {
@@ -148,7 +148,7 @@ var $lang = array();
 			if($error !== '') {
 				$response->error = $error;
 			} else {
-				$response->msg = 'sucess';
+				$response->msg = $this->lang['update_sucess'];
 			}
 		}
 		else if($form->get_errors()) {
@@ -198,7 +198,7 @@ var $lang = array();
 			if($error !== '') {
 				$response->error = $error;
 			} else {
-				$response->msg = 'sucess';
+				$response->msg = $this->lang['update_sucess'];;
 			}
 		}
 		else if($form->get_errors()) {
@@ -238,7 +238,7 @@ var $lang = array();
 
 			$d['bezeichner'] = 'New';
 
-			$d['id']['label']                         = 'bezeichner_kurz';
+			$d['id']['label']                         = $this->lang['label_short'];
 			$d['id']['required']                      = true;
 			$d['id']['validate']['regex']             = '/^[A-Z0-9_]+$/';
 			$d['id']['validate']['errormsg']          = sprintf('%s must be A-Z 0-9 or _', 'bezeichner_kurz');
@@ -249,7 +249,7 @@ var $lang = array();
 			}
 		}
 
-		$d['bezeichner_lang']['label']                    = 'Lang';
+		$d['bezeichner_lang']['label']                    = $this->lang['label_long'];
 		$d['bezeichner_lang']['required']                 = true;
 		$d['bezeichner_lang']['object']['type']           = 'htmlobject_input';
 		$d['bezeichner_lang']['object']['attrib']['name'] = 'bez[bezeichner_lang]';
@@ -272,7 +272,7 @@ var $lang = array();
 			$d['din']['object']['attrib']['value'] = $fields['din'];
 		}
 
-		$d['alias']['label']                     = 'Alias';
+		$d['alias']['label']                     = $this->lang['label_alias'];
 		$d['alias']['object']['type']            = 'htmlobject_input';
 		$d['alias']['object']['attrib']['name']  = 'bez[alias]';
 		$d['alias']['object']['attrib']['style'] = 'width:400px;';
@@ -289,7 +289,7 @@ var $lang = array();
 		$states[] = array('off','Off');
 		$states[] = array('obsolete','Obsolete');
 
-		$d['status']['label']                       = 'Status';
+		$d['status']['label']                       = $this->lang['label_state'];
 		$d['status']['object']['type']              = 'htmlobject_select';
 		$d['status']['object']['attrib']['index']   = array(0,1);
 		$d['status']['object']['attrib']['options'] = $states;

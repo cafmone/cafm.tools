@@ -73,7 +73,7 @@ var $lang = array();
 
 		$i = $this->response->html->a();
 		$i->href    = $this->response->get_url($this->actions_name, 'insert' );
-		$i->title   = 'New';
+		$i->title   = $this->lang['button_title_add_identifier'];
 		$i->css     = 'icon icon-plus btn btn-default btn-sm';
 		$i->style   = 'margin: -3px 4px 0 0; display: inline-block;';
 		$i->handler = 'onclick="phppublisher.wait();"';
@@ -83,7 +83,7 @@ var $lang = array();
 		if(in_array('cafm.one', $plugins)) {
 			$s = $this->response->html->a();
 			$s->href    = $this->response->get_url($this->actions_name, 'sync' );
-			$s->title   = 'sync';
+			$s->title   = $this->lang['button_title_sync_identifiers'];
 			$s->css     = 'icon icon-sync btn btn-default btn-sm';
 			$s->style   = 'margin: 5px 4px 0 0; display: inline-block;';
 			$s->handler = 'onclick="phppublisher.wait();"';
@@ -91,7 +91,7 @@ var $lang = array();
 
 		$d = $this->response->html->a();
 		$d->href    = $this->response->get_url($this->actions_name, 'download' );
-		$d->title   = 'download';
+		$d->title   = $this->lang['button_title_download_identifier'];
 		$d->css     = 'icon icon-download btn btn-default btn-sm';
 		$d->style   = 'margin: 5px 4px 0 0; display: inline-block;';
 
@@ -149,7 +149,7 @@ var $lang = array();
 		$table->autosort  = true;
 		$table->identifier      = 'kurz';
 		$table->identifier_name = $this->controller->identifier_name;
-		$table->actions         = array(array('status' => 'status'));
+		$table->actions         = array(array('status' => $this->lang['label_state']));
 		$table->actions_name    = $this->actions_name;
 
 		$head   = array();
@@ -159,13 +159,13 @@ var $lang = array();
 			$head['filter']['style'] = 'width: 60px;text-align:center;';
 		}
 
-		$head['kurz']['title'] = 'Kurz';
+		$head['kurz']['title'] = $this->lang['label_short'];
 		$head['kurz']['sortable'] = true;
 
-		$head['lang']['title'] = 'Lang';
+		$head['lang']['title'] = $this->lang['label_long'];
 		$head['lang']['sortable'] = true;
 
-		$head['alias']['title'] = 'Alias';
+		$head['alias']['title'] = $this->lang['label_alias'];
 		$head['alias']['sortable'] = true;
 
 		$head['din']['title'] = 'DIN';
@@ -174,7 +174,7 @@ var $lang = array();
 		$head['help']['title'] = 'Help';
 		$head['help']['sortable'] = false;
 
-		$head['status']['title'] = 'Status';
+		$head['status']['title'] = $this->lang['label_state'];
 		$head['status']['sortable'] = true;
 
 		$head['edit']['title'] = '&#160;';
@@ -234,7 +234,7 @@ var $lang = array();
 			foreach($data as $d) {
 				$a = $response->html->a();
 				$a->href  = $response->get_url($this->actions_name, 'insert').'&bezeichner='.$d['bk'].$tparams;
-				$a->title = 'edit';
+				$a->title = sprintf($this->lang['button_title_edit_identifier'], $d['bk']);
 				$a->css = 'icon icon-edit edit btn btn-default btn-sm';
 				$a->style = 'margin: -3px 0 0 0; display: inline-block;';
 				$a->handler = 'onclick="phppublisher.wait();"';
@@ -314,7 +314,7 @@ var $lang = array();
 		$states[] = array('off','Off');
 		$states[] = array('obsolete','Obsolete');
 
-		$d['filter_status']['label']                       = 'Status';
+		$d['filter_status']['label']                       = $this->lang['label_state'];
 		$d['filter_status']['css']                         = 'autosize float-right';
 		$d['filter_status']['style']                       = 'clear:both;';
 		$d['filter_status']['object']['type']              = 'htmlobject_select';
@@ -323,14 +323,14 @@ var $lang = array();
 		$d['filter_status']['object']['attrib']['style']   = 'width:120px;margin:0 80px 0 0;';
 		$d['filter_status']['object']['attrib']['name']    = 'filter[status]';
 
-		$d['filter_kurz']['label']                     = 'Kurz';
+		$d['filter_kurz']['label']                     = $this->lang['label_short'];
 		$d['filter_kurz']['css']                       = 'autosize float-right';
 		$d['filter_kurz']['style']                     = 'clear:both;';
 		$d['filter_kurz']['object']['type']            = 'htmlobject_input';
 		$d['filter_kurz']['object']['attrib']['style'] = 'width:200px;';
 		$d['filter_kurz']['object']['attrib']['name']  = 'filter[bezeichner_kurz]';
 
-		$d['filter_lang']['label']                     = 'Lang';
+		$d['filter_lang']['label']                     = $this->lang['label_long'];
 		$d['filter_lang']['css']                       = 'autosize float-right';
 		$d['filter_lang']['style']                     = 'clear:both;';
 		$d['filter_lang']['object']['type']            = 'htmlobject_input';

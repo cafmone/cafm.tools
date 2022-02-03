@@ -54,18 +54,7 @@ var $tpldir;
 * @access public
 * @var array
 */
-var $lang = array(
-	'label' => 'Gewerke',
-	'select' => array(
-		'label' => '&Uuml;bersicht',
-	),
-	'taetigkeiten' => array(
-		'label' => 'T&auml;tigkeiten',
-	),
-	'plans' => array(
-		'label' => 'Planung',
-	)
-);
+var $lang = array();
 
 	//--------------------------------------------
 	/**
@@ -86,7 +75,6 @@ var $lang = array(
 		$this->db = $controller->db;
 		$this->user = $controller->user;
 		$this->settings = $controller->settings;
-		#$this->lang = $this->user->translate($this->lang, CLASSDIR.'plugins/bestand/lang/', 'bestand.ini');
 		$this->classdir = $controller->classdir;
 		$this->plugins = $this->file->get_ini(PROFILESDIR.'/plugins.ini');
 	}
@@ -156,7 +144,7 @@ var $lang = array(
 			$controller->actions_name = $this->actions_name;
 			$controller->message_param = $this->message_param;
 			$controller->tpldir = $this->tpldir;
-			#$controller->lang  = $this->lang['select'];
+			$controller->lang  = $this->lang;
 			$data = $controller->action();
 		}
 		$content['label']   = 'x';

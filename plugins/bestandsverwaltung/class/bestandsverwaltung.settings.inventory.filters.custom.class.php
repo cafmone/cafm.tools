@@ -58,22 +58,7 @@ var $settings;
 * @access public
 * @var array
 */
-var $lang = array(
-		"lang_query" => "Database",
-		"lang_export" => "Export",
-		"lang_printout" => "Printout",
-		"lang_filter" => "Custom Filters",
-		"lang_recording" => "Erfassung",
-		"lang_permissions" => "Permissions",
-		"query" => array(
-			"type" => "Type",
-			"host" => "Host",
-			"db" => "DB",
-			"user" => "User",
-			"pass" => "Pass"
-		),
-		"update_sucess" => "Settings updated successfully",
-	);
+var $lang = array();
 
 	//--------------------------------------------
 	/**
@@ -103,7 +88,6 @@ var $lang = array(
 	function action($action = null) {
 
 		$form = $this->update();
-
 		$str = '';
 		$tables = $this->db->select('bestand_index','*',null,'pos');
 		if(is_array($tables)) {
@@ -126,7 +110,7 @@ var $lang = array(
 		$t = $this->response->html->template($this->tpldir.'bestandsverwaltung.settings.inventory.filters.custom.html');
 		$t->add($vars);
 		$t->add($form);
-		$t->add($str, 'attribs');	
+		$t->add($str, 'attribs');
 		$t->group_elements(array('param_' => 'form'));
 		$t->group_elements(array('filter_' => 'filter'));
 
@@ -140,10 +124,6 @@ var $lang = array(
 
 			}
 		}
-
-#$this->response->html->help($filters);
-
-
 		return $t;
 	}
 
@@ -158,33 +138,20 @@ var $lang = array(
 	function update() {
 		$form = $this->get_form();
 		if(!$form->get_errors() && $this->response->submit()) {
-			$error = '';
 			$request = $form->get_request();
-			#$old = $this->file->get_ini( $this->settings );
-			#if(is_array($old)) {
-			#	unset($old['query']);
-			#	unset($old['export']);
-			#	unset($old['printout']);
-			#	unset($old['filter']);
-			#	unset($old['qrcode']);
-			#	unset($old['recording']);
-			#	$request = array_merge($old, $request);
-			#}
-
+			if($request === '') {
+				$request = array();
+			}
+			$error = $this->file->make_ini( $this->settings, $request );
 			if( $error === '' ) {
-				$error = $this->file->make_ini( $this->settings, $request );
-				if( $error === '' ) {
-					$msg = $this->lang['update_sucess'];
-					$this->response->redirect($this->response->get_url($this->actions_name, 'custom', $this->message_param, $msg));
-				} else {
-					$_REQUEST[$this->message_param] = $error;
-				}
+				$msg = $this->lang['update_sucess'];
+				$this->response->redirect($this->response->get_url($this->actions_name, 'custom', $this->message_param, $msg));
 			} else {
-				$_REQUEST[$this->message_param] = $error;
+				$_REQUEST[$this->message_param]['error'] = $error;
 			}
 		} 
 		else if($form->get_errors()) {
-			$_REQUEST[$this->message_param] = implode('<br>', $form->get_errors());
+			$_REQUEST[$this->message_param]['error'] = implode('<br>', $form->get_errors());
 		}
 		return $form;
 	}

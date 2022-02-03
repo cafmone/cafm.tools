@@ -174,8 +174,8 @@ var $lang = array();
 							} else {
 								$i = $this->response->html->a();
 								$i->href    = $this->response->get_url($this->actions_name, 'sync' ).'&confirm['.$b['bezeichner_kurz'].']='.$b['bezeichner_kurz'];
-								$i->title   = 'Update';
-								$i->css     = 'icon icon-sync btn btn-default btn-xs';
+								$i->title   = sprintf($this->lang['button_title_sync_identifier'], $b['bezeichner_kurz']);
+								$i->css     = 'icon icon-sync btn btn-default btn-sm';
 								$i->style   = 'margin: 0 0 0 0; display: inline-block;';
 								$i->handler = 'onclick="phppublisher.wait();"';
 
@@ -222,8 +222,8 @@ var $lang = array();
 						} else {
 							$i = $this->response->html->a();
 							$i->href    = $this->response->get_url($this->actions_name, 'sync' ).'&confirm['.$b['bezeichner_kurz'].']='.$b['bezeichner_kurz'];
-							$i->title   = 'Insert';
-							$i->css     = 'icon icon-transfer btn btn-default btn-xs';
+							$i->title   = sprintf($this->lang['button_title_insert_identifier'], $b['bezeichner_kurz']);
+							$i->css     = 'icon icon-plus btn btn-default btn-sm';
 							$i->style   = 'margin: 0 0 0 0; display: inline-block;';
 							$i->handler = 'onclick="phppublisher.wait();"';
 

@@ -154,10 +154,10 @@ var $lang = array();
 			$controller->message_param = $this->message_param;
 			$controller->actions_name = $this->actions_name;
 			$controller->tpldir = $this->tpldir;
-			#$controller->lang = $this->lang;
+			$controller->lang = $this->lang;
 			$data = $controller->action();
 		}
-		$content['label']   = 'Custom';
+		$content['label']   = $this->lang['tab_custom'];
 		$content['value']   = $data;
 		$content['target']  = $this->response->html->thisfile;
 		$content['request'] = $this->response->get_array($this->actions_name, 'custom' );

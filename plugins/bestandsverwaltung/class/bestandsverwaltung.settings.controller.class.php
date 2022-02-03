@@ -50,25 +50,45 @@ var $tpldir;
 * @var array
 */
 var $lang = array(
-	'label' => 'Einstellungen',
+	'label' => 'Inventory',
 	'inventory' => array(
-		'label' => 'Bestand',
-		'label_identifiers' => 'Bezeichner',
-		'label_qrcode' => 'QRCode',
-		'label_filters' => 'Filters',
-		'label_form' => 'Formular',
-		'label_process' => 'Prozess',
+		'tab' => 'Inventory',
+		'tab_identifiers' => 'Identifiers',
+		'tab_qrcode' => 'QRCode',
+		'tab_filters' => 'Filters',
+		'tab_form' => 'Form',
+		'tab_attribs' => 'Atributes',
+		'tab_options' => 'Options',
+		'tab_index' => 'Index',
+		'tab_custom' => 'Custom',
+		'label_process' => 'Process',
+		'label_state' => 'State',
+		'label_short' => 'Short',
+		'label_long' => 'Long',
+		'label_alias' => 'Alias',
+		'button_title_add_identifier' => 'Add new identifier',
+		'button_title_sync_identifiers' => 'Sync identifiers',
+		'button_title_sync_identifier' => 'Sync identifier %s',
+		'button_title_download_identifier' => 'Download identifier list',
+		'button_title_edit_identifier' => 'Edit identifier %s',
+		'button_title_insert_identifier' => 'Insert identifier %s',
+		'update_sucess' => 'Updated successfully',
 	),
 	'gewerke' => array(
-		'label' => 'Gewerke',
+		'tab' => 'Trades',
+		'button_title_add' => 'Add new trade',
+		'button_title_clip' => 'Clip trades',
+		'button_title_unclip' => 'Unclip trades',
+		'button_title_download' => 'Download PDF',
+		'button_title_debug' => 'Debug trades',
 	),
 	'raumbuch' => array(
-		'label' => 'Standort',
+		'tab' => 'Standort',
 		//'label_select' => '&Uuml;bersicht',
 		//'label_form' => 'Formular',
 	),
 	'export' => array(
-		'label' => 'Export',
+		'tab' => 'Export',
 	),
 
 );
@@ -181,7 +201,6 @@ var $lang = array(
 
 		$t = $this->response->html->template($this->tpldir.'/bestandsverwaltung.settings.controller.html');
 		$t->add($tab, 'tab');
-		$t->add($this->lang['label'], 'label');
 
 		return $t;
 	}
@@ -203,7 +222,7 @@ var $lang = array(
 			$controller->lang  = $this->lang['inventory'];
 			$data = $controller->action();
 		}
-		$content['label']   = $this->lang['inventory']['label'];
+		$content['label']   = $this->lang['inventory']['tab'];
 		$content['value']   = $data;
 		$content['target']  = $this->response->html->thisfile;
 		$content['request'] = $this->response->get_array($this->actions_name, 'inventory' );
@@ -232,7 +251,7 @@ var $lang = array(
 			$controller->lang  = $this->lang['gewerke'];
 			$data = $controller->action();
 		}
-		$content['label']   = $this->lang['gewerke']['label'];
+		$content['label']   = $this->lang['gewerke']['tab'];
 		$content['value']   = $data;
 		$content['target']  = $this->response->html->thisfile;
 		$content['request'] = $this->response->get_array($this->actions_name, 'gewerke' );
@@ -261,7 +280,7 @@ var $lang = array(
 			#$controller->lang  = $this->lang['raumbuch'];
 			$data = $controller->action();
 		}
-		$content['label']   = $this->lang['raumbuch']['label'];
+		$content['label']   = $this->lang['raumbuch']['tab'];
 		$content['value']   = $data;
 		$content['target']  = $this->response->html->thisfile;
 		$content['request'] = $this->response->get_array($this->actions_name, 'raumbuch' );
@@ -289,7 +308,7 @@ var $lang = array(
 			$controller->lang  = $this->lang['export'];
 			$data = $controller->action();
 		}
-		$content['label']   = $this->lang['export']['label'];
+		$content['label']   = $this->lang['export']['tab'];
 		$content['value']   = $data;
 		$content['target']  = $this->response->html->thisfile;
 		$content['request'] = $this->response->get_array($this->actions_name, 'export' );

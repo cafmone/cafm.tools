@@ -136,10 +136,11 @@ var changelogpicker = {
 
 var copy = {
 	confirm : function( element, id ) {
+		phppublisher.modal.width = '280px';
 		var modalid = phppublisher.modal.init('');
 		var c = document.createElement("div");
 		c.style.textAlign = 'center';
-		c.style.margin = '30px';
+		c.style.margin = '20px';
 		var t = document.createElement("div");
 		t.innerHTML = 'Copy '+id+'?<br><br>';
 		var b = document.createElement("button");
@@ -543,11 +544,13 @@ function doExport(form) {
 	</div>
 
 	{table}
-	<div id="detailsbox">&#160;</div>
+
 	<div class="noprint" id="anchorbottom" style="text-align:right;padding:10px 10px 0 0; margin: 0 15px 0 20px;"><a href="#top" title="{button_title_up}"><span class="icon icon-menu-up"></span></a></div>
 	</form>
 	
 </div>
+
+<div id="detailsbox">&#160;</div>
 
 <div id="progress" style="display:none;" class="popunder">
 	<div style="margin:0 auto;width:320px;">

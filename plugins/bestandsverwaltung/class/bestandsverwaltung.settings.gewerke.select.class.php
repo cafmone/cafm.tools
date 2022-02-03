@@ -106,6 +106,7 @@ var $lang = array();
 	 */
 	//--------------------------------------------
 	function action() {
+	
 		$response = $this->select();
 		$t = $response->html->template($this->tpldir.'bestandsverwaltung.settings.gewerke.select.html');
 		$t->add($response->html->thisfile,'thisfile');
@@ -128,24 +129,24 @@ var $lang = array();
 			} else {
 				$a->href = $response->get_url($this->actions_name, 'select').'&debug=true';
 			}
-			$a->css   = 'icon icon-info debug';
+			$a->css   = 'btn btn-default icon icon-info debug';
 			$a->customattribs = 'data-toggle="tooltip"';
-			$a->title = 'Debug';
+			$a->title = $this->lang['button_title_debug'];
 			$a->handler = 'onclick="phppublisher.wait();"';
 			$t->add($a, 'debug');
 
 			$a        = $response->html->a();
 			$a->href  = $this->response->get_url($this->actions_name, 'pdf');
 			$a->customattribs = 'data-toggle="tooltip"';
-			$a->title = 'Download PDF';
-			$a->css   = 'icon icon-download';
+			$a->title = $this->lang['button_title_download'];
+			$a->css   = 'btn btn-default icon icon-download';
 			$t->add($a,'pdf');
 
 			$a        = $response->html->a();
 			$a->href  = 'javascript:gewerk.open(\'\',\'insert\');';
 			$a->customattribs = 'data-toggle="tooltip"';
-			$a->title = 'Insert';
-			$a->css   = 'icon icon-plus insert noprint';
+			$a->title = $this->lang['button_title_add'];
+			$a->css   = 'btn btn-default icon icon-plus insert noprint';
 			$t->add($a,'insert');
 
 			$t->add('','selector');
@@ -154,12 +155,12 @@ var $lang = array();
 			$a->label = '';
 			$a->customattribs = 'data-toggle="tooltip"';
 			if(isset($this->clip) && $this->clip !== 'false') {
-				$a->title = 'Unclip';
-				$a->css   = 'icon icon-menu-down';
+				$a->title = $this->lang['button_title_unclip'];
+				$a->css   = 'btn btn-default icon icon-menu-down';
 				$a->href = $response->get_url($this->actions_name, 'select').'&clip=false';
 			} else {
-				$a->title = 'Clip';
-				$a->css   = 'icon icon-menu-right';
+				$a->title = $this->lang['button_title_clip'];
+				$a->css   = 'btn btn-default icon icon-menu-right';
 				$a->href = $response->get_url($this->actions_name, 'select').'&clip=true';
 			}
 			$a->handler = 'onclick="phppublisher.wait();"';
@@ -390,7 +391,7 @@ var $lang = array();
 						} else {
 							$a          = $this->response->html->a();
 							$a->label   = '';
-							$a->css     = 'icon icon-menu-right noprint';
+							$a->css     = 'btn btn-default btn-sm icon icon-menu-right noprint';
 							$a->href    = $this->response->html->thisfile.$this->params.'&clip='.$k.'#'.$k;
 							$a->handler = 'onclick="phppublisher.wait();"';
 
@@ -506,7 +507,7 @@ var $lang = array();
 			} else {
 				$a          = $this->response->html->a();
 				$a->label   = '';
-				$a->css     = 'icon icon-menu-right noprint';
+				$a->css     = 'btn btn-default btn-sm icon icon-menu-down noprint';
 				$a->href    = $this->response->html->thisfile.$this->params.'&clip='.$key.'#'.$key;
 				$a->handler = 'onclick="phppublisher.wait();"';
 
