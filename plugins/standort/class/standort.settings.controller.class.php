@@ -143,6 +143,14 @@ var $tpldir;
 	 */
 	//--------------------------------------------
 	function action($action = null) {
+	
+		// Settings Error
+		if(!isset($this->settings) || 
+			!isset($this->settings['query']['table']) || 
+			!isset($this->settings['query']['db'])
+		) {
+			$_REQUEST[$this->message_param]['error'] = 'Error: Please check plugin settings';
+		}
 
 
 		// Group switch

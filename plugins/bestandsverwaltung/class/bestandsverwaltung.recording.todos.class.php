@@ -74,6 +74,7 @@ var $lang = array();
 		$this->settings = $controller->settings;
 		$this->classdir = $controller->classdir;
 		$this->profilesdir = $controller->profilesdir;
+		$this->plugins = $this->file->get_ini(PROFILESDIR.'/plugins.ini');
 
 		$tables = $this->db->select('bestand_index', array('tabelle_kurz','tabelle_lang'), null, 'pos');
 		if(is_array($tables)) {
@@ -217,15 +218,17 @@ var $lang = array();
 				$str .= 'Datum: '.$date.'<br>';
 
 				// Standort
-				$standort = $this->response->html->request()->get('SYSTEM', true);
-				if(isset($standort['RAUMBUCHID'])) {
-					require_once(CLASSDIR.'plugins/standort/class/standort.class.php');
-					$raumbuch = new standort($this->db, $this->file);
-					$raumbuch->options = $raumbuch->options();
-					if(isset($raumbuch->options[$raumbuch->indexprefix.$standort['RAUMBUCHID']])) {
-						$str .= 'Standort: '.$raumbuch->options[$raumbuch->indexprefix.$standort['RAUMBUCHID']]['label'].' ('.$standort['RAUMBUCHID'].')'.'<br>';
-					} else {
-						$str .= 'Standort: '.$standort['RAUMBUCHID'].'<br>';
+				if(in_array('standort', $this->plugins)) {
+					$standort = $this->response->html->request()->get('SYSTEM', true);
+					if(isset($standort['RAUMBUCHID'])) {
+						require_once(CLASSDIR.'plugins/standort/class/standort.class.php');
+						$raumbuch = new standort($this->db, $this->file);
+						$raumbuch->options = $raumbuch->options();
+						if(isset($raumbuch->options[$raumbuch->indexprefix.$standort['RAUMBUCHID']])) {
+							$str .= 'Standort: '.$raumbuch->options[$raumbuch->indexprefix.$standort['RAUMBUCHID']]['label'].' ('.$standort['RAUMBUCHID'].')'.'<br>';
+						} else {
+							$str .= 'Standort: '.$standort['RAUMBUCHID'].'<br>';
+						}
 					}
 				}
 				
@@ -522,18 +525,20 @@ var $lang = array();
 				$pdf->Write(5, date('Y-m-d H:i:s',$now)."\n");
 
 				// Standort
-				$standort = $this->response->html->request()->get('SYSTEM', true);
-				if(isset($standort['RAUMBUCHID'])) {
-					require_once(CLASSDIR.'plugins/standort/class/standort.class.php');
-					$raumbuch = new standort($this->db, $this->file);
-					$raumbuch->options = $raumbuch->options();
-					$pdf->SetFont('', 'B', 10);
-					$pdf->Write(5, 'Standort: ');
-					$pdf->SetFont('', '', 10);
-					if(isset($raumbuch->options[$raumbuch->indexprefix.$standort['RAUMBUCHID']])) {
-						$pdf->Write(5, $raumbuch->options[$raumbuch->indexprefix.$standort['RAUMBUCHID']]['label'].' ('.$standort['RAUMBUCHID'].')'."\n");
-					} else {
-						$pdf->Write(5, $standort['RAUMBUCHID']."\n");
+				if(in_array('standort', $this->plugins)) {
+					$standort = $this->response->html->request()->get('SYSTEM', true);
+					if(isset($standort['RAUMBUCHID'])) {
+						require_once(CLASSDIR.'plugins/standort/class/standort.class.php');
+						$raumbuch = new standort($this->db, $this->file);
+						$raumbuch->options = $raumbuch->options();
+						$pdf->SetFont('', 'B', 10);
+						$pdf->Write(5, 'Standort: ');
+						$pdf->SetFont('', '', 10);
+						if(isset($raumbuch->options[$raumbuch->indexprefix.$standort['RAUMBUCHID']])) {
+							$pdf->Write(5, $raumbuch->options[$raumbuch->indexprefix.$standort['RAUMBUCHID']]['label'].' ('.$standort['RAUMBUCHID'].')'."\n");
+						} else {
+							$pdf->Write(5, $standort['RAUMBUCHID']."\n");
+						}
 					}
 				}
 				$pdf->Write(5, "\n");

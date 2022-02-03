@@ -61,6 +61,7 @@ var $lang = array(
 			$this->db->db = $this->settings['settings']['db'];
 		}
 		$this->tpldir = CLASSDIR.'plugins/cafm.one/templates/';
+		$this->plugins = $this->file->get_ini(PROFILESDIR.'/plugins.ini');
 
 	}
 
@@ -205,13 +206,15 @@ var $lang = array(
 				}
 				echo '<div>Datum: '.date('Y-m-d H:i:s',$result[0]['date']).'</div>';
 
-				$standort = array_search('RAUMBUCHID', array_column($result, 'merkmal_kurz'));
-				if($standort !== false) {
-					require_once(CLASSDIR.'plugins/standort/class/standort.class.php');
-					$raumbuch = new standort($this->db, $this->file);
-					$raumbuch->options = $raumbuch->options();
-					if(isset($raumbuch->options[$raumbuch->indexprefix.$result[$standort]['wert']])) {
-						echo '<div>Standort: '.$raumbuch->options[$raumbuch->indexprefix.$result[$standort]['wert']]['label'].' ('.$result[$standort]['wert'].')</div>';
+				if(in_array('standort', $this->plugins)) {
+					$standort = array_search('RAUMBUCHID', array_column($result, 'merkmal_kurz'));
+					if($standort !== false) {
+						require_once(CLASSDIR.'plugins/standort/class/standort.class.php');
+						$raumbuch = new standort($this->db, $this->file);
+						$raumbuch->options = $raumbuch->options();
+						if(isset($raumbuch->options[$raumbuch->indexprefix.$result[$standort]['wert']])) {
+							echo '<div>Standort: '.$raumbuch->options[$raumbuch->indexprefix.$result[$standort]['wert']]['label'].' ('.$result[$standort]['wert'].')</div>';
+						}
 					}
 				}
 

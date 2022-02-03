@@ -83,6 +83,7 @@ var $__attribs;
 		$this->response   = $controller->response;
 		$this->controller = $controller;
 		$this->settings   = $controller->settings;
+		$this->plugins    = $this->file->get_ini(PROFILESDIR.'/plugins.ini');
 
 		// Validate user
 		$groups = array();
@@ -128,9 +129,12 @@ var $__attribs;
 			$this->bezeichner = $lb;
 		}
 
-		require_once(CLASSDIR.'plugins/standort/class/standort.class.php');
-		$this->raumbuch = new standort($this->db, $this->file);
-		$this->raumbuch->options = $this->raumbuch->options();
+		// handle CAFM.ONE connected 
+		if(in_array('standort', $this->plugins)) {
+			require_once(CLASSDIR.'plugins/standort/class/standort.class.php');
+			$this->raumbuch = new standort($this->db, $this->file);
+			$this->raumbuch->options = $this->raumbuch->options();
+		}
 
 		require_once(CLASSDIR.'plugins/bestandsverwaltung/class/gewerke.class.php');
 		$this->gewerke = new gewerke($this->db);
@@ -142,8 +146,6 @@ var $__attribs;
 		} else {
 			$this->prozesses = '';
 		}
-
-		$this->plugins = $this->file->get_ini(PROFILESDIR.'/plugins.ini');
 
 		// handle CAFM.ONE connected 
 		if(in_array('cafm.one', $this->plugins)) {
@@ -501,11 +503,14 @@ var $__attribs;
 						$data .= date('Y-m-d H:i',$id['date']).'<br><br>';
 
 						// Raumbuch
-						if(isset($id['RAUMBUCHID'])) {
-							if(array_key_exists($this->raumbuch->indexprefix.$id['RAUMBUCHID'], $this->raumbuch->options)) {
-								$data .= 'Standort: '.$this->raumbuch->options[$this->raumbuch->indexprefix.$id['RAUMBUCHID']]['label'].' ['.$id['RAUMBUCHID'].']<br>';
+						if(isset($this->raumbuch)) {
+							if(isset($id['RAUMBUCHID'])) {
+								if(array_key_exists($this->raumbuch->indexprefix.$id['RAUMBUCHID'], $this->raumbuch->options)) {
+									$data .= 'Standort: '.$this->raumbuch->options[$this->raumbuch->indexprefix.$id['RAUMBUCHID']]['label'].' ['.$id['RAUMBUCHID'].']<br>';
+								}
 							}
 						}
+
 						// Custom Filters
 						if(isset($this->settings['filter']) && is_array($this->settings['filter'])) {
 							foreach($this->settings['filter'] as $f) {
@@ -579,22 +584,16 @@ var $__attribs;
 							$update .= $a->get_string();
 						}
 
-						#$a        = $response->html->a();
-						#$a->href  = '#';
-						#$a->label = 'Changelog';
-						#$a->title = 'Changelog';
-						#$a->css   = 'btn btn-sm btn-default changelog';
-						#$a->handler = 'onclick="changelogpicker.init(\''.$id['id'].'\'); return false;"';
-						#$update .= $a->get_string();
-
-						if(isset($id['RAUMBUCHID'])) {
-							$a        = $response->html->a();
-							$a->href  = '#';
-							$a->label = $this->lang['button_location'];
-							$a->title = $this->lang['button_location'];
-							$a->css   = 'btn btn-sm btn-default raumbuch';
-							$a->handler = 'onclick="raumbuchpicker.init(\''.$id['RAUMBUCHID'].'\',\''.$id['id'].'\'); return false;"';
-							$update .= $a->get_string();
+						if(isset($this->raumbuch)) {
+							if(isset($id['RAUMBUCHID'])) {
+								$a        = $response->html->a();
+								$a->href  = '#';
+								$a->label = $this->lang['button_location'];
+								$a->title = $this->lang['button_location'];
+								$a->css   = 'btn btn-sm btn-default raumbuch';
+								$a->handler = 'onclick="raumbuchpicker.init(\''.$id['RAUMBUCHID'].'\',\''.$id['id'].'\'); return false;"';
+								$update .= $a->get_string();
+							}
 						}
 					}
 
@@ -769,22 +768,27 @@ var $__attribs;
 			$this->__filters['bezeichner'] .= $not;
 		}
 
-		$raumbuch = $this->raumbuch->options;
-		if(is_array($raumbuch) && count($raumbuch) > 0) {
-			array_unshift($raumbuch, array('id' => '', 'label' => ''));
-			$d['filter_raumbuch']['label']                       = $this->lang['label_location'];
-			$d['filter_raumbuch']['object']['type']              = 'htmlobject_select';
-			$d['filter_raumbuch']['object']['attrib']['index']   = array('id','label');
-			$d['filter_raumbuch']['object']['attrib']['name']    = 'filter[raumbuch]';
-			$d['filter_raumbuch']['object']['attrib']['id']      = 'filter_raumbuch';
-			$d['filter_raumbuch']['object']['attrib']['options'] = $raumbuch;
-			$d['filter_raumbuch']['object']['attrib']['style']   = 'width: 300px;';
-			$d['filter_raumbuch']['object']['attrib']['handler'] = 'onmousedown="phppublisher.select.init(this, \''.$this->lang['label_location'].'\'); return false;"';
-			if(isset($this->filter['raumbuch']) && $this->filter['raumbuch'] !== '') {
-				$this->__filters[] = $this->lang['label_location'].': '.$raumbuch[$this->raumbuch->indexprefix.$this->filter['raumbuch']]['label'].' ['.$this->filter['raumbuch'].']';
+		if(isset($this->raumbuch)) {
+			$raumbuch = $this->raumbuch->options;
+			if(is_array($raumbuch) && count($raumbuch) > 0) {
+				array_unshift($raumbuch, array('id' => '', 'label' => ''));
+				$d['filter_raumbuch']['label']                       = $this->lang['label_location'];
+				$d['filter_raumbuch']['object']['type']              = 'htmlobject_select';
+				$d['filter_raumbuch']['object']['attrib']['index']   = array('id','label');
+				$d['filter_raumbuch']['object']['attrib']['name']    = 'filter[raumbuch]';
+				$d['filter_raumbuch']['object']['attrib']['id']      = 'filter_raumbuch';
+				$d['filter_raumbuch']['object']['attrib']['options'] = $raumbuch;
+				$d['filter_raumbuch']['object']['attrib']['style']   = 'width: 300px;';
+				$d['filter_raumbuch']['object']['attrib']['handler'] = 'onmousedown="phppublisher.select.init(this, \''.$this->lang['label_location'].'\'); return false;"';
+				if(isset($this->filter['raumbuch']) && $this->filter['raumbuch'] !== '') {
+					$this->__filters[] = $this->lang['label_location'].': '.$raumbuch[$this->raumbuch->indexprefix.$this->filter['raumbuch']]['label'].' ['.$this->filter['raumbuch'].']';
+				}
+			} else {
+				$d['filter_raumbuch'] = '';
 			}
 		} else {
 			$d['filter_raumbuch'] = '';
+			$raumbuch = '';
 		}
 
 		$gewerke = $this->gewerke->options();

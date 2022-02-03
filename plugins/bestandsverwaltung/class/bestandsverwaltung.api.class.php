@@ -101,6 +101,7 @@ var $lang = array(
 		$this->tpldir = CLASSDIR.'plugins/bestandsverwaltung/templates/';
 		$this->classdir = CLASSDIR.'plugins/bestandsverwaltung/class/';
 		$this->profilesdir = PROFILESDIR;
+		$this->plugins = $this->file->get_ini(PROFILESDIR.'/plugins.ini');
 	}
 
 	//--------------------------------------------
@@ -199,17 +200,17 @@ var $lang = array(
 	 */
 	//--------------------------------------------
 	function raumbuch() {
-		require_once(CLASSDIR.'plugins/bestandsverwaltung/class/bestandsverwaltung.settings.raumbuch.controller.class.php');
-
-		// set action to point back here
-		$this->response->add($this->actions_name,'update');
-
-		$controller = new bestandsverwaltung_settings_raumbuch_controller($this);
-		#$controller->actions_name = 'raumbuch_printout';
-		#$controller->message_param = $this->message_param;
-		$controller->tpldir = $this->tpldir;
-		$data = $controller->printout(true);
-		echo $data->get_string();
+		if(in_array('standort', $this->plugins)) {
+			require_once(CLASSDIR.'plugins/bestandsverwaltung/class/bestandsverwaltung.settings.raumbuch.controller.class.php');
+			// set action to point back here
+			$this->response->add($this->actions_name,'update');
+			$controller = new bestandsverwaltung_settings_raumbuch_controller($this);
+			#$controller->actions_name = 'raumbuch_printout';
+			#$controller->message_param = $this->message_param;
+			$controller->tpldir = $this->tpldir;
+			$data = $controller->printout(true);
+			echo $data->get_string();
+		}
 	}
 
 	//--------------------------------------------
@@ -518,16 +519,18 @@ var $lang = array(
 
 						echo '<div>Datum: '.date('Y-m-d H:i:s',$result[0]['date']).'</div>';
 
-						$standort = array_search('RAUMBUCHID', array_column($result, 'merkmal_kurz'));
-						if($standort !== false) {
-							require_once(CLASSDIR.'plugins/standort/class/standort.class.php');
-							$raumbuch = new standort($this->db, $this->file);
-							$raumbuch->options = $raumbuch->options();
-							if(isset($raumbuch->options[$raumbuch->indexprefix.$result[$standort]['wert']])) {
-								echo '<div>Standort: '.$raumbuch->options[$raumbuch->indexprefix.$result[$standort]['wert']]['label'].' ('.$result[$standort]['wert'].')</div>';
-							} else {
-								echo '<div>Standort: '.$result[$standort]['wert'].'</div>';
+						if(in_array('standort', $this->plugins)) {
+							$standort = array_search('RAUMBUCHID', array_column($result, 'merkmal_kurz'));
+							if($standort !== false) {
+								require_once(CLASSDIR.'plugins/standort/class/standort.class.php');
+								$raumbuch = new standort($this->db, $this->file);
+								$raumbuch->options = $raumbuch->options();
+								if(isset($raumbuch->options[$raumbuch->indexprefix.$result[$standort]['wert']])) {
+									echo '<div>Standort: '.$raumbuch->options[$raumbuch->indexprefix.$result[$standort]['wert']]['label'].' ('.$result[$standort]['wert'].')</div>';
+								} else {
+									echo '<div>Standort: '.$result[$standort]['wert'].'</div>';
 
+								}
 							}
 						}
 

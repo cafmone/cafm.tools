@@ -137,27 +137,27 @@ var $lang = array(
 					default:
 					case 'inventory':
 						$content[] = $this->inventory( true );
-						$content[] = $this->raumbuch();
+						#$content[] = $this->raumbuch();
 						$content[] = $this->gewerke();
 						#$content[] = $this->export();
 					break;
 					case 'raumbuch':
 						$content[] = $this->inventory();
-						$content[] = $this->raumbuch( true );
+						#$content[] = $this->raumbuch( true );
 						$content[] = $this->gewerke();
 						#$content[] = $this->export();
 					break;
 					case 'gewerke':
 						$content[] = $this->inventory();
-						$content[] = $this->raumbuch();
+						#$content[] = $this->raumbuch();
 						$content[] = $this->gewerke( true );
 						#$content[] = $this->export();
 					break;
 					case 'export':
 						$content[] = $this->inventory();
-						$content[] = $this->raumbuch();
+						#$content[] = $this->raumbuch();
 						$content[] = $this->gewerke();
-						$content[] = $this->export( true );
+						#$content[] = $this->export( true );
 					break;
 				}
 			}

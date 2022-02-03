@@ -37,19 +37,19 @@ private $__tablemaster;
 				if(isset($this->settings['query']['db'])) {
 					$this->db->db = $this->settings['query']['db'];
 				} else {
-					throw new Exception('Standort setting db is missing. Please check settings.');
+					#throw new Exception('Standort setting db is missing. Please check settings.');
 				}
 				// handle tablemaster
 				if(isset($this->settings['query']['table'])) {
 					$this->__tablemaster = $this->settings['query']['table'];
 				} else {
-					throw new Exception('Standort setting table is missing. Please check settings.');
+					#throw new Exception('Standort setting table is missing. Please check settings.');
 				}
 			} else {
-				throw new Exception('Standort settings are missing. Please check settings.');
+				#throw new Exception('Standort settings are missing. Please check settings.');
 			}
 		} else {
-			throw new Exception('Standort settings are missing. Please check settings.');
+			#throw new Exception('Standort settings are missing. Please check settings.');
 		}
 
 	}

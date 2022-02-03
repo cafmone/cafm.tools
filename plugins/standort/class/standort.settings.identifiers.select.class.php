@@ -158,12 +158,16 @@ var $lang = array();
 
 		$body = array();
 
-		$sql  = 'SELECT ';
-		$sql .= 'b.bezeichner_kurz as bk, ';
-		$sql .= 'b.bezeichner_lang as bl, ';
-		$sql .= 'b.pos as pos ';
-		$sql .= 'FROM '.$this->settings['query']['table'].'_identifiers AS b ';
-
+		if(isset($this->settings['query']['table'])) {
+			$sql  = 'SELECT ';
+			$sql .= 'b.bezeichner_kurz as bk, ';
+			$sql .= 'b.bezeichner_lang as bl, ';
+			$sql .= 'b.pos as pos ';
+			$sql .= 'FROM '.$this->settings['query']['table'].'_identifiers AS b ';
+			$sql .= 'GROUP BY bk,bl,pos';
+		} else {
+			$sql = '';
+		}
 
 /*
 		if(isset($this->filter)) {
@@ -194,8 +198,11 @@ var $lang = array();
 			}
 		}
 */
-		$sql .= 'GROUP BY bk,bl,pos';
-		$data = $this->db->handler()->query($sql);
+		if($sql !== '') {
+			$data = $this->db->handler()->query($sql);
+		} else {
+			$data = '';
+		}
 
 		$tparams = '';
 		$params  = $this->response->html->request()->get($table->__id);

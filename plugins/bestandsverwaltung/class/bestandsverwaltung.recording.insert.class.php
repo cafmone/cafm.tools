@@ -785,25 +785,27 @@ var $__delimiter = '[~]';
 		}
 
 		// Raumbuch
-		require_once(CLASSDIR.'plugins/standort/class/standort.class.php');
-		$raumbuch = new standort($this->db, $this->file);
-		$options = $raumbuch->options();
+		if(in_array('standort', $this->plugins)) {
+			require_once(CLASSDIR.'plugins/standort/class/standort.class.php');
+			$raumbuch = new standort($this->db, $this->file);
+			$options = $raumbuch->options();
 
-		if(is_array($options) && count($options) > 0) {
-			array_unshift($options, array('id' => '', 'label' => ''));
+			if(is_array($options) && count($options) > 0) {
+				array_unshift($options, array('id' => '', 'label' => ''));
 
-			$d['system_raumbuch']['label']                       = $this->lang['label_location'];
-			$d['system_raumbuch']['object']['type']              = 'htmlobject_select';
-			$d['system_raumbuch']['object']['attrib']['index']   = array('id','label');
-			$d['system_raumbuch']['object']['attrib']['style']   = 'max-width:200px;';
-			$d['system_raumbuch']['object']['attrib']['name']    = 'SYSTEM[RAUMBUCHID]';
-			$d['system_raumbuch']['object']['attrib']['options'] = $options;
-			$d['system_raumbuch']['object']['attrib']['title']   = $this->lang['label_location'];
-			$d['system_raumbuch']['object']['attrib']['handler'] = 'onmousedown="phppublisher.select.init(this, \'Standort\'); return false;"';
+				$d['system_raumbuch']['label']                       = $this->lang['label_location'];
+				$d['system_raumbuch']['object']['type']              = 'htmlobject_select';
+				$d['system_raumbuch']['object']['attrib']['index']   = array('id','label');
+				$d['system_raumbuch']['object']['attrib']['style']   = 'max-width:200px;';
+				$d['system_raumbuch']['object']['attrib']['name']    = 'SYSTEM[RAUMBUCHID]';
+				$d['system_raumbuch']['object']['attrib']['options'] = $options;
+				$d['system_raumbuch']['object']['attrib']['title']   = $this->lang['label_location'];
+				$d['system_raumbuch']['object']['attrib']['handler'] = 'onmousedown="phppublisher.select.init(this, \'Standort\'); return false;"';
 
-			if(isset($this->fields['SYSTEM'])) {
-				if(array_key_exists('RAUMBUCHID', $this->fields['SYSTEM'])) {
-					$d['system_raumbuch']['object']['attrib']['selected'] = array($this->fields['SYSTEM']['RAUMBUCHID']['wert']);
+				if(isset($this->fields['SYSTEM'])) {
+					if(array_key_exists('RAUMBUCHID', $this->fields['SYSTEM'])) {
+						$d['system_raumbuch']['object']['attrib']['selected'] = array($this->fields['SYSTEM']['RAUMBUCHID']['wert']);
+					}
 				}
 			}
 		}
