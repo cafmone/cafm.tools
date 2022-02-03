@@ -36,6 +36,7 @@ var $identifier_name = 'saction';
 */
 var $lang = array(
 	'plugin' => 'Plugin',
+	'description' => 'Description',
 	'active'  => 'Active',
 	'rank' => 'Rank',
 	'edit'   => 'edit',
@@ -132,7 +133,7 @@ var $lang = array(
 	//--------------------------------------------
 	function select() {
 		$response = $this->response;
-		$files    = $this->file->get_folders( CLASSDIR.'/plugins' );
+		$files    = $this->file->get_folders( CLASSDIR.'plugins' );
 		$count    = count( $files );
 
 		$head['rank']['title']      = $this->lang['rank'];
@@ -140,32 +141,38 @@ var $lang = array(
 		$head['rank']['style']   = 'width:90px;';
 		$head['plugin']['title']    = $this->lang['plugin'];
 		$head['plugin']['sortable'] = true;
-		$head['action']['title']    = '';
-		$head['action']['sortable'] = false;
+		$head['description']['title']    = $this->lang['description'];
+		$head['description']['sortable'] = false;
 
 		$i = 0;
 		$body  = array();
 		foreach( $files as $k => $f ) {
 			$action = '';
 			$groups = '';
+			$description = '&#160;';
+
+			if($this->file->exists($f['path'].'/'.$f['name'].'.init.class.php')) {
+				require_once($f['path'].'/'.$f['name'].'.init.class.php');
+				$c = str_replace('.','_', $f['name']).'_init';
+				$c = new $c($this->response, $this->file, $this->user, $this->db);
+				$c->profilesdir = $this->PROFILESDIR;
+				if(method_exists($c, 'description')) {
+					$description = $c->description();
+				}
+			}
+
 			if(isset($this->ini) && in_array($f['name'], $this->ini)) {
-				$a          = $response->html->a();
-				$a->href    = $this->response->get_url($this->actions_name, 'permissions').'&plugin='.$f['name'];
-				$a->label   = 'Permissions';
-				$a->title   = 'Permissions';
-				$a->css     = 'permissions';
-				$a->handler = 'onclick="phppublisher.wait();"';
 				$pos = array_keys($this->ini, $f['name']);
 				$body[]	= array(
 					'plugin' => $f['name'],
 					'rank'   => "$pos[0]",
-					'action' => $a->get_string()
+					'description' => $description,
 				);
 			} else {
 				$body[]	= array(
 					'plugin' => $f['name'],
 					'rank'   => '&#160;',
-					'action'   => '&#160;'
+					'description' => $description,
 				);
 			}
 		}

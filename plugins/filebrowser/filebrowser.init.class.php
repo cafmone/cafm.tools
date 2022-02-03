@@ -29,6 +29,7 @@ var $tpldir;
 var $lang = array(
 	'label' => 'Files',
 	'browser' => 'Browser',
+	'description' => 'Tiny Filebrowser',
 );
 
 	//--------------------------------------------
@@ -46,6 +47,19 @@ var $lang = array(
 		$this->response = $response;
 		$this->user = $user;
 		$this->ini = $this->file->get_ini(PROFILESDIR.'filebrowser.ini');
+	}
+	
+	//--------------------------------------------
+	/**
+	 * Description
+	 *
+	 * @access public
+	 * @return string
+	 */
+	//--------------------------------------------
+	function description() {
+		return $this->lang['description'];
+	
 	}
 
 	//--------------------------------------------
