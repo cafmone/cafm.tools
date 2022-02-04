@@ -144,7 +144,7 @@ var $lang = array();
 			}
 			$error = $this->file->make_ini( $this->settings, $request );
 			if( $error === '' ) {
-				$msg = $this->lang['update_sucess'];
+				$msg = $this->lang['msg_update_sucess'];
 				$this->response->redirect($this->response->get_url($this->actions_name, 'custom', $this->message_param, $msg));
 			} else {
 				$_REQUEST[$this->message_param]['error'] = $error;

@@ -148,7 +148,7 @@ var $lang = array();
 			if($error !== '') {
 				$response->error = $error;
 			} else {
-				$response->msg = $this->lang['update_sucess'];
+				$response->msg = $this->lang['msg_insert_sucess'];
 			}
 		}
 		else if($form->get_errors()) {
@@ -198,7 +198,7 @@ var $lang = array();
 			if($error !== '') {
 				$response->error = $error;
 			} else {
-				$response->msg = $this->lang['update_sucess'];;
+				$response->msg = $this->lang['msg_update_sucess'];
 			}
 		}
 		else if($form->get_errors()) {
@@ -236,7 +236,7 @@ var $lang = array();
 			}
 		} else {
 
-			$d['bezeichner'] = 'New';
+			$d['bezeichner'] = $this->lang['headline_add_identifier'];
 
 			$d['id']['label']                         = $this->lang['label_short'];
 			$d['id']['required']                      = true;

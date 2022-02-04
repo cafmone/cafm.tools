@@ -283,7 +283,7 @@ var $lang = array();
 			$table->identifier      = 'bezeichner';
 			$table->identifier_name = 'confirm';
 			$table->actions_name    = $this->actions_name;
-			$table->actions         = array(array('sync'=>'sync'));
+			$table->actions         = array(array('sync'=>$this->lang['button_sync']));
 
 			$head   = array();
 			$head['bezeichner']['title'] = 'Kurz';
@@ -303,7 +303,7 @@ var $lang = array();
 			$table->max  = count($body);
 			$table->head = $head;
 			$table->body = $body;
-			$table->add_headrow('<h3>Sync</h3>');
+			$table->add_headrow('<h3>'.$this->lang['headline_sync_identifiers'].'</h3>');
 
 			#$response->table = $table;
 			return $table;
@@ -469,7 +469,7 @@ var $lang = array();
 		$states[] = array('off','Off');
 		$states[] = array('obsolete','Obsolete');
 
-		$d['status']['label']                       = 'status';
+		$d['status']['label']                       = $this->lang['label_state'];
 		$d['status']['required']                    = true;
 		$d['status']['object']['type']              = 'htmlobject_select';
 		$d['status']['object']['attrib']['index']   = array(0,1);

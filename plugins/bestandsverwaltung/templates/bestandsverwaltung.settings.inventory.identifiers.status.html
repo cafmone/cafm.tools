@@ -1,14 +1,15 @@
 <div id="bestandsverwaltung">
-	<h1>{label}</h1>
+	<h3>{label}</h3>
 	<div class="floatbreaker">&#160;></div>
 	<form action="{thisfile}" method="POST" enctype="multipart/form-data"  class="form-horizontal">
 
-		<div class="col-xs-5">
-			{form}
-			<div style="clear:both;" class="floatbreaker">&#160;</div>
-		</div>
-		<div class="col-xs-7 statusbox" style="margin: 0 0 0 0;">
-			{status}
+		<div class="clearfix">
+			<div class="col-sm-5 float-left">
+				{form}
+			</div>
+			<div class="col-sm-7 float-left statusbox" style="margin: 0 0 0 0;">
+				{status}
+			</div>
 		</div>
 
 		<div style="clear:both;" class="floatbreaker">&#160;</div>

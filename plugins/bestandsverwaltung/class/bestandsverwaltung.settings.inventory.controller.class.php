@@ -226,6 +226,7 @@ var $lang = array();
 			$controller = new bestandsverwaltung_settings_inventory_qrcode_controller($this);
 			$controller->message_param = $this->message_param;
 			$controller->tpldir = $this->tpldir;
+			$controller->lang = $this->lang;
 			$data = $controller->action();
 		}
 		$content['label']   = $this->lang['tab_qrcode'];

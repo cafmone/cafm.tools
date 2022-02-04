@@ -89,10 +89,10 @@ var $lang = array();
 		$form = $this->update();
 		$t = $this->response->html->template($this->tpldir.'bestandsverwaltung.settings.inventory.qrcode.settings.html');
 		$t->add($this->response->html->thisfile, 'thisfile');
-		$t->add($this->lang['lang_type'], 'lang_type');
-		$t->add($this->lang['lang_size'], 'lang_size');
-		$t->add($this->lang['lang_url'], 'lang_url');
-		$t->add($this->lang['lang_replacements'], 'lang_replacements');
+		$t->add($this->lang['legend_type'], 'legend_type');
+		$t->add($this->lang['legend_size'], 'legend_size');
+		$t->add($this->lang['legend_url'], 'legend_url');
+		$t->add($this->lang['legend_replacements'], 'legend_replacements');
 		$t->add($form);
 		$t->group_elements(array('param_' => 'form'));
 		return $t;
@@ -116,7 +116,7 @@ var $lang = array();
 			if($type === 'qrcode') {
 				if(isset($request['url']['type'])) {
 					if($request['url']['type'] === 'custom' && !isset($request['url']['path'])) {
-						$error = 'Error: No url given';
+						$error = $this->lang['error_no_url'];
 						$form->set_error('qrcode[url][path]', '');
 					}
 					else if($request['url']['type'] !== 'custom') {
@@ -131,17 +131,17 @@ var $lang = array();
 			if( $error === '' ) {
 				$error = $this->file->make_ini( $this->settings, $request );
 				if( $error === '' ) {
-					$msg = $this->lang['update_sucess'];
+					$msg = $this->lang['msg_update_sucess'];
 					$this->response->redirect($this->response->get_url($this->actions_name, 'config', $this->message_param, $msg));
 					} else {
-						$_REQUEST[$this->message_param] = $error;
+						$_REQUEST[$this->message_param]['error'] = $error;
 					}
 			} else {
-				$_REQUEST[$this->message_param] = $error;
+				$_REQUEST[$this->message_param]['error'] = $error;
 			}
 		} 
 		else if($form->get_errors()) {
-			$_REQUEST[$this->message_param] = implode('<br>', $form->get_errors());
+			$_REQUEST[$this->message_param]['error'] = implode('<br>', $form->get_errors());
 		}
 		return $form;
 	}
@@ -163,7 +163,7 @@ var $lang = array();
 		$qtypes[] = array('qrcode','QRCode L');
 		$qtypes[] = array('leitz_icon','Leitz Icon');
 
-		$d['qrcode_type']['label']                       = 'Type';
+		$d['qrcode_type']['label']                       = $this->lang['label_type'];
 		$d['qrcode_type']['object']['type']              = 'htmlobject_select';
 		$d['qrcode_type']['object']['attrib']['index']   = array(0,1);
 		$d['qrcode_type']['object']['attrib']['options'] = $qtypes;
@@ -176,7 +176,7 @@ var $lang = array();
 			$d['qrcode_type']['object']['attrib']['selected'] = array('barcode');
 		}
 
-		$d['qrcode_heigth']['label']                     = 'Height (mm)';
+		$d['qrcode_heigth']['label']                     = $this->lang['label_height'];
 		$d['qrcode_heigth']['validate']['regex']         = '/^[0-9]+$/i';
 		$d['qrcode_heigth']['validate']['errormsg']      = sprintf('%s must be number', 'Heigth');
 		$d['qrcode_heigth']['object']['type']            = 'htmlobject_input';
@@ -186,7 +186,7 @@ var $lang = array();
 			$d['qrcode_heigth']['object']['attrib']['value'] = $ini['size']['height'];
 		}
 
-		$d['qrcode_width']['label']                     = 'Width (mm)';
+		$d['qrcode_width']['label']                     = $this->lang['label_width'];
 		$d['qrcode_width']['validate']['regex']         = '/^[0-9]+$/i';
 		$d['qrcode_width']['validate']['errormsg']      = sprintf('%s must be number', 'Width');
 		$d['qrcode_width']['object']['type']            = 'htmlobject_input';
@@ -196,7 +196,7 @@ var $lang = array();
 			$d['qrcode_width']['object']['attrib']['value'] = $ini['size']['width'];
 		}
 
-		$d['qrcode_border']['label']                     = 'Border (mm)';
+		$d['qrcode_border']['label']                     = $this->lang['label_border'];
 		$d['qrcode_border']['validate']['regex']         = '/^[0-9]+$/i';
 		$d['qrcode_border']['validate']['errormsg']      = sprintf('%s must be number', 'Border');
 		$d['qrcode_border']['object']['type']            = 'htmlobject_input';
@@ -206,7 +206,7 @@ var $lang = array();
 			$d['qrcode_border']['object']['attrib']['value'] = $ini['size']['border'];
 		}
 
-		$d['qrcode_font']['label']                     = 'Font';
+		$d['qrcode_font']['label']                     = $this->lang['label_fontsize'];
 		$d['qrcode_font']['validate']['regex']         = '/^[0-9]+$/i';
 		$d['qrcode_font']['validate']['errormsg']      = sprintf('%s must be number', 'Font');
 		$d['qrcode_font']['object']['type']            = 'htmlobject_input';
@@ -227,7 +227,7 @@ var $lang = array();
 		}
 
 
-		$d['qrcode_url_1']['label']                     = 'ID only';
+		$d['qrcode_url_1']['label']                     = $this->lang['label_id_only'];
 		$d['qrcode_url_1']['object']['type']            = 'htmlobject_input';
 		$d['qrcode_url_1']['object']['attrib']['type']  = 'radio';
 		$d['qrcode_url_1']['object']['attrib']['name']  = 'qrcode[url][type]';
@@ -236,7 +236,7 @@ var $lang = array();
 			$d['qrcode_url_1']['object']['attrib']['checked'] = true;
 		}
 
-		$d['qrcode_url_2']['label']                     = 'Auto';
+		$d['qrcode_url_2']['label']                     = $this->lang['label_id_auto'];
 		$d['qrcode_url_2']['object']['type']            = 'htmlobject_input';
 		$d['qrcode_url_2']['object']['attrib']['type']  = 'radio';
 		$d['qrcode_url_2']['object']['attrib']['name']  = 'qrcode[url][type]';
@@ -245,7 +245,7 @@ var $lang = array();
 			$d['qrcode_url_2']['object']['attrib']['checked'] = true;
 		}
 
-		$d['qrcode_url_3']['label']                     = 'Custom';
+		$d['qrcode_url_3']['label']                     = $this->lang['label_id_custom'];
 		$d['qrcode_url_3']['object']['type']            = 'htmlobject_input';
 		$d['qrcode_url_3']['object']['attrib']['type']  = 'radio';
 		$d['qrcode_url_3']['object']['attrib']['name']  = 'qrcode[url][type]';
@@ -261,8 +261,6 @@ var $lang = array();
 		if(isset($ini['url']['path'])) {
 			$d['qrcode_url_input']['object']['attrib']['value'] = $ini['url']['path'];
 		}
-
-
 
 		$form->display_errors = false;
 		$form->add($d);

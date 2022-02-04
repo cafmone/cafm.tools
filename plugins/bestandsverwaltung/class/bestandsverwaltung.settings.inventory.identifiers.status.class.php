@@ -82,7 +82,7 @@ var $lang = array();
 				$_REQUEST[$this->message_param]['error'] = $response->error;
 			}
 			$t = $this->response->html->template($this->tpldir.'/bestandsverwaltung.settings.inventory.identifiers.status.html');
-			$t->add('Status &auml;ndern', 'label');
+			$t->add($this->lang['headline_update_state'], 'label');
 			$t->add($this->response->html->thisfile, 'thisfile');
 			$t->add($response->form);
 			$t->group_elements(array('param_' => 'form'));
@@ -180,7 +180,7 @@ var $lang = array();
 			$states[] = array('off','Off');
 			$states[] = array('obsolete','Obsolete');
 
-			$d['status']['label']                       = 'Status';
+			$d['status']['label']                       = $this->lang['label_state'];
 			$d['status']['css']                         = 'autosize';
 			$d['status']['style']                       = 'margin: 0 0 0 50px;';
 			$d['status']['object']['type']              = 'htmlobject_select';

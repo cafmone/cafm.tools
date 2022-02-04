@@ -55,14 +55,7 @@ var $tpldir;
 * @access public
 * @var array
 */
-var $lang = array(
-		"lang_type" => "Type",
-		"lang_size" => "Size",
-		"lang_settings" => "Settings",
-		"lang_url" => "Url",
-		"lang_replacements" => "Replacements",
-		"update_sucess" => "Settings updated successfully",
-	);
+var $lang = array();
 
 	//--------------------------------------------
 	/**
@@ -135,6 +128,7 @@ var $lang = array(
 		$tab = $this->response->html->tabmenu('settings_qrcode_tab');
 		$tab->message_param = $this->message_param;
 		$tab->css = 'htmlobject_tabs';
+		#$tab->boxcss = 'tab-content noborder';
 		$tab->auto_tab = false;
 		$tab->add($data);
 
@@ -160,11 +154,12 @@ var $lang = array(
 			$controller->message_param = $this->message_param;
 			$data = $controller->action();
 		}
-		$content['label']   = $this->lang['lang_settings'];
+		$content['label']   = $this->lang['tab_settings'];
 		$content['value']   = $data;
 		$content['target']  = $this->response->html->thisfile;
 		$content['request'] = $this->response->get_array($this->actions_name, 'settings' );
 		$content['onclick'] = false;
+		#$content['hidden'] = true;
 		if($this->action === 'settings') {
 			$content['active']  = true;
 		}
