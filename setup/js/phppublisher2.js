@@ -454,7 +454,7 @@ phppublisher = {
 				var elements=document.querySelectorAll(waitElementsClick[i]);
 				for (var j=0; j<elements.length; j++){
 					// check a[href]
-					if(!elements[j].href || elements[j].href.split("#")[1] != '' ) {
+					if(!elements[j].href || elements[j].href.indexOf("#") == -1 ) {
 						if(elements[j].tagName != 'a' || elements[j].href != '#') {
 							elements[j].onclick=function(){
 								var msg = 'Loading ...';

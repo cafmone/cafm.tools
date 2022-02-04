@@ -157,7 +157,7 @@ var $table_prefix = 'bestand_';
 		$d['kat_id']['object']['attrib']['value']     = $response->id;
 		$d['kat_id']['object']['attrib']['maxlength'] = 255;
 
-		$d['new']['label']                         = 'Neu';
+		$d['new']['label']                         = $this->lang['label_new_option'];
 		$d['new']['css']                           = 'autosize float-right';
 		$d['new']['object']['type']                = 'htmlobject_input';
 		$d['new']['object']['attrib']['type']      = 'text';
@@ -237,7 +237,7 @@ var $table_prefix = 'bestand_';
 		$d['new_id']['object']['attrib']['value']     = '';
 		$d['new_id']['object']['attrib']['maxlength'] = 50;
 
-		$d['new_value']['label']                         = 'Value';
+		$d['new_value']['label']                         = $this->lang['label_new_option'];
 		$d['new_value']['required']                      = true;
 		$d['new_value']['object']['type']                = 'htmlobject_input';
 		$d['new_value']['object']['attrib']['type']      = 'text';

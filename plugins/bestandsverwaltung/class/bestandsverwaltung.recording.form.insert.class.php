@@ -17,12 +17,12 @@
  *  along with this file (see ../LICENSE.TXT) If not, see 
  *  <http://www.gnu.org/licenses/>.
  *
- *  Copyright (c) 2015-2016, Alexander Kuballa
+ *  Copyright (c) 2015-2022, Alexander Kuballa
  *
  * @package phppublisher
  * @author Alexander Kuballa [akuballa@users.sourceforge.net]
  * @author Uwe Pochadt
- * @copyright Copyright (c) 2008 - 2016, Alexander Kuballa
+ * @copyright Copyright (c) 2008 - 2022, Alexander Kuballa
  * @license GNU GENERAL PUBLIC LICENSE Version 2 (see ../LICENSE.TXT)
  * @version 1.0
  */
@@ -105,7 +105,7 @@ var $datatypes = array(
 			$t = $this->response->html->template($this->tpldir.'/bestandsverwaltung.recording.form.insert.html');
 			$t->add($this->response->html->thisfile, 'thisfile');
 			$t->add($response->form);
-			$t->add('Bezeichner','bezeichner_label');
+			$t->add($this->lang['label_identifiers'],'label_identifiers');
 			$t->add($response->counter,'counter');
 			$t->group_elements(array('param_' => 'form'));
 			$t->group_elements(array('available_' => 'available'));
@@ -322,7 +322,7 @@ var $datatypes = array(
 			$d['row'] = '';
 		}
 
-		$d['table']['label']                        = 'Tabelle';
+		$d['table']['label']                        = $this->lang['label_index'];
 		$d['table']['static']                       = true;
 		$d['table']['object']['type']               = 'htmlobject_input';
 		$d['table']['object']['attrib']['name']     = 'dummytable';
@@ -340,7 +340,7 @@ var $datatypes = array(
 			$d['id']['object']['attrib']['value'] = $this->fields['merkmal_kurz'];
 		}
 
-		$d['label']['label']                         = 'Label';
+		$d['label']['label']                         = $this->lang['label_label'];
 		$d['label']['required']                      = true;
 		$d['label']['object']['type']                = 'htmlobject_input';
 		$d['label']['object']['attrib']['name']      = 'attribs[merkmal_lang]';
@@ -360,7 +360,7 @@ var $datatypes = array(
 */
 		array_unshift($this->datatypes, array(''));
 
-		$d['datentyp']['label']                       = 'Datentyp';
+		$d['datentyp']['label']                       = $this->lang['label_datatype'];
 		$d['datentyp']['required']                    = true;
 		$d['datentyp']['object']['type']              = 'htmlobject_select';
 		$d['datentyp']['object']['attrib']['index']   = array(0,0);
@@ -383,7 +383,7 @@ var $datatypes = array(
 			array_unshift($options, array('option'=>''));
 		}
 
-		$d['options']['label']                        = 'Options';
+		$d['options']['label']                        = $this->lang['label_options'];
 		$d['options']['object']['type']               = 'htmlobject_select';
 		$d['options']['object']['attrib']['index']    = array('option','option');
 		$d['options']['object']['attrib']['id']       = 'option';
@@ -404,17 +404,17 @@ var $datatypes = array(
 			}
 		}
 
-		$d['pflichtfeld']['label']                     = 'Pflichtfeld';
+		$d['pflichtfeld']['label']                     = $this->lang['label_mandatory'];
 		$d['pflichtfeld']['object']['type']            = 'htmlobject_input';
 		$d['pflichtfeld']['object']['attrib']['type']  = 'checkbox';
 		$d['pflichtfeld']['object']['attrib']['name']  = 'attribs[pflichtfeld]';
 		if(isset($this->fields['pflichtfeld']) && $this->fields['pflichtfeld'] === '1') {
 			$d['pflichtfeld']['object']['attrib']['checked'] = true;
 		}
-
-		$d['minimum']['label']                         = 'Minimum';
+		
+		$d['minimum']['label']                         = $this->lang['label_min'];
 		$d['minimum']['validate']['regex']             = '/^[0-9]+$/i';
-		$d['minimum']['validate']['errormsg']          = sprintf('%s must be number', 'Minimum');
+		$d['minimum']['validate']['errormsg']          = sprintf($this->response->html->lang['form']['error_NaN'], $this->lang['label_min']);
 		$d['minimum']['object']['type']                = 'htmlobject_input';
 		$d['minimum']['object']['attrib']['id']        = 'minimum';
 		$d['minimum']['object']['attrib']['name']      = 'attribs[minimum]';
@@ -423,9 +423,9 @@ var $datatypes = array(
 			$d['minimum']['object']['attrib']['value'] = $this->fields['minimum'];
 		}
 
-		$d['maximum']['label']                         = 'Maximum';
+		$d['maximum']['label']                         = $this->lang['label_max'];
 		$d['maximum']['validate']['regex']             = '/^[0-9]+$/i';
-		$d['maximum']['validate']['errormsg']          = sprintf('%s must be number', 'Maximum');
+		$d['maximum']['validate']['errormsg']          = sprintf($this->response->html->lang['form']['error_NaN'], $this->lang['label_max']);
 		$d['maximum']['object']['type']                = 'htmlobject_input';
 		$d['maximum']['object']['attrib']['id']        = 'maximum';
 		$d['maximum']['object']['attrib']['name']      = 'attribs[maximum]';

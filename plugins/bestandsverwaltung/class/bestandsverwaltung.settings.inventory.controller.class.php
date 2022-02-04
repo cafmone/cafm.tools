@@ -197,7 +197,7 @@ var $lang = array();
 			require_once($this->classdir.'bestandsverwaltung.settings.inventory.form.controller.class.php');
 			$controller = new bestandsverwaltung_settings_inventory_form_controller($this);
 			$controller->tpldir = $this->tpldir;
-			$controller->lang = $this->lang;
+			#$controller->lang = $this->lang;
 			$data = $controller->action();
 		}
 		$content['label']   = $this->lang['tab_form'];

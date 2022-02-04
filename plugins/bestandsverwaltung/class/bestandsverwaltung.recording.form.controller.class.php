@@ -48,7 +48,26 @@ var $tpldir;
 * @access public
 * @var array
 */
-var $lang = array();
+var $lang = array(
+		'tab_attribs' => 'Attributes',
+		'tab_options' => 'Options',
+		'tab_index' => 'Index',
+		'tab_identifiers' => 'Identifiers',
+		'label_identifiers' => 'Identifiers',
+		'label_identifier' => 'Identifier',
+		'label_index' => 'Index',
+		'label_attrib_filter' => 'ID',
+		'label_label' => 'Label',
+		'label_mandatory' => 'Madatory field',
+		'label_datatype' => 'Datatype',
+		'label_options' => 'Options',
+		'label_min' => 'Minimum',
+		'label_max' => 'Maximum',
+		'label_new_option' => 'New Option',
+		'button_title_add_attrib' => 'Add new attribute',
+		'button_title_edit_attrib' => 'Edit attribute %s',
+		'button_title_remove_attrib' => 'Remove attribute from identifier %s',
+	);
 
 	//--------------------------------------------
 	/**
@@ -88,6 +107,7 @@ var $lang = array();
 	 */
 	//--------------------------------------------
 	function action($action = null) {
+
 		if($this->is_valid) {
 			$this->action = '';
 			$ar = $this->response->html->request()->get($this->actions_name);
@@ -185,7 +205,7 @@ var $lang = array();
 			$controller->actions_name = $this->actions_name;
 			$controller->message_param = $this->message_param;
 			$controller->tpldir = $this->tpldir;
-			#$controller->lang  = $this->lang['select'];
+			$controller->lang  = $this->lang;
 			$data = $controller->action();
 		}
 		$content['label']   = $this->lang['tab_attribs'];
@@ -215,7 +235,7 @@ var $lang = array();
 			$controller->actions_name = $this->actions_name;
 			$controller->message_param = $this->message_param;
 			$controller->tpldir = $this->tpldir;
-			#$controller->lang  = $this->lang['select'];
+			$controller->lang  = $this->lang;
 			$data = $controller->action();
 		}
 		$content['label']   = $this->lang['tab_options'];
@@ -245,7 +265,7 @@ var $lang = array();
 			$controller->actions_name = $this->actions_name;
 			$controller->message_param = $this->message_param;
 			$controller->tpldir = $this->tpldir;
-			#$controller->lang  = $this->lang['select'];
+			$controller->lang  = $this->lang;
 			$data = $controller->action();
 		}
 		$content['label']   = $this->lang['tab_attribs'];
@@ -305,7 +325,7 @@ var $lang = array();
 			$controller->actions_name = $this->actions_name;
 			$controller->message_param = $this->message_param;
 			$controller->tpldir = $this->tpldir;
-			#$controller->lang  = $this->lang['select'];
+			$controller->lang  = $this->lang;
 			$data = $controller->action();
 		}
 		$content['label']   = $this->lang['tab_identifiers'];

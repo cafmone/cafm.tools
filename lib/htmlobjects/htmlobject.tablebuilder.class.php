@@ -1196,6 +1196,8 @@ var $sort_link = true;
 		foreach($this->body as $val) {
 			if(isset($val[$this->sort])) {
 				$column[] = $val[$this->sort];
+			} else {
+				$column[] = '';
 			}
 		}
 		if(count($this->body) === count($column)) {

@@ -89,7 +89,6 @@ var $lang = array();
 		require_once($this->classdir.'bestandsverwaltung.recording.form.controller.class.php');
 		$controller = new bestandsverwaltung_recording_form_controller($this);
 		$controller->tpldir = $this->tpldir;
-		$controller->lang  = $this->lang;
 		$data = $controller->action();
 
 		return $data;

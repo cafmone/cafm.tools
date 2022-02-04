@@ -89,10 +89,11 @@ var $table_bezeichner = 'bezeichner';
 		$sql  = 'SELECT * ';
 		$sql .= 'FROM '.$this->table_prefix.$this->table.' ';
 		if(isset($this->filter['merkmal']) && $this->filter['merkmal'] !== '') {
+			// handle counter
+			$this->filtered = count($this->db->handler()->query($sql));
 			$m = $this->db->handler()->escape($this->filter['merkmal']);
 			$sql .= 'WHERE `merkmal_kurz` LIKE \''.$m.'\' ';
 		}
-		#$sql .= 'ORDER BY merkmal_lang ';
 		$this->attribs = $this->db->handler()->query($sql);
 	}
 
@@ -118,7 +119,7 @@ var $table_bezeichner = 'bezeichner';
 
 		if(isset($this->table)) {
 			$a = $this->response->html->a();
-			$a->title = 'New';
+			$a->title = $this->lang['button_title_add_attrib'];
 			$a->css = 'icon icon-plus btn btn-sm btn-default noprint';
 			$a->handler = 'onclick="phppublisher.wait(\'Loading ...\');"';
 			$a->style = 'margin: 5px 10px 0 0;';
@@ -126,16 +127,29 @@ var $table_bezeichner = 'bezeichner';
 			$t->add($a, 'new');
 		}
 
+
+		// Counter
+		$counter = $this->response->html->div();
+		if(isset($this->filtered)) {
+			if(is_array($this->attribs)) {
+				$count = count($this->attribs).' / '.$this->filtered;
+			} else {
+				$count = '0 / '.$this->filtered;
+			}
+		} else {
+			$num   = count($this->attribs);
+			$count = $num.' / '.$num;
+		}
+		$counter->add($count);
+		$t->add($counter, 'counter');
+
 		// assemble boxes 
 		if(isset($this->attribs) && is_array($this->attribs)) {
 
-			$counter = $this->response->html->div();
-			$counter->add(count($this->attribs));
-			$t->add($counter, 'counter');
-
 			foreach($this->attribs as $r) {
+			
 				$a = $this->response->html->a();
-				$a->title = 'edit';
+				$a->title = sprintf($this->lang['button_title_edit_attrib'], $r['merkmal_kurz']);
 				$a->css = 'icon icon-edit btn btn-sm btn-default noprint';
 				$a->handler = 'onclick="phppublisher.wait(\'Loading ...\');"';
 				$a->style = 'float:right;margin:0 0 0 0';
@@ -253,7 +267,7 @@ var $table_bezeichner = 'bezeichner';
 			}
 
 			$options = $this->db->select($this->table_prefix.'index', 'tabelle_kurz,tabelle_lang', null, 'pos');
-			$f['tables']['label']                        = 'Tabelle';
+			$f['tables']['label']                        = $this->lang['label_index'];
 			$f['tables']['object']['type']               = 'htmlobject_select';
 			$f['tables']['object']['attrib']['index']    = array('tabelle_kurz','tabelle_lang');
 			$f['tables']['object']['attrib']['name']     = 'table';
@@ -262,7 +276,7 @@ var $table_bezeichner = 'bezeichner';
 			$f['tables']['object']['attrib']['handler']  = 'onchange="phppublisher.wait();this.form.submit();"';
 			$f['tables']['object']['attrib']['selected'] = array($this->table);
 
-			$f['filter_merkmal']['label']                         = 'Merkmal';
+			$f['filter_merkmal']['label']                         = $this->lang['label_attrib_filter'];
 			$f['filter_merkmal']['object']['type']                = 'htmlobject_input';
 			$f['filter_merkmal']['object']['attrib']['name']      = 'filter[merkmal]';
 			$f['filter_merkmal']['object']['attrib']['maxlength'] = 30;

@@ -41,6 +41,7 @@ var $lang = array(
 		'error_required'  => '%s must not be empty',
 		'error_maxlength' => '%s exeeds maxlength of %d',
 		'error_minlength' => '%s undercuts minlength of %d',
+		'error_NaN'       => '%s must be a number',
 		'required'        => '*'
 	),
 	'response' => array(

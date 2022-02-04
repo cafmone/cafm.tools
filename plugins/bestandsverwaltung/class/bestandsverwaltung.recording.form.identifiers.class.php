@@ -141,6 +141,8 @@ var $table_bezeichner = 'bezeichner';
 		$sql .= '`b`.`bezeichner_lang` as label ';
 		$sql .= 'FROM `'.$this->table_bezeichner.'` AS b ';
 		if(isset($this->filter['bezeichner']) && $this->filter['bezeichner'] !== '') {
+			// handle counter
+			$this->filtered = count($this->db->handler()->query($sql));
 			$bez = $this->db->handler()->escape($this->filter['bezeichner']);
 			$sql .= 'WHERE `b`.`bezeichner_kurz` LIKE \''.$bez.'\' ';
 		}
@@ -153,25 +155,27 @@ var $table_bezeichner = 'bezeichner';
 
 		$f = array();
 		$d = array();
-		if(isset($this->table) && is_array($bezeichner)) {
+		if(isset($this->table)) {
 
 			$used_identifiers = 0;
 			$output = array();
-			foreach($bezeichner as $b) {
-				$mark = $b['bezeichner'];
-				$sql  = 'SELECT * ';
-				$sql .= 'FROM '.$this->table_prefix.''.$this->table.' ';
-				$sql .= 'WHERE `bezeichner_kurz`=\''.$b['bezeichner'].'\' ';
-				$sql .= 'OR `bezeichner_kurz`LIKE \'%,'.$b['bezeichner'].'\' ';
-				$sql .= 'OR `bezeichner_kurz`LIKE \'%,'.$b['bezeichner'].',%\' ';
-				$sql .= 'OR `bezeichner_kurz`LIKE \''.$b['bezeichner'].',%\' ';
-				$sql .= 'OR `bezeichner_kurz`=\'*\' ';
-				$sql .= 'ORDER BY `bezeichner_kurz` ';
-				$result = $this->db->handler()->query($sql);
-				if(is_array($result)) {
-					$output[$b['bezeichner']]['attribs'] = $result;
-					$output[$b['bezeichner']]['label']   = $b['bezeichner'].' - '.$b['label'];
-					$used_identifiers++;
+			if(is_array($bezeichner)) {
+				foreach($bezeichner as $b) {
+					$mark = $b['bezeichner'];
+					$sql  = 'SELECT * ';
+					$sql .= 'FROM '.$this->table_prefix.''.$this->table.' ';
+					$sql .= 'WHERE `bezeichner_kurz`=\''.$b['bezeichner'].'\' ';
+					$sql .= 'OR `bezeichner_kurz`LIKE \'%,'.$b['bezeichner'].'\' ';
+					$sql .= 'OR `bezeichner_kurz`LIKE \'%,'.$b['bezeichner'].',%\' ';
+					$sql .= 'OR `bezeichner_kurz`LIKE \''.$b['bezeichner'].',%\' ';
+					$sql .= 'OR `bezeichner_kurz`=\'*\' ';
+					$sql .= 'ORDER BY `bezeichner_kurz` ';
+					$result = $this->db->handler()->query($sql);
+					if(is_array($result)) {
+						$output[$b['bezeichner']]['attribs'] = $result;
+						$output[$b['bezeichner']]['label']   = $b['bezeichner'].' - '.$b['label'];
+						$used_identifiers++;
+					}
 				}
 			}
 
@@ -232,7 +236,7 @@ var $table_bezeichner = 'bezeichner';
 
 							$a = $this->response->html->a();
 							$a->href    = $link.'&remove=true&identifier='.$k.'&attrib='.$r['merkmal_kurz'];
-							$a->title   = 'remove';
+							$a->title   = sprintf($this->lang['button_title_remove_attrib'], $k);
 							$a->css     = 'icon icon-trash btn btn-default btn-sm float-left';
 							$a->style   = 'margin: 4px 0 0 8px; display: inline-block;';
 							$a->handler = 'onclick="remove.confirm(this,\''.$k.'\',\''.$r['merkmal_kurz'].'\');return false;"';
@@ -263,15 +267,24 @@ var $table_bezeichner = 'bezeichner';
 
 			$d['data__0'] = $table;
 
+			// Counter
 			$counter = $this->response->html->div();
-			$counter->add('Bezeichner: ');
-			$counter->add('<span title="used">'.$used_identifiers.'</span> / ');
-			$counter->add('<span title="overall">'.count($bezeichner).'</span>');
-
+			$counter->add($this->lang['label_identifiers'].': ');
+			if(isset($this->filtered)) {
+				if(is_array($bezeichner)) {
+					$count = count($bezeichner).' / '.$this->filtered;
+				} else {
+					$count = '0 / '.$this->filtered;
+				}
+			} else {
+				$num   = count($bezeichner);
+				$count = $num.' / '.$num;
+			}
+			$counter->add($count);
 			$f['counter']['object'] = $counter;
 
 			$options = $this->db->select($this->table_prefix.'index', 'tabelle_kurz,tabelle_lang', null, 'pos');
-			$f['tables']['label']                        = 'Tabelle';
+			$f['tables']['label']                        = $this->lang['label_index'];
 			$f['tables']['object']['type']               = 'htmlobject_select';
 			$f['tables']['object']['attrib']['index']    = array('tabelle_kurz','tabelle_lang');
 			$f['tables']['object']['attrib']['name']     = 'table';
@@ -280,7 +293,7 @@ var $table_bezeichner = 'bezeichner';
 			$f['tables']['object']['attrib']['handler']  = 'onchange="phppublisher.wait();this.form.submit();"';
 			$f['tables']['object']['attrib']['selected'] = array($this->table);
 
-			$f['filter_bezeichner']['label']                         = 'Bezeichner';
+			$f['filter_bezeichner']['label']                         = $this->lang['label_identifier'];
 			$f['filter_bezeichner']['object']['type']                = 'htmlobject_input';
 			$f['filter_bezeichner']['object']['attrib']['name']      = 'filter[bezeichner]';
 			$f['filter_bezeichner']['object']['attrib']['title']     = 'Example: CO_A or BK%';
@@ -299,12 +312,7 @@ var $table_bezeichner = 'bezeichner';
 		} else {
 			$form->add('','submit');
 			$div = $this->response->html->div();
-			if(!isset($this->table)) {
-				$div->add('Error: No data table found');
-			} 
-			else if(!is_array($bezeichner)) {
-				$div->add('Error: No data found in table '.$this->table_bezeichner);
-			}
+			$div->add('Error: No data table found');
 			$f['data_Error']['object'] = $div;
 			$f['tables'] = '';
 			$f['filter_empty'] = '';
