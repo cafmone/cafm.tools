@@ -682,6 +682,7 @@ var $__delimiter = '[~]';
 			$sql .= 'OR `bezeichner_kurz`LIKE \''.$this->bezeichner.',%\' ' ;
  			// Wildcard *
 			$sql .= 'OR `bezeichner_kurz`=\'*\' ';
+			$sql .= 'ORDER BY `row` ';
 			$result[$k] = $this->db->handler()->query($sql);
 		}
 
@@ -809,60 +810,6 @@ var $__delimiter = '[~]';
 					}
 				}
 			}
-		}
-
-		// handle "Arbeitskarte"
-		if(!isset($this->id) && isset($this->taetigkeiten) && $this->doprint === false) {
-			$pdf = $this->response->html->button();
-			$pdf->type = 'submit';
-			$pdf->id = 'getpdf';
-			$pdf->label = $this->lang['button_pdf'];
-			$pdf->css = 'btn btn-default';
-			$pdf->name = $this->actions_name.'[todos][pdf]';
-
-			$doc = $this->response->html->button();
-			$doc->type = 'submit';
-			$doc->id = 'getdoc';
-			$doc->label = $this->lang['button_doc'];
-			$doc->css = 'btn btn-default';
-			$doc->name = $this->actions_name.'[todos][doc]';
-
-			$str  = '<div style="position: absolute;top: 40px;right: 10px;text-align: right;" id="todopanel">';
-			$str .= '<button type="button" class="form-control btn btn-default btn-inline" label="'.$this->lang['button_labor_card'].'" onclick="toggle_arbeitskarte();">'.$this->lang['button_labor_card'].'</button>';
-			$str .= '<div id="todogroups" class="tab-content" style="display:none;background-color:white;">';
-			$tables = $this->taetigkeiten->prefixes();
-			if(is_array($tables)) {
-				$str .= '<div style="margin-right:500px;">';
-				foreach($tables as $table) {
-					if(isset($table['bezeichner']) && (in_array('*', $table['bezeichner']) || in_array($this->bezeichner,$table['bezeichner']))) {
-						$input = $this->response->html->input();
-						$input->type = 'checkbox';
-						$input->css = 'form-control checkbox';
-						$input->checked = true;
-						$input->id = uniqid('p');
-						$input->title = $table['lang'];
-						$input->name = 'prefix['.$table['prefix'].']';
-
-						$label = substr($table['lang'], 0, 65);
-						strlen($label) < strlen($table['lang']) ? $label = $label.'...' : null;
-
-						$box = $this->response->html->box();
-						$box->css = 'htmlobject_box autosize inverted checkbox';
-						$box->style = 'white-space:nowrap;';
-						$box->label = $label;
-						$box->add($input);
-						$str .= $box->get_string();
-					}
-				}
-				$str .= '</div>';
-			}
-			$str .= '<div class="buttons" style="clear:both;">'.$pdf->get_string().$doc->get_string().'</div>';
-			$str .= '</div>';
-			$str .= '</div>';
-
-			$d['todos_export'] = $str;
-		} else {
-			$d['todos_export'] = '';
 		}
 
 		// handle bestand column wert length

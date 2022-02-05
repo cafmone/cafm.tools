@@ -78,6 +78,7 @@ var $table_prefix = 'bestand_';
 		$t = $this->response->html->template($this->tpldir.'/bestandsverwaltung.recording.form.options.html');
 		$t->add($this->response->html->thisfile, 'thisfile');
 		$t->add($response, 'data');
+		$t->add($this->lang['headline_new_option'], 'label');
 		$t->add($new);
 		$t->group_elements(array('param_' => 'form'));
 

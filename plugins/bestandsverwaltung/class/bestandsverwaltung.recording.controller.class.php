@@ -121,7 +121,7 @@ var $lang = array(
 		}
 	
 		if($this->response->cancel()) {
-			if($this->action === 'step2') {
+			if($this->action === 'step2' || $this->action === 'insert') {
 				$this->action = 'step1';
 			}
 		}

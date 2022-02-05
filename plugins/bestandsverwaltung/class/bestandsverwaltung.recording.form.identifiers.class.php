@@ -89,15 +89,18 @@ var $table_bezeichner = 'bezeichner';
 					if (($key = array_search($identifier, $bezeichner)) !== false) {
 						unset($bezeichner[$key]);
 						$bezeichner = implode(',', $bezeichner);
+						if($bezeichner === '') {
+							$bezeichner = null;
+						}
 						$error = $this->db->update(
 							$this->table_prefix.$this->table,
 							array('bezeichner_kurz' => $bezeichner),
 							array('row',$row)
 						);
 						if($error === '') {
-							$_REQUEST[$this->message_param] = 'sucess';
+							$_REQUEST[$this->message_param] = $this->lang['msg_success'];
 						} else {
-							$_REQUEST[$this->message_param] = $error;
+							$_REQUEST[$this->message_param]['error'] = $error;
 						}
 					}
 				}
@@ -236,7 +239,7 @@ var $table_bezeichner = 'bezeichner';
 
 							$a = $this->response->html->a();
 							$a->href    = $link.'&remove=true&identifier='.$k.'&attrib='.$r['merkmal_kurz'];
-							$a->title   = sprintf($this->lang['button_title_remove_attrib'], $k);
+							$a->title   = sprintf($this->lang['button_title_remove_attrib_identifier'], $k);
 							$a->css     = 'icon icon-trash btn btn-default btn-sm float-left';
 							$a->style   = 'margin: 4px 0 0 8px; display: inline-block;';
 							$a->handler = 'onclick="remove.confirm(this,\''.$k.'\',\''.$r['merkmal_kurz'].'\');return false;"';

@@ -17,12 +17,12 @@
  *  along with this file (see ../LICENSE.TXT) If not, see 
  *  <http://www.gnu.org/licenses/>.
  *
- *  Copyright (c) 2015-2016, Alexander Kuballa
+ *  Copyright (c) 2015-2022, Alexander Kuballa
  *
  * @package phppublisher
  * @author Alexander Kuballa [akuballa@users.sourceforge.net]
  * @author Uwe Pochadt
- * @copyright Copyright (c) 2008 - 2016, Alexander Kuballa
+ * @copyright Copyright (c) 2008 - 2022, Alexander Kuballa
  * @license GNU GENERAL PUBLIC LICENSE Version 2 (see ../LICENSE.TXT)
  * @version 1.0
  */
@@ -53,6 +53,7 @@ var $lang = array(
 		'tab_options' => 'Options',
 		'tab_index' => 'Index',
 		'tab_identifiers' => 'Identifiers',
+		'label_attribs' => 'Attributes',
 		'label_identifiers' => 'Identifiers',
 		'label_identifier' => 'Identifier',
 		'label_index' => 'Index',
@@ -63,10 +64,16 @@ var $lang = array(
 		'label_options' => 'Options',
 		'label_min' => 'Minimum',
 		'label_max' => 'Maximum',
-		'label_new_option' => 'New Option',
+		'label_new_option' => 'New option',
+		'headline_new_option' => 'New options block',
 		'button_title_add_attrib' => 'Add new attribute',
 		'button_title_edit_attrib' => 'Edit attribute %s',
-		'button_title_remove_attrib' => 'Remove attribute from identifier %s',
+		'button_title_move_attrib' => 'Move attribute up',
+		'button_title_remove_attrib_identifier' => 'Remove attribute from identifier %s',
+		'msg_moved_attrib' => 'Successfully moved attribute %s',
+		'msg_updated_attrib' => 'Successfully updated attribute %s',
+		'msg_added_attrib' => 'Successfully added attribute %s',
+		'msg_sucess' => 'Operation sucessfull',
 	);
 
 	//--------------------------------------------
@@ -128,7 +135,7 @@ var $lang = array(
 			}
 
 			if(!isset($this->db->type)) {
-				$content  = '<div style="margin: 80px auto 50px auto;width:200px;"><b>Error:</b> Check your db settings</div>';
+				$content  = '<div style="margin: 80px auto 50px auto;width:200px;"><b>Error:</b> Check db settings</div>';
 			} else {
 				$this->response->add($this->actions_name, $this->action);
 
@@ -159,12 +166,6 @@ var $lang = array(
 						$content[] = $this->attribs();
 						$content[] = $this->options();
 						$content[] = $this->index( true );
-					break;
-					case 'insert':
-						$content[] = $this->identifiers();
-						$content[] = $this->insert( true );
-						$content[] = $this->options();
-						$content[] = $this->index();
 					break;
 				}
 			}
@@ -200,10 +201,10 @@ var $lang = array(
 	function attribs($visible = false) {
 		$data = '';
 		if($visible === true) {
-			require_once($this->classdir.'bestandsverwaltung.recording.form.attribs.class.php');
-			$controller = new bestandsverwaltung_recording_form_attribs($this);
-			$controller->actions_name = $this->actions_name;
-			$controller->message_param = $this->message_param;
+			require_once($this->classdir.'bestandsverwaltung.recording.form.attribs.controller.class.php');
+			$controller = new bestandsverwaltung_recording_form_attribs_controller($this);
+			#$controller->actions_name = $this->actions_name;
+			#$controller->message_param = $this->message_param;
 			$controller->tpldir = $this->tpldir;
 			$controller->lang  = $this->lang;
 			$data = $controller->action();
@@ -244,36 +245,6 @@ var $lang = array(
 		$content['request'] = $this->response->get_array($this->actions_name, 'options' );
 		$content['onclick'] = false;
 		if($this->action === 'options'){
-			$content['active']  = true;
-		}
-		return $content;
-	}
-
-	//--------------------------------------------
-	/**
-	 * Insert
-	 *
-	 * @access public
-	 * @return htmlobject_template
-	 */
-	//--------------------------------------------
-	function insert($visible = false) {
-		$data = '';
-		if($visible === true) {
-			require_once($this->classdir.'bestandsverwaltung.recording.form.insert.class.php');
-			$controller = new bestandsverwaltung_recording_form_insert($this);
-			$controller->actions_name = $this->actions_name;
-			$controller->message_param = $this->message_param;
-			$controller->tpldir = $this->tpldir;
-			$controller->lang  = $this->lang;
-			$data = $controller->action();
-		}
-		$content['label']   = $this->lang['tab_attribs'];
-		$content['value']   = $data;
-		$content['target']  = $this->response->html->thisfile;
-		$content['request'] = $this->response->get_array($this->actions_name, 'attribs' );
-		$content['onclick'] = false;
-		if($this->action === 'insert'){
 			$content['active']  = true;
 		}
 		return $content;

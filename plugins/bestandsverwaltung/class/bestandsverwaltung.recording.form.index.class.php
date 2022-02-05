@@ -129,14 +129,77 @@ var $table_prefix = 'bestand_';
 			}
 		}
 
+		$t = $response->html->template($this->tpldir.'/bestandsverwaltung.recording.form.index.sort.html');
+		$t->add($response->html->thisfile,'thisfile');
+		$t->add($form);
+		$t->add('plugin_select', 'id');
+		$t->group_elements(array('param_' => 'form'));
+		return $t;
+	}
+
+	//--------------------------------------------
+	/**
+	 * Update
+	 *
+	 * @access public
+	 * @return htmlobject_response
+	 */
+	//--------------------------------------------
+	function update( ) {
+		$response = $this->response;
+		$form     = $response->get_form($this->actions_name, 'index');
+
+		$form->add('','cancel');
+
+		if(isset($this->tables)) {
+			$options = array();
+			foreach($this->tables as $v){
+				$options[] = array($v['row'], $v['tabelle_lang']);
+			}
+			#$d['select']['label']                        = '';
+			#$d['select']['object']['type']               = 'htmlobject_select';
+			#$d['select']['object']['attrib']['index']    = array(0, 1);
+			#$d['select']['object']['attrib']['id']       = 'plugin_select';
+			#$d['select']['object']['attrib']['name']     = 'index[]';
+			#$d['select']['object']['attrib']['options']  = $options;
+			#$d['select']['object']['attrib']['multiple'] = true;
+			#$d['select']['object']['attrib']['style']    = 'width:250px;height: 200px;';
+			#$d['select']['object']['attrib']['css']      = 'picklist';
+	
+			$form->add($d);
+			$request = $form->get_request('index');
+			if(!$form->get_errors() && $response->submit()) {
+				if(is_array($request)) {
+					foreach($request as $k => $v) {
+						$error = $this->db->update(
+							$this->table_prefix.'index', 
+							array('pos' => ($k+1)), 
+							array('row' => $v));
+						if($error !== '') {
+							$errors[] = $error;
+							break;
+						}
+					}
+
+					if(!isset($errors)) {
+						$msg = $this->lang['msg_sorted'];
+						$this->response->redirect($this->response->get_url($this->actions_name, 'index', $this->message_param, $msg));
+					} else {
+						$_REQUEST[$this->message_param] = implode('<br>', $errors);
+					}
+				}
+			}
+			else if($form->get_errors()) {
+				$_REQUEST[$this->message_param] = join('<br>', $form->get_errors());
+			}
+		}
+
 		$t = $response->html->template($this->tpldir.'/bestandsverwaltung.recording.form.index.html');
 		$t->add($response->html->thisfile,'thisfile');
 		$t->add($form);
 		$t->add('plugin_select', 'id');
 		$t->group_elements(array('param_' => 'form'));
 		return $t;
-
-
 	}
 
 

@@ -546,6 +546,7 @@ var $lang = array(
 							$sql .= 'OR `bezeichner_kurz` LIKE \'%,'.$result[0]['bezeichner_kurz'].'\' ';
 							$sql .= 'OR `bezeichner_kurz` LIKE \'%,'.$result[0]['bezeichner_kurz'].',%\' ';
 							$sql .= 'OR `bezeichner_kurz` LIKE \''.$result[0]['bezeichner_kurz'].',%\') ';
+							$sql .= 'ORDER BY `row` ';
 							$res = $this->db->handler->query($sql);
 							if(is_array($res)) {
 								foreach($res as $r) {

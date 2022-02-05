@@ -142,7 +142,7 @@ var $__attribs;
 		// handle prozess check bestand_index
 		$check = $this->db->select('bestand_index', 'tabelle_kurz', array('tabelle_kurz' => 'prozess'));
 		if(is_array($check)) {
-			$this->prozesses = $this->db->select('bestand_prozess', array('merkmal_lang','merkmal_kurz','datentyp','bezeichner_kurz'), 'bezeichner_kurz IS NOT NULL');
+			$this->prozesses = $this->db->select('bestand_prozess', array('merkmal_lang','merkmal_kurz','datentyp','bezeichner_kurz'), 'bezeichner_kurz IS NOT NULL', '`row`');
 		} else {
 			$this->prozesses = '';
 		}
@@ -1787,6 +1787,7 @@ var $__attribs;
 							$sql  = 'SELECT merkmal_lang AS m FROM bestand_'.$this->db->handler()->escape($t).' ';
 							$sql .= 'WHERE `bezeichner_kurz` LIKE \'*\' OR `bezeichner_kurz` LIKE \'*,%\' OR `bezeichner_kurz` LIKE \'%,*\'  OR `bezeichner_kurz` LIKE \'%,*,%\' ';
 							$sql .= 'OR `bezeichner_kurz` LIKE \''.$bezeichner.'\' OR `bezeichner_kurz` LIKE \''.$bezeichner.',%\' OR `bezeichner_kurz` LIKE \'%,'.$bezeichner.'\' OR `bezeichner_kurz` LIKE \'%,'.$bezeichner.',%\' ';
+							$sql .= 'ORDER BY `row` ';
 							$result = $this->db->handler()->query($sql);
 							if(is_array($result)) {
 								$m = 0;
@@ -1841,9 +1842,6 @@ var $__attribs;
 		$prefix = $this->response->html->request()->get('filter[todos][prefix]');
 		$interval = $this->response->html->request()->get('filter[todos][interval]');
 
-#$this->response->html->help($ids);
-#$this->response->html->help($_REQUEST);
-#exit();
 		if(isset($this->filter['group']) && $this->filter['group'] === 'bezeichner' ) {
 			$jsparams  = 'var group = "bezeichner";'."\n";
 			$jsparams .= 'var jsparams = ['."\n";

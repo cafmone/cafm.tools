@@ -50,7 +50,6 @@ var $tpldir;
 * @var array
 */
 var $lang = array(
-	'label' => 'Inventory',
 	'inventory' => array(
 		'tab' => 'Inventory',
 		'tab_identifiers' => 'Identifiers',
@@ -98,9 +97,6 @@ var $lang = array(
 		'button_title_download' => 'Download PDF',
 		'button_title_debug' => 'Debug trades',
 	),
-	'export' => array(
-		'tab' => 'Export',
-	),
 );
 
 	//--------------------------------------------
@@ -132,6 +128,7 @@ var $lang = array(
 			$groups[] = $this->controller->settings['settings']['supervisor']; 
 		}
 		$this->is_valid = $this->controller->user->is_valid($groups);
+		$this->lang = $this->user->translate($this->lang, CLASSDIR.'plugins/bestandsverwaltung/lang/', 'bestandsverwaltung.settings.controller.ini');
 	}
 
 	//--------------------------------------------

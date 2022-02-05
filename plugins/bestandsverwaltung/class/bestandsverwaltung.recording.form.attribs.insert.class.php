@@ -1,6 +1,6 @@
 <?php
 /**
- * bestandsverwaltung_recording_form_insert
+ * bestandsverwaltung_recording_form_attribs_insert
  *
  * This file is part of plugin bestandsverwaltung
  *
@@ -27,7 +27,7 @@
  * @version 1.0
  */
 
-class bestandsverwaltung_recording_form_insert
+class bestandsverwaltung_recording_form_attribs_insert
 {
 
 var $lang = array();
@@ -58,7 +58,6 @@ var $datatypes = array(
 		$this->response   = $controller->response;
 		$this->controller = $controller;
 		$this->user       = $controller->user;
-		$this->settings   = $controller->settings;
 
 		$table = $this->response->html->request()->get('table');
 		if($table !== '') {
@@ -102,7 +101,7 @@ var $datatypes = array(
 				$_REQUEST[$this->message_param]['error'] = $response->error;
 			}
 
-			$t = $this->response->html->template($this->tpldir.'/bestandsverwaltung.recording.form.insert.html');
+			$t = $this->response->html->template($this->tpldir.'/bestandsverwaltung.recording.form.attribs.insert.html');
 			$t->add($this->response->html->thisfile, 'thisfile');
 			$t->add($response->form);
 			$t->add($this->lang['label_identifiers'],'label_identifiers');
@@ -112,9 +111,9 @@ var $datatypes = array(
 			$t->group_elements(array('selected_' => 'selected'));
 
 		} else {
-			$this->controller->controller->response->redirect(
-					$this->controller->response->get_url(
-					$this->controller->actions_name, 'attribs', $this->controller->message_param, $response->msg
+			$this->response->redirect(
+					$this->response->get_url(
+					$this->actions_name, 'select', $this->message_param, $response->msg
 				).'#'.$response->id
 			);
 		}
@@ -178,7 +177,7 @@ var $datatypes = array(
 			if(isset($error) && $error !== '') {
 				$response->error = $error;
 			} else {
-				$response->msg = 'sucess';
+				$response->msg = sprintf($this->lang['msg_added_attrib'], $attribs['merkmal_kurz']);
 				$response->id  = $attribs['merkmal_kurz'];
 			}
 		}
@@ -284,7 +283,7 @@ var $datatypes = array(
 			if($error !== '') {
 				$response->error = $error;
 			} else {
-				$response->msg = 'sucess';
+				$response->msg = sprintf($this->lang['msg_updated_attrib'], $attribs['merkmal_kurz']);
 				$response->id  = $attribs['merkmal_kurz'];
 			}
 		}
@@ -466,7 +465,7 @@ var $datatypes = array(
 		$bezeichner = $this->db->select($this->table_bezeichner, 'bezeichner_kurz,bezeichner_lang', null, 'bezeichner_kurz');
 		$selected = array();
 		if(is_array($bezeichner)) {
-			if(isset($this->fields['bezeichner_kurz'])) {
+			if(isset($this->fields['bezeichner_kurz']) && $this->fields['bezeichner_kurz'] !== '') {
 				$selected = explode(',',$this->fields['bezeichner_kurz']);
 			}
 			// Add Wildcard
@@ -522,7 +521,6 @@ var $datatypes = array(
 			$d['selected_bez0'] = '';
 			$cselected = 0;
 		}
-
 
 		$form->add($d);
 		$response->form = $form;

@@ -1,6 +1,6 @@
 <?php
 /**
- * bestandsverwaltung_recording_form_attribs
+ * bestandsverwaltung_recording_form_attribs_select
  *
  * This file is part of plugin bestandsverwaltung
  *
@@ -17,17 +17,17 @@
  *  along with this file (see ../LICENSE.TXT) If not, see 
  *  <http://www.gnu.org/licenses/>.
  *
- *  Copyright (c) 2015-2016, Alexander Kuballa
+ *  Copyright (c) 2015-2022, Alexander Kuballa
  *
  * @package phppublisher
  * @author Alexander Kuballa [akuballa@users.sourceforge.net]
  * @author Uwe Pochadt
- * @copyright Copyright (c) 2008 - 2016, Alexander Kuballa
+ * @copyright Copyright (c) 2008 - 2022, Alexander Kuballa
  * @license GNU GENERAL PUBLIC LICENSE Version 2 (see ../LICENSE.TXT)
  * @version 1.0
  */
 
-class bestandsverwaltung_recording_form_attribs
+class bestandsverwaltung_recording_form_attribs_select
 {
 
 var $lang = array();
@@ -50,7 +50,6 @@ var $table_bezeichner = 'bezeichner';
 		$this->response   = $controller->response;
 		$this->controller = $controller;
 		$this->user       = $controller->user;
-		$this->settings   = $controller->settings;
 
 		require_once(CLASSDIR.'plugins/bestandsverwaltung/class/bestandsverwaltung.class.php');
 		$this->bestandsverwaltung = new bestandsverwaltung($this->db);
@@ -94,6 +93,7 @@ var $table_bezeichner = 'bezeichner';
 			$m = $this->db->handler()->escape($this->filter['merkmal']);
 			$sql .= 'WHERE `merkmal_kurz` LIKE \''.$m.'\' ';
 		}
+		$sql .= ' ORDER BY `row`';
 		$this->attribs = $this->db->handler()->query($sql);
 	}
 
@@ -111,7 +111,7 @@ var $table_bezeichner = 'bezeichner';
 
 		$response = $this->attribs();
 
-		$t = $this->response->html->template($this->tpldir.'/bestandsverwaltung.recording.form.attribs.html');
+		$t = $this->response->html->template($this->tpldir.'/bestandsverwaltung.recording.form.attribs.select.html');
 		$t->add($this->response->html->thisfile, 'thisfile');
 		$t->add($response->form);
 		$t->add($response->dataform);
@@ -132,13 +132,13 @@ var $table_bezeichner = 'bezeichner';
 		$counter = $this->response->html->div();
 		if(isset($this->filtered)) {
 			if(is_array($this->attribs)) {
-				$count = count($this->attribs).' / '.$this->filtered;
+				$count = $this->lang['label_attribs'].': '.count($this->attribs).' / '.$this->filtered;
 			} else {
-				$count = '0 / '.$this->filtered;
+				$count = $this->lang['label_attribs'].': '.'0 / '.$this->filtered;
 			}
 		} else {
 			$num   = count($this->attribs);
-			$count = $num.' / '.$num;
+			$count = $this->lang['label_attribs'].': '.$num.' / '.$num;
 		}
 		$counter->add($count);
 		$t->add($counter, 'counter');
@@ -146,14 +146,27 @@ var $table_bezeichner = 'bezeichner';
 		// assemble boxes 
 		if(isset($this->attribs) && is_array($this->attribs)) {
 
+			$i = 0;
 			foreach($this->attribs as $r) {
 			
 				$a = $this->response->html->a();
 				$a->title = sprintf($this->lang['button_title_edit_attrib'], $r['merkmal_kurz']);
 				$a->css = 'icon icon-edit btn btn-sm btn-default noprint';
 				$a->handler = 'onclick="phppublisher.wait(\'Loading ...\');"';
-				$a->style = 'float:right;margin:0 0 0 0';
+				$a->style = 'float:right;margin:0 0 0 3px';
 				$a->href = $this->response->get_url($this->actions_name,'insert').'&row='.$r['row'].'&table='.$this->table;
+
+				if($i !== 0) {
+					$move = $this->response->html->a();
+					$move->title = sprintf($this->lang['button_title_move_attrib'], $r['merkmal_kurz']);
+					$move->css = 'icon icon-menu-up btn btn-sm btn-default noprint';
+					$move->handler = 'onclick="phppublisher.wait(\'Loading ...\');"';
+					$move->style = 'float:right;margin:0 0 0 0';
+					$move->href = $this->response->get_url($this->actions_name,'move').'&row='.$r['row'].'&table='.$this->table;
+				} else {
+					$move = '';
+					$i = 1;
+				}
 
 				$box = $this->response->html->div();
 				$box->id = $r['merkmal_kurz'];
@@ -161,6 +174,7 @@ var $table_bezeichner = 'bezeichner';
 				$box->style = 'margin: 0 0 20px 0;';
 				$box->add('<div class="card-header">');
 				$box->add($a);
+				$box->add($move);
 				$box->add('<div class="float-left">');
 				$box->add($t->get_elements('data_'.$r['merkmal_kurz']));
 				$box->add('</div>');
@@ -209,7 +223,7 @@ var $table_bezeichner = 'bezeichner';
 		}
 
 		$response = $this->response;
-		$form = $response->get_form($this->actions_name, 'attribs');
+		$form = $response->get_form($this->actions_name, 'select');
 
 		$dataresponse = $response->response('data');
 		$dataresponse->id = 'data';
