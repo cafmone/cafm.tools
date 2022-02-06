@@ -110,7 +110,7 @@ var $lang = array();
 		if(isset($this->controller->inventory_filter) && $this->controller->inventory_filter === true) {
 			// bezeichner count in bestand
 			$sql  = 'SELECT `id`,`bezeichner_kurz` as bezeichner ';
-			$sql .= 'FROM '.$this->settings['query']['table'].' ';
+			$sql .= 'FROM '.$this->settings['query']['identifiers'].' ';
 			$sql .= 'GROUP BY id, bezeichner';
 			$result = $this->db->handler()->query($sql);
 			if(is_array($result)) {
@@ -142,14 +142,14 @@ var $lang = array();
 			$head['filter']['style'] = 'width: 60px;text-align:center;';
 		}
 
-		$head['pos']['title'] = $this->lang['table_pos'];
+		$head['pos']['title'] = $this->lang['label_pos'];
 		$head['pos']['sortable'] = true;
 		$head['pos']['style'] = 'width:60px;';
 
-		$head['kurz']['title'] = $this->lang['table_short'];
+		$head['kurz']['title'] = $this->lang['label_short'];
 		$head['kurz']['sortable'] = true;
 
-		$head['lang']['title'] = $this->lang['table_long'];
+		$head['lang']['title'] = $this->lang['label_long'];
 		$head['lang']['sortable'] = true;
 
 		$head['edit']['title'] = '&#160;';
@@ -158,12 +158,12 @@ var $lang = array();
 
 		$body = array();
 
-		if(isset($this->settings['query']['table'])) {
+		if(isset($this->settings['query']['identifiers'])) {
 			$sql  = 'SELECT ';
 			$sql .= 'b.bezeichner_kurz as bk, ';
 			$sql .= 'b.bezeichner_lang as bl, ';
 			$sql .= 'b.pos as pos ';
-			$sql .= 'FROM '.$this->settings['query']['table'].'_identifiers AS b ';
+			$sql .= 'FROM '.$this->settings['query']['identifiers'].' AS b ';
 			$sql .= 'GROUP BY bk,bl,pos';
 		} else {
 			$sql = '';
@@ -217,7 +217,7 @@ var $lang = array();
 				$a = $response->html->a();
 				$a->href  = $response->get_url($this->actions_name, 'insert').'&identifier='.$d['bk'].$tparams;
 				$a->title = sprintf($this->lang['title_edit'], $d['bk']);
-				$a->css = 'glyphicon glyphicon-edit edit btn btn-default btn-xs';
+				$a->css = 'icon icon-edit edit btn btn-default btn-sm';
 				$a->style = 'margin: 0 0 0 0; display: inline-block;';
 				$a->handler = 'onclick="phppublisher.wait();"';
 
@@ -238,7 +238,7 @@ var $lang = array();
 						$f = $this->response->html->a();
 						$f->href    = $c->response->get_url($c->actions_name, 'inventory' ).'&filter[bezeichner]='.$d['bk'];
 						#$f->title   = $this->lang['select']['title_filter'];
-						$f->css     = 'btn btn-default btn-xs';
+						$f->css     = 'btn btn-default btn-sm';
 						$f->style   = 'margin: 0 0 0 0; display: block;';
 						$f->target  = '_blank';
 						$f->label   = $matches;

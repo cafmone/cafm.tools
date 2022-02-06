@@ -99,13 +99,13 @@ var $lang = array();
 			} else {
 				$error = '';
 				$id = $this->response->html->request()->get('id');
-				$child = $this->db->select($this->settings['query']['table'], 'id', array('parent_id'=>$id), null, '1');
+				$child = $this->db->select($this->settings['query']['content'], 'id', array('parent_id'=>$id), null, '1');
 				if(!isset($child[0]['id'])) {
 					if($this->file->exists($this->datadir.$id)) {
 						$error = $this->file->remove($this->datadir.$id, true);
 					}
 					if($error === '') {
-						$error = $this->db->delete($this->settings['query']['table'], array('id', $id));
+						$error = $this->db->delete($this->settings['query']['content'], array('id', $id));
 					}
 					if($error === '') {
 						$response->msg = sprintf($this->lang['msg_remove_success'], $id);

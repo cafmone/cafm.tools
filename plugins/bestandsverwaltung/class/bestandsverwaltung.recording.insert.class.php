@@ -793,11 +793,11 @@ var $__delimiter = '[~]';
 			$options = $raumbuch->options();
 
 			if(is_array($options) && count($options) > 0) {
-				array_unshift($options, array('id' => '', 'label' => ''));
+				array_unshift($options, array('id' => '', 'path' => ''));
 
 				$d['system_raumbuch']['label']                       = $this->lang['label_location'];
 				$d['system_raumbuch']['object']['type']              = 'htmlobject_select';
-				$d['system_raumbuch']['object']['attrib']['index']   = array('id','label');
+				$d['system_raumbuch']['object']['attrib']['index']   = array('id','path');
 				$d['system_raumbuch']['object']['attrib']['style']   = 'max-width:200px;';
 				$d['system_raumbuch']['object']['attrib']['name']    = 'SYSTEM[RAUMBUCHID]';
 				$d['system_raumbuch']['object']['attrib']['options'] = $options;

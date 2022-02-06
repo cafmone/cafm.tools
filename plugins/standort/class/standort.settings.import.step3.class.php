@@ -371,7 +371,7 @@ var $lang = array();
 						$o['merkmal_kurz'] = 'NAME';
 						$o['wert'] = $v['label'];
 
-						$error = $this->db->insert($this->controller->settings['query']['table'], $o);
+						$error = $this->db->insert($this->controller->settings['query']['content'], $o);
 						if($error === '') {
 							if(isset($v['children'])) {
 								$error = $this->insert($v['children'], $v['id']);

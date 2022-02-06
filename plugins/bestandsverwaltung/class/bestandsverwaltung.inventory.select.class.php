@@ -771,10 +771,10 @@ var $__attribs;
 		if(isset($this->raumbuch)) {
 			$raumbuch = $this->raumbuch->options;
 			if(is_array($raumbuch) && count($raumbuch) > 0) {
-				array_unshift($raumbuch, array('id' => '', 'label' => ''));
+				array_unshift($raumbuch, array('id' => '', 'path' => ''));
 				$d['filter_raumbuch']['label']                       = $this->lang['label_location'];
 				$d['filter_raumbuch']['object']['type']              = 'htmlobject_select';
-				$d['filter_raumbuch']['object']['attrib']['index']   = array('id','label');
+				$d['filter_raumbuch']['object']['attrib']['index']   = array('id','path');
 				$d['filter_raumbuch']['object']['attrib']['name']    = 'filter[raumbuch]';
 				$d['filter_raumbuch']['object']['attrib']['id']      = 'filter_raumbuch';
 				$d['filter_raumbuch']['object']['attrib']['options'] = $raumbuch;
@@ -993,7 +993,7 @@ var $__attribs;
 			// handle export grouping
 			if(!isset($this->filter['group']) || $this->filter['group'] === 'single') {
 				if(is_array($raumbuch) && is_array($tables)) {
-					array_unshift($tables,array('tabelle_kurz'=>'standort','tabelle_lang'=>'Standort'));
+					array_unshift($tables,array('tabelle_kurz'=>'standort','tabelle_lang'=>$this->lang['label_location']));
 				}
 			} else {
 				// handle missing standort (prevent error message)
@@ -1028,9 +1028,9 @@ var $__attribs;
 		$d['export_table']['object']['attrib']['multiple'] = true;
 		$d['export_table']['object']['attrib']['options']  = $tables;
 		$d['export_table']['object']['attrib']['style']    = 'width:150px; height: 115px;';
-		if($this->response->html->request()->get('export[table]') === '' && is_array($tables)) {
-			$d['export_table']['object']['attrib']['selected'] = array($tables[0]['tabelle_kurz']);
-		}
+		#if($this->response->html->request()->get('export[table]') === '' && is_array($tables)) {
+		#	$d['export_table']['object']['attrib']['selected'] = array($tables[0]['tabelle_kurz']);
+		#}
 
 		$d['bom']['label']                     = 'BOM';
 		$d['bom']['css']                       = 'autosize';

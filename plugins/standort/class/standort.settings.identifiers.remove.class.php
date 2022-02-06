@@ -85,7 +85,7 @@ var $lang = array();
 				$errors  = array();
 				$message = array();
 				foreach($request as $key => $id) {
-					$error = $this->db->delete($this->settings['query']['table'].'_identifiers', array('bezeichner_kurz', $id));
+					$error = $this->db->delete($this->settings['query']['content'].'_identifiers', array('bezeichner_kurz', $id));
 					if($error === '') {
 						$form->remove($this->controller->identifier_name.'['.$id.']');
 						$message[] = sprintf($this->lang['msg_remove_success'], $id);

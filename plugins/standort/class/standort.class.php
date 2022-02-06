@@ -40,8 +40,8 @@ private $__tablemaster;
 					#throw new Exception('Standort setting db is missing. Please check settings.');
 				}
 				// handle tablemaster
-				if(isset($this->settings['query']['table'])) {
-					$this->__tablemaster = $this->settings['query']['table'];
+				if(isset($this->settings['query']['content'])) {
+					$this->__tablemaster = $this->settings['query']['content'];
 				} else {
 					#throw new Exception('Standort setting table is missing. Please check settings.');
 				}
@@ -64,7 +64,7 @@ private $__tablemaster;
 	//--------------------------------------------
 	function levels() {
 		$options = array();
-		$levels  = $this->db->handler()->query('SELECT * FROM '.$this->__tablemaster.'_identifiers ORDER BY `pos`');
+		$levels  = $this->db->handler()->query('SELECT * FROM '.$this->settings['query']['identifiers'].' ORDER BY `pos`');
 		if(is_array($levels)) {
 			$i = 1;
 			foreach($levels as $level) {

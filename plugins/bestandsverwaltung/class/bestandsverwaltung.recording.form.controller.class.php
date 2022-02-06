@@ -41,7 +41,11 @@ var $actions_name = 'bestand_form_action';
 * @var string
 */
 var $message_param = 'bestand_form_msg';
-
+/**
+* path to tpldir
+* @access public
+* @var string
+*/
 var $tpldir;
 /**
 * translation
@@ -70,11 +74,25 @@ var $lang = array(
 		'button_title_edit_attrib' => 'Edit attribute %s',
 		'button_title_move_attrib' => 'Move attribute up',
 		'button_title_remove_attrib_identifier' => 'Remove attribute from identifier %s',
+		'button_title_edit_index' => 'Edit index',
 		'msg_moved_attrib' => 'Successfully moved attribute %s',
 		'msg_updated_attrib' => 'Successfully updated attribute %s',
 		'msg_added_attrib' => 'Successfully added attribute %s',
-		'msg_sucess' => 'Operation sucessfull',
+		'msg_success' => 'Operation sucessfull',
 	);
+	
+/**
+* prefix for form tables
+* @access public
+* @var string
+*/
+var $table_prefix = 'bestand_';
+/**
+* identifier table
+* @access public
+* @var string
+*/
+var $table_bezeichner = 'bezeichner';
 
 	//--------------------------------------------
 	/**
@@ -207,6 +225,8 @@ var $lang = array(
 			#$controller->message_param = $this->message_param;
 			$controller->tpldir = $this->tpldir;
 			$controller->lang  = $this->lang;
+			$controller->table_prefix = $this->table_prefix;
+			$controller->table_bezeichner = $this->table_bezeichner;
 			$data = $controller->action();
 		}
 		$content['label']   = $this->lang['tab_attribs'];
@@ -237,6 +257,8 @@ var $lang = array(
 			$controller->message_param = $this->message_param;
 			$controller->tpldir = $this->tpldir;
 			$controller->lang  = $this->lang;
+			$controller->table_prefix = $this->table_prefix;
+			$controller->table_bezeichner = $this->table_bezeichner;
 			$data = $controller->action();
 		}
 		$content['label']   = $this->lang['tab_options'];
@@ -261,12 +283,12 @@ var $lang = array(
 	function index($visible = false) {
 		$data = '';
 		if($visible === true) {
-			require_once($this->classdir.'bestandsverwaltung.recording.form.index.class.php');
-			$controller = new bestandsverwaltung_recording_form_index($this);
-			$controller->actions_name = $this->actions_name;
-			$controller->message_param = $this->message_param;
+			require_once($this->classdir.'bestandsverwaltung.recording.form.index.controller.class.php');
+			$controller = new bestandsverwaltung_recording_form_index_controller($this);
 			$controller->tpldir = $this->tpldir;
 			$controller->lang  = $this->lang;
+			$controller->table_prefix = $this->table_prefix;
+			$controller->table_bezeichner = $this->table_bezeichner;
 			$data = $controller->action();
 		}
 		$content['label']   = $this->lang['tab_index'];
@@ -297,6 +319,8 @@ var $lang = array(
 			$controller->message_param = $this->message_param;
 			$controller->tpldir = $this->tpldir;
 			$controller->lang  = $this->lang;
+			$controller->table_prefix = $this->table_prefix;
+			$controller->table_bezeichner = $this->table_bezeichner;
 			$data = $controller->action();
 		}
 		$content['label']   = $this->lang['tab_identifiers'];

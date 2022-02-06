@@ -30,7 +30,7 @@ var $lang = array();
 		$this->controller = $controller;
 		$this->settings   = $controller->settings;
 
-		$this->identifiers  = $this->db->select($this->settings['query']['table'].'_identifiers', array('bezeichner_kurz','bezeichner_lang'));
+		$this->identifiers  = $this->db->select($this->settings['query']['content'].'_identifiers', array('bezeichner_kurz','bezeichner_lang'));
 	}
 
 	//--------------------------------------------
@@ -89,7 +89,7 @@ var $lang = array();
 				if($request !== '' && $identifier !== '') {
 					foreach($request as $key => $id) {
 						$error = $this->db->update(
-							$this->settings['query']['table'],
+							$this->settings['query']['content'],
 							array('bezeichner_kurz' => $identifier),
 							array('id' => $id)
 						);

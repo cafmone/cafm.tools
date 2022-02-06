@@ -31,9 +31,18 @@ class bestandsverwaltung_recording_form_attribs_select
 {
 
 var $lang = array();
-
-var $table_prefix = 'bestand_';
-var $table_bezeichner = 'bezeichner';
+/**
+* prefix for form tables
+* @access public
+* @var string
+*/
+var $table_prefix;
+/**
+* identifier table
+* @access public
+* @var string
+*/
+var $table_bezeichner;
 
 	//--------------------------------------------
 	/**
@@ -137,7 +146,11 @@ var $table_bezeichner = 'bezeichner';
 				$count = $this->lang['label_attribs'].': '.'0 / '.$this->filtered;
 			}
 		} else {
-			$num   = count($this->attribs);
+			if(is_array($this->attribs)) {
+				$num = count($this->attribs);
+			} else {
+				$num = 0;
+			}
 			$count = $this->lang['label_attribs'].': '.$num.' / '.$num;
 		}
 		$counter->add($count);
@@ -211,7 +224,7 @@ var $table_bezeichner = 'bezeichner';
 		$sql  = 'SELECT bezeichner_kurz as bezeichner, bezeichner_lang as label ';
 		$sql .= 'FROM '.$this->table_bezeichner.' ';
 		$sql .= 'GROUP BY bezeichner_kurz, bezeichner_lang ';
-		$sql .= 'ORDER BY bezeichner_kurz';
+		$sql .= 'ORDER BY label';
 
 		$result = $this->db->handler()->query($sql);
 		$bezeichner = array();
@@ -253,11 +266,10 @@ var $table_bezeichner = 'bezeichner';
 						$h->css = 'list-group';
 
 						$tmp = explode(',', $r['bezeichner_kurz']);
-						sort($tmp);
 
 						foreach($tmp as $v) {
 							if(array_key_exists($v, $bezeichner)) {
-								$h->add('<div>'.$v.' - '.$bezeichner[$v].'</div>');
+								$h->add('<div>'.$bezeichner[$v].' ('.$v.')</div>');
 							} else {
 								$h->add($v.'<br>');
 							}

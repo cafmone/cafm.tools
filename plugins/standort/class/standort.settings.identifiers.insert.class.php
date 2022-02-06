@@ -61,7 +61,7 @@ var $lang = array();
 		if(isset($this->identifier)) {
 			$sql  = 'SELECT ';
 			$sql .= 'b.bezeichner_lang as bl ';
-			$sql .= 'FROM '.$this->settings['query']['table'].'_identifiers AS b ';
+			$sql .= 'FROM '.$this->settings['query']['identifiers'].' AS b ';
 			$sql .= 'WHERE b.bezeichner_kurz=\''.$this->identifier.'\' ';
 			$values = $this->db->handler()->query($sql);
 			if(is_array($values)) {
@@ -106,10 +106,10 @@ var $lang = array();
 
 			// handle identifier
 			$request = $form->get_request('bez');
-			$check = $this->db->select($this->settings['query']['table'].'_identifiers', 'bezeichner_kurz', array('bezeichner_kurz'=>$request['bezeichner_kurz']));
+			$check = $this->db->select($this->settings['query']['identifiers'].'', 'bezeichner_kurz', array('bezeichner_kurz'=>$request['bezeichner_kurz']));
 			if($check === '') {
 				// handle pos
-				$pos = $this->db->select($this->settings['query']['table'].'_identifiers', 'pos', '', 'pos DESC', '1');
+				$pos = $this->db->select($this->settings['query']['identifiers'].'', 'pos', '', 'pos DESC', '1');
 				if($pos === '') {
 					$request['pos'] = 1;
 				}
@@ -119,7 +119,7 @@ var $lang = array();
 					$error = $pos;
 				}
 				if($error === '') {
-					$error = $this->db->insert($this->settings['query']['table'].'_identifiers',$request);
+					$error = $this->db->insert($this->settings['query']['identifiers'].'',$request);
 				}
 			} else {
 				$error = sprintf($this->lang['error_exists'], $request['bezeichner_kurz']);
@@ -155,7 +155,7 @@ var $lang = array();
 			// handle identifier
 			$identifier = $form->get_request('bez');
 			$error = $this->db->update(
-					$this->settings['query']['table'].'_identifiers',
+					$this->settings['query']['identifiers'],
 					$identifier,
 					array('bezeichner_kurz'=>$this->identifier)
 				);
@@ -190,10 +190,10 @@ var $lang = array();
 			$fields = $this->fields;
 		}
 
-		$columns = $this->db->handler()->columns($this->db->db, $this->settings['query']['table'].'_identifiers', 'bezeichner_lang');
+		$columns = $this->db->handler()->columns($this->db->db, $this->settings['query']['identifiers'].'', 'bezeichner_lang');
 
 		if(!isset($this->identifier)) {
-			$d['id']['label']                         = $this->lang['table_short'];
+			$d['id']['label']                         = $this->lang['label_short'];
 			$d['id']['required']                      = true;
 			$d['id']['validate']['regex']             = '/^[A-Z0-9_]+$/';
 			$d['id']['validate']['errormsg']          = sprintf($this->lang['error_short_misspelled'], '[A-Z0-9_]');
@@ -203,7 +203,7 @@ var $lang = array();
 				$d['id']['object']['attrib']['maxlength'] = $columns['bezeichner_kurz']['length'];
 			}
 		} else {
-			$d['id']['label']                        = $this->lang['table_short'].'&#160;';
+			$d['id']['label']                        = $this->lang['label_short'].'&#160;';
 			$d['id']['static']                       = true;
 			$d['id']['object']['type']               = 'htmlobject_input';
 			$d['id']['object']['attrib']['name']     = 'idxxx';
@@ -211,7 +211,7 @@ var $lang = array();
 			$d['id']['object']['attrib']['value']    = $this->identifier;
 		}
 
-		$d['bezeichner_lang']['label']                    = $this->lang['table_short'];
+		$d['bezeichner_lang']['label']                    = $this->lang['label_long'];
 		$d['bezeichner_lang']['required']                 = true;
 		$d['bezeichner_lang']['object']['type']           = 'htmlobject_input';
 		$d['bezeichner_lang']['object']['attrib']['name'] = 'bez[bezeichner_lang]';

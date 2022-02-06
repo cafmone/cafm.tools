@@ -31,8 +31,18 @@ class bestandsverwaltung_recording_form_options
 {
 
 var $lang = array();
-
-var $table_prefix = 'bestand_';
+/**
+* prefix for form tables
+* @access public
+* @var string
+*/
+var $table_prefix;
+/**
+* identifier table
+* @access public
+* @var string
+*/
+var $table_bezeichner;
 
 	//--------------------------------------------
 	/**

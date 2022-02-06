@@ -69,9 +69,9 @@ var $lang = array(
 		'title_insert' => 'New identifier',
 		'title_sort' => 'Sort identifiers',
 		'title_edit' => 'Edit identifier %s',
-		'table_pos' => 'Position',
-		'table_short' => 'Short',
-		'table_long' => 'Long',
+		'label_pos' => 'Position',
+		'label_short' => 'Short',
+		'label_long' => 'Long',
 		'confirm_remove' => 'Remove selected identifier(s)?',
 		'error_short_misspelled' => 'Short must be %s only',
 		'error_exists' => 'Error: Identifier %s is already in use',
@@ -146,7 +146,7 @@ var $tpldir;
 	
 		// Settings Error
 		if(!isset($this->settings) || 
-			!isset($this->settings['query']['table']) || 
+			!isset($this->settings['query']['prefix']) || 
 			!isset($this->settings['query']['db'])
 		) {
 			$_REQUEST[$this->message_param]['error'] = 'Error: Please check plugin settings';

@@ -54,6 +54,9 @@ var $lang = array();
 		$this->classdir = $controller->classdir;
 		$this->profilesdir = $controller->profilesdir;
 		$this->settings = $controller->settings;
+		
+		require_once($this->classdir.'standort.class.php');
+		$standort = new standort($this->db, $this->file);
 	}
 
 	//--------------------------------------------

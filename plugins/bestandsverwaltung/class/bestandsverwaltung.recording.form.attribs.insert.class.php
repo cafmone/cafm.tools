@@ -29,10 +29,20 @@
 
 class bestandsverwaltung_recording_form_attribs_insert
 {
+/**
+* prefix for form tables
+* @access public
+* @var string
+*/
+var $table_prefix;
+/**
+* identifier table
+* @access public
+* @var string
+*/
+var $table_bezeichner;
 
 var $lang = array();
-var $table_prefix = 'bestand_';
-var $table_bezeichner = 'bezeichner';
 var $datatypes = array(
 	array('checkbox'),
 	array('integer'),
@@ -462,7 +472,7 @@ var $datatypes = array(
 		}
 */
 
-		$bezeichner = $this->db->select($this->table_bezeichner, 'bezeichner_kurz,bezeichner_lang', null, 'bezeichner_kurz');
+		$bezeichner = $this->db->select($this->table_bezeichner, 'bezeichner_kurz,bezeichner_lang', null, 'bezeichner_lang');
 		$selected = array();
 		if(is_array($bezeichner)) {
 			if(isset($this->fields['bezeichner_kurz']) && $this->fields['bezeichner_kurz'] !== '') {
@@ -477,7 +487,7 @@ var $datatypes = array(
 			foreach($bezeichner as $b) {
 				if(in_array($b['bezeichner_kurz'], $selected)) {
 
-					$d['selected_bez'.$i]['label'] = $b['bezeichner_kurz'].' - '.$b['bezeichner_lang'];
+					$d['selected_bez'.$i]['label'] = $b['bezeichner_lang'].' ('.$b['bezeichner_kurz'].')';
 					if($b['bezeichner_kurz'] !== '*') {
 						$d['selected_bez'.$i]['id'] = $b['bezeichner_kurz'];
 					}
@@ -494,7 +504,7 @@ var $datatypes = array(
 
 				} else {
 
-					$d['available_bez'.$i]['label'] = $b['bezeichner_kurz'].' - '.$b['bezeichner_lang'];
+					$d['available_bez'.$i]['label'] = $b['bezeichner_lang'].' ('.$b['bezeichner_kurz'].')';
 					if($b['bezeichner_kurz'] !== '*') {
 						$d['available_bez'.$i]['id'] = $b['bezeichner_kurz'];
 					}
@@ -526,7 +536,7 @@ var $datatypes = array(
 		$response->form = $form;
 		$form->display_errors = false;
 
-		$response->counter = $cselected.' / '.(count($bezeichner)-1);
+		$response->counter = $cselected.' / '.(count($bezeichner));
 
 		return $response;
 	}

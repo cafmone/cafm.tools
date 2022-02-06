@@ -59,8 +59,8 @@ var $lang = array(
 		$this->user = $controller->user;
 		$this->settings = $controller->settings;
 		$this->classdir = $controller->classdir;
-		if(isset($this->settings['query']['table'])) {
-			$this->prefix = $this->settings['query']['table'];
+		if(isset($this->settings['query']['prefix'])) {
+			$this->prefix = $this->settings['query']['prefix'];
 		} else {
 			$this->prefix = '';
 		}
@@ -76,6 +76,24 @@ var $lang = array(
 	 */
 	//--------------------------------------------
 	function action($action = null) {
+	
+	
+		require_once(CLASSDIR.'plugins/bestandsverwaltung/class/bestandsverwaltung.recording.form.controller.class.php');
+		$controller = new bestandsverwaltung_recording_form_controller($this);
+		#$controller->actions_name = $this->actions_name;
+		#$controller->message_param = $this->message_param;
+		$controller->classdir = CLASSDIR.'plugins/bestandsverwaltung/class/';
+		$controller->tpldir = CLASSDIR.'plugins/bestandsverwaltung/templates/';
+		$controller->table_prefix = $this->prefix.'';
+		$controller->table_bezeichner = $this->prefix.'bezeichner';
+		$data = $controller->action();
+
+		return $data;
+
+
+
+
+/*
 		$this->action = '';
 		$ar = $this->response->html->request()->get($this->actions_name);
 		if($ar !== '') {
@@ -143,6 +161,7 @@ var $lang = array(
 		$tab->add($content);
 
 		return $tab;
+*/
 	}
 
 	//--------------------------------------------

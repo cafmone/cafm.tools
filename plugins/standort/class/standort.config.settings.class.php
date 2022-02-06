@@ -142,13 +142,31 @@ var $lang = array(
 			$d['db']['object']['attrib']['value'] = $ini['query']['db'];
 		}
 
-		$d['table']['label']                     = 'Table';
+		$d['prefix']['label']                     = 'Prefix';
+		$d['prefix']['required']                  = true;
+		$d['prefix']['object']['type']            = 'htmlobject_input';
+		$d['prefix']['object']['attrib']['name']  = 'query[prefix]';
+		$d['prefix']['object']['attrib']['type']  = 'text';
+		if(isset($ini['query']['prefix'])) {
+			$d['prefix']['object']['attrib']['value'] = $ini['query']['prefix'];
+		}
+		
+		$d['table']['label']                     = 'Content';
 		$d['table']['required']                  = true;
 		$d['table']['object']['type']            = 'htmlobject_input';
-		$d['table']['object']['attrib']['name']  = 'query[table]';
+		$d['table']['object']['attrib']['name']  = 'query[content]';
 		$d['table']['object']['attrib']['type']  = 'text';
-		if(isset($ini['query']['table'])) {
-			$d['table']['object']['attrib']['value'] = $ini['query']['table'];
+		if(isset($ini['query']['content'])) {
+			$d['table']['object']['attrib']['value'] = $ini['query']['content'];
+		}
+		
+		$d['identifiers']['label']                     = 'Identifiers';
+		$d['identifiers']['required']                  = true;
+		$d['identifiers']['object']['type']            = 'htmlobject_input';
+		$d['identifiers']['object']['attrib']['name']  = 'query[identifiers]';
+		$d['identifiers']['object']['attrib']['type']  = 'text';
+		if(isset($ini['query']['identifiers'])) {
+			$d['identifiers']['object']['attrib']['value'] = $ini['query']['identifiers'];
 		}
 
 		// Permissions

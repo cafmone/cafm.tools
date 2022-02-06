@@ -43,7 +43,7 @@ var $lang = array();
 	//--------------------------------------------
 	function action($action = null) {
 
-		$tabellen = $this->db->select($this->settings['query']['table'].'_identifiers', 'row,bezeichner_lang',null,'pos');
+		$tabellen = $this->db->select($this->settings['query']['identifiers'].'', array('row','bezeichner_lang'),null,'pos');
 		if(is_array($tabellen)) {
 			$this->tables = $tabellen;
 		}
@@ -86,7 +86,7 @@ var $lang = array();
 				if(is_array($request)) {
 					foreach($request as $k => $v) {
 						$error = $this->db->update(
-							$this->settings['query']['table'].'_identifiers', 
+							$this->settings['query']['identifiers'], 
 							array('pos' => ($k+1)), 
 							array('row' => $v));
 						if($error !== '') {

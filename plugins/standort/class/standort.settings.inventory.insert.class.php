@@ -42,14 +42,15 @@ var $hide_empty = false;
 		$this->settings   = $controller->settings;
 		$this->fields     = array();
 		$this->datadir    = $this->controller->datadir;
-		$this->tables     = $this->db->select($this->settings['query']['table'].'_index',array('tabelle_kurz','tabelle_lang'));
+		$this->tables     = $this->db->select($this->settings['query']['prefix'].'index',array('tabelle_kurz','tabelle_lang'));
+		
 		$this->standort   = $controller->standort;
 
 		$id = $this->response->html->request()->get('id');
 		if( $id !== '') {
 			$this->id = $id;
 			$this->response->add('id', $this->id);
-			$values = $this->db->select($this->settings['query']['table'], array('row','bezeichner_kurz','tabelle','parent_id','merkmal_kurz','wert'), array('id', $this->id));
+			$values = $this->db->select($this->settings['query']['content'], array('row','bezeichner_kurz','tabelle','parent_id','merkmal_kurz','wert'), array('id', $this->id));
 			if(is_array($values)) {
 				$this->fields['parent'] = $values[0]['parent_id'];
 				$this->fields['bezeichner'] = $values[0]['bezeichner_kurz'];
@@ -279,9 +280,9 @@ var $hide_empty = false;
 				$d['merkmal_kurz'] = 'NAME';
 				$d['wert']         = $form->get_request('NAME');
 
-				$check = $this->db->select($this->settings['query']['table'], array('row'), array('id', $d['id']));
+				$check = $this->db->select($this->settings['query']['content'], array('row'), array('id', $d['id']));
 				if($check === '') {
-					$error = $this->db->insert($this->settings['query']['table'], $d);
+					$error = $this->db->insert($this->settings['query']['content'], $d);
 					if($error === '') {
 						foreach($f as $key => $value) {
 							if(is_array($value)) {
@@ -289,7 +290,7 @@ var $hide_empty = false;
 									$d['tabelle'] = $key;
 									$d['merkmal_kurz'] = $k;
 									$d['wert'] = $v;
-									$error = $this->db->insert($this->settings['query']['table'], $d);
+									$error = $this->db->insert($this->settings['query']['content'], $d);
 								}
 							}
 						}
@@ -343,13 +344,13 @@ var $hide_empty = false;
 								if($v === '') {
 									// delete
 									$error = $this->db->delete(
-										$this->settings['query']['table'],
+										$this->settings['query']['content'],
 										array('row',$this->fields[$key][$k]['row'])
 									);
 								} else {
 									// update
 									$error = $this->db->update(
-										$this->settings['query']['table'],
+										$this->settings['query']['content'],
 										array('wert' => $v),
 										array('row',$this->fields[$key][$k]['row'])
 									);	
@@ -368,7 +369,7 @@ var $hide_empty = false;
 								$d['tabelle']         = $key;
 								$d['merkmal_kurz']    = $k;
 								$d['wert']            = $v;
-								$error = $this->db->insert($this->settings['query']['table'], $d);
+								$error = $this->db->insert($this->settings['query']['content'], $d);
 							}
 						}
 						if($error !== '') {
@@ -384,7 +385,7 @@ var $hide_empty = false;
 				// change parent
 #				if(isset($this->fields['parent']) && $this->fields['parent'] !== $response->html->request()->get('parent')) {
 #					$error = $this->db->update(
-#						$this->settings['query']['table'],
+#						$this->settings['query']['content'],
 #						array('parent_id' => $response->html->request()->get('parent')),
 #						array('id',$this->id)
 #					);
@@ -395,7 +396,7 @@ var $hide_empty = false;
 					// change Name
 					if(isset($this->fields['NAME']['wert']) && $this->fields['NAME']['wert'] !== $response->html->request()->get('NAME')) {
 						$error = $this->db->update(
-							$this->settings['query']['table'],
+							$this->settings['query']['content'],
 							array('wert' => $response->html->request()->get('NAME')),
 							array('id' => $this->id, 'row' => $this->fields['NAME']['row'], 'merkmal_kurz' => 'NAME')
 						);
@@ -426,11 +427,11 @@ var $hide_empty = false;
 	function get_response() {
 		$response = $this->response;
 		$fields   = $this->fields;
-		$columns  = $this->db->handler()->columns($this->db->db, $this->settings['query']['table']);
+		$columns  = $this->db->handler()->columns($this->db->db, $this->settings['query']['content']);
 
 		$d = array();
-		$d['toplink'] = '<div class="noprint" style="display: inline;text-align:right;margin:0 5px 0 10px;"><a id="insertbottom" href="#top">&#9650;</a></div>';
-		$d['bottomlink'] = '<div class="noprint" style="position: absolute; top: 2px; right: 10px;"><a href="#insertbottom">&#9660;</a></div>';
+		$d['toplink'] = '<div class="noprint" style="display: inline;text-align:right;margin:0 5px 0 10px;"><a class="icon icon-menu-up" id="insertbottom" href="#top"></a></div>';
+		$d['bottomlink'] = '<div class="noprint" style="position: absolute; top: 2px; right: 10px;"><a class="icon icon-menu-down" href="#insertbottom"></a></div>';
 		$d['float'] = 'none';
 
 		if(isset($this->id)) {
@@ -496,15 +497,20 @@ var $hide_empty = false;
 			}
 
 			$result = array();
-			foreach($this->tables as $table) {
-				$result[$table['tabelle_kurz']]['data'] = $this->db->select($this->settings['query']['table'].'_'.$table['tabelle_kurz'],'*',array('bezeichner_kurz', $this->ebene));
-				$result[$table['tabelle_kurz']]['title'] = $table['tabelle_lang'];
+			if(is_array($this->tables)) {
+				foreach($this->tables as $table) {
+				
+					# TODO handle wildcard *
+				
+					$result[$table['tabelle_kurz']]['data'] = $this->db->select($this->settings['query']['prefix'].''.$table['tabelle_kurz'],'*',array('bezeichner_kurz', $this->ebene));
+					$result[$table['tabelle_kurz']]['title'] = $table['tabelle_lang'];
+				}
 			}
 			if(is_array($result) && count($result) > 0) {
 				foreach ( $result as $k => $v ) {
 					if(is_array($v) && isset($v['data']) && is_array($v['data']) && $v['data'] !== '') {
 
-						$h = $this->response->html->customtag('h3');
+						$h = $this->response->html->customtag('legend');
 
 						$h->add($v['title']);
 						$d['merkmal_'.$k.'_head']['object'] = $h;
@@ -570,12 +576,12 @@ var $hide_empty = false;
 								case 'katalog':
 									$merkmal = $this->db->handler()->escape($r['merkmal_kurz']);
 									$where   = '`bezeichner_kurz`=\''.$r['bezeichner_kurz'].'\' AND `merkmal_kurz`=\''.$merkmal.'\'';
-									$options = $this->db->select($this->settings['query']['table'].'_katalog','wert', $where);
+									$options = $this->db->select($this->settings['query']['content'].'_katalog','wert', $where);
 									if($options === ''){
 										$where   = '`merkmal_kurz`=\''.$merkmal.'\'';
-										$options = $this->db->select($this->settings['query']['table'].'_katalog','wert', $where);
+										$options = $this->db->select($this->settings['query']['content'].'_katalog','wert', $where);
 									}
-									$options = $this->db->select($this->settings['query']['table'].'_katalog','wert', array('merkmal_kurz', $r['merkmal_kurz']));
+									$options = $this->db->select($this->settings['query']['content'].'_katalog','wert', array('merkmal_kurz', $r['merkmal_kurz']));
 									$d['merkmal_'.$k.'_'.$i]['label']                     = $r['merkmal_lang'];
 									$d['merkmal_'.$k.'_'.$i]['object']['type']            = 'htmlobject_select';
 									$d['merkmal_'.$k.'_'.$i]['object']['attrib']['index'] = array('wert','wert');

@@ -17,12 +17,12 @@
  *  along with this file (see ../LICENSE.TXT) If not, see 
  *  <http://www.gnu.org/licenses/>.
  *
- *  Copyright (c) 2015-2016, Alexander Kuballa
+ *  Copyright (c) 2015-2022, Alexander Kuballa
  *
  * @package phppublisher
  * @author Alexander Kuballa [akuballa@users.sourceforge.net]
  * @author Uwe Pochadt
- * @copyright Copyright (c) 2008 - 2016, Alexander Kuballa
+ * @copyright Copyright (c) 2008 - 2022, Alexander Kuballa
  * @license GNU GENERAL PUBLIC LICENSE Version 2 (see ../LICENSE.TXT)
  * @version 1.0
  */
@@ -31,8 +31,18 @@ class bestandsverwaltung_recording_form_identifiers
 {
 
 var $lang = array();
-var $table_prefix = 'bestand_';
-var $table_bezeichner = 'bezeichner';
+/**
+* prefix for form tables
+* @access public
+* @var string
+*/
+var $table_prefix;
+/**
+* identifier table
+* @access public
+* @var string
+*/
+var $table_bezeichner;
 
 	//--------------------------------------------
 	/**
@@ -150,7 +160,7 @@ var $table_bezeichner = 'bezeichner';
 			$sql .= 'WHERE `b`.`bezeichner_kurz` LIKE \''.$bez.'\' ';
 		}
 		$sql .= 'GROUP BY bezeichner, label ';
-		$sql .= 'ORDER BY bezeichner';
+		$sql .= 'ORDER BY label';
 
 		$bezeichner = $this->db->handler()->query($sql);
 
@@ -172,11 +182,14 @@ var $table_bezeichner = 'bezeichner';
 					$sql .= 'OR `bezeichner_kurz`LIKE \'%,'.$b['bezeichner'].',%\' ';
 					$sql .= 'OR `bezeichner_kurz`LIKE \''.$b['bezeichner'].',%\' ';
 					$sql .= 'OR `bezeichner_kurz`=\'*\' ';
-					$sql .= 'ORDER BY `bezeichner_kurz` ';
+					$sql .= 'ORDER BY `row` ';
 					$result = $this->db->handler()->query($sql);
+					
+					#$this->response->html->help($result);
+					
 					if(is_array($result)) {
 						$output[$b['bezeichner']]['attribs'] = $result;
-						$output[$b['bezeichner']]['label']   = $b['bezeichner'].' - '.$b['label'];
+						$output[$b['bezeichner']]['label']   = $b['label'].' ('.$b['bezeichner'].')';
 						$used_identifiers++;
 					}
 				}
@@ -215,7 +228,7 @@ var $table_bezeichner = 'bezeichner';
 			$body = array();
 			$i    = 0;
 			foreach($output as $k => $o) {
-				if($i >= $min && $i < $max) {
+				#if($i >= $min && $i < $max) {
 					$panel = $this->response->html->div();
 					$panel->css = 'card';
 					$panel->style = 'margin: 0 0 20px 0;';
@@ -258,10 +271,10 @@ var $table_bezeichner = 'bezeichner';
 					$panel->add($dataform->get_elements());
 					$panel->add('</div>');
 
-					$body[] = array('content' => $panel, 'bezeichner' => $k);
-				} else {
-					$body[] = array('content' => 'empty', 'bezeichner' => $k);
-				}
+					$body[] = array('content' => $panel, 'bezeichner' => $o['label']);
+				#} else {
+				#	$body[] = array('content' => 'empty', 'bezeichner' => $k);
+				#}
 				$i++;
 			}
 
