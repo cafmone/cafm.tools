@@ -53,28 +53,8 @@ var $identifier_name = 'bestand_ident';
 * @var array
 */
 var $lang = array(
-	"base" => array(
-		"error_params" => "parmas not set correctly",
-		"page_saved" => "Page saved",
-		"meta_saved" => "Meta saved",
-		"navi_saved" => "Navigation saved",
-		"dir_empty" => "no files in directory",
-		"lang_folder" => "Folder",
-		"new_node" => "new node",
-		"new_page" => "new page",
-	),
-	"file" => array(
-		"lang_headline" => "Images",
-		"lang_delete_confirm" => "really delete?",
-		"lang_delete" => "delete",
-		"lang_cancel" => "cancel",
-		"lang_insert" => "insert",
-		"lang_rename" => "rename",
-		"lang_close" => "close",
-		"lang_browse" => "browse",
-		"lang_upload" => "upload",
-		"lang_loading" => "loading...",
-	),
+	'label_location' => 'Location',
+	'label_date' => 'Date',
 );
 
 	//--------------------------------------------
@@ -102,6 +82,8 @@ var $lang = array(
 		$this->classdir = CLASSDIR.'plugins/bestandsverwaltung/class/';
 		$this->profilesdir = PROFILESDIR;
 		$this->plugins = $this->file->get_ini(PROFILESDIR.'/plugins.ini');
+		$this->lang = $this->user->translate($this->lang, CLASSDIR.'plugins/bestandsverwaltung/lang/', 'bestandsverwaltung.api.ini');
+
 	}
 
 	//--------------------------------------------
@@ -201,15 +183,12 @@ var $lang = array(
 	//--------------------------------------------
 	function raumbuch() {
 		if(in_array('standort', $this->plugins)) {
-			require_once(CLASSDIR.'plugins/bestandsverwaltung/class/bestandsverwaltung.settings.raumbuch.controller.class.php');
-			// set action to point back here
-			$this->response->add($this->actions_name,'update');
-			$controller = new bestandsverwaltung_settings_raumbuch_controller($this);
-			#$controller->actions_name = 'raumbuch_printout';
-			#$controller->message_param = $this->message_param;
-			$controller->tpldir = $this->tpldir;
-			$data = $controller->printout(true);
-			echo $data->get_string();
+			$id = $this->db->handler()->escape($this->response->html->request()->get('id'));
+			if($id !== '') {
+				require_once(CLASSDIR.'plugins/standort/class/standort.class.php');
+				$this->raumbuch = new standort($this->db, $this->file);
+				$this->response->html->help($this->raumbuch->parents($id));
+			}
 		}
 	}
 
@@ -517,7 +496,7 @@ var $lang = array(
 							echo '<div>'.$result[0]['bezeichner_kurz'].'</div>';
 						}
 
-						echo '<div>Datum: '.date('Y-m-d H:i:s',$result[0]['date']).'</div>';
+						echo '<div>'.$this->lang['label_date'].': '.date('Y-m-d H:i:s',$result[0]['date']).'</div>';
 
 						if(in_array('standort', $this->plugins)) {
 							$standort = array_search('RAUMBUCHID', array_column($result, 'merkmal_kurz'));
@@ -526,9 +505,9 @@ var $lang = array(
 								$raumbuch = new standort($this->db, $this->file);
 								$raumbuch->options = $raumbuch->options();
 								if(isset($raumbuch->options[$raumbuch->indexprefix.$result[$standort]['wert']])) {
-									echo '<div>Standort: '.$raumbuch->options[$raumbuch->indexprefix.$result[$standort]['wert']]['label'].' ('.$result[$standort]['wert'].')</div>';
+									echo '<div>'.$this->lang['label_location'].': '.$raumbuch->options[$raumbuch->indexprefix.$result[$standort]['wert']]['path'].' ('.$result[$standort]['wert'].')</div>';
 								} else {
-									echo '<div>Standort: '.$result[$standort]['wert'].'</div>';
+									echo '<div>'.$this->lang['label_location'].': '.$result[$standort]['wert'].'</div>';
 
 								}
 							}

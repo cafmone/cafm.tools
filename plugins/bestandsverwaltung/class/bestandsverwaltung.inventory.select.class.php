@@ -506,7 +506,7 @@ var $__attribs;
 						if(isset($this->raumbuch)) {
 							if(isset($id['RAUMBUCHID'])) {
 								if(array_key_exists($this->raumbuch->indexprefix.$id['RAUMBUCHID'], $this->raumbuch->options)) {
-									$data .= 'Standort: '.$this->raumbuch->options[$this->raumbuch->indexprefix.$id['RAUMBUCHID']]['label'].' ['.$id['RAUMBUCHID'].']<br>';
+									$data .= $this->lang['label_location'].': '.$this->raumbuch->options[$this->raumbuch->indexprefix.$id['RAUMBUCHID']]['path'].' ['.$id['RAUMBUCHID'].']<br>';
 								}
 							}
 						}
