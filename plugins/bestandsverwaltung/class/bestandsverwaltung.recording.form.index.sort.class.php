@@ -72,7 +72,7 @@ var $table_bezeichner;
 	//--------------------------------------------
 	function action($action = null) {
 
-		$tabellen = $this->db->select($this->table_prefix.'index', '*',null,'pos');
+		$tabellen = $this->db->select($this->table_prefix.'index', '*',null,'`pos`');
 		if(is_array($tabellen)) {
 			$this->tables = $tabellen;
 		}

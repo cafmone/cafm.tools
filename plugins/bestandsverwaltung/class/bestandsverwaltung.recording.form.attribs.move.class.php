@@ -78,7 +78,7 @@ var $table_bezeichner;
 	
 		if($table !== '' && $row !== '') {
 			$result = $this->db->select($this->table_prefix.$table, '*', null, '`row`');
-			if(is_array($result)) {
+			if(is_array($result)) { 
 				foreach($result as $k => $v) {
 					if(isset($v['row']) && $v['row'] === $row) {
 						if(isset($result[$k-1]) && isset($result[$k-1]['row'])) {
@@ -117,6 +117,10 @@ var $table_bezeichner;
 							}
 						}
 					}
+				}
+			} else {
+				if($result !== '') {
+					$error = $result;
 				}
 			}
 		} else {

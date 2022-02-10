@@ -353,7 +353,7 @@ var $type;
 				$a = $this->handler->escape($a);
 				$r = "ORDER BY $a";
 			}
-			if(is_string($order)) {
+			if(is_string($order) && $order !== '') {
 				$a = $this->handler->escape($order);
 				$r = "ORDER BY $a";
 			}

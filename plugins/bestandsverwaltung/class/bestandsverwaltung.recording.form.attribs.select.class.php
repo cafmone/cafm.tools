@@ -85,7 +85,7 @@ var $table_bezeichner;
 			$this->table = $this->db->handler()->escape($table);
 			$this->response->add('table',$this->table);
 		} else {
-			$tabellen = $this->db->select($this->table_prefix.'index', 'tabelle_kurz',null,'pos');
+			$tabellen = $this->db->select($this->table_prefix.'index', 'tabelle_kurz',null,'`pos`');
 			if(is_array($tabellen)) {
 				$this->table = $tabellen[0]['tabelle_kurz'];
 			} else {
@@ -292,7 +292,7 @@ var $table_bezeichner;
 				}
 			}
 
-			$options = $this->db->select($this->table_prefix.'index', 'tabelle_kurz,tabelle_lang', null, 'pos');
+			$options = $this->db->select($this->table_prefix.'index', 'tabelle_kurz,tabelle_lang', null, '`pos`');
 			$f['tables']['label']                        = $this->lang['label_index'];
 			$f['tables']['object']['type']               = 'htmlobject_select';
 			$f['tables']['object']['attrib']['index']    = array('tabelle_kurz','tabelle_lang');

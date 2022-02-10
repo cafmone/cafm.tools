@@ -219,7 +219,7 @@ var $lang = array(
 				}
 
 				if(is_array($device)) {
-					$tables = $this->db->select('bestand_index', 'tabelle_kurz,tabelle_lang',null,'pos');
+					$tables = $this->db->select('bestand_index', 'tabelle_kurz,tabelle_lang',null,'`pos`');
 					foreach($tables as $t) {
 						$sql  = 'SELECT `merkmal_kurz`,`merkmal_lang` ';
 						$sql .= 'FROM `bestand_'.$t['tabelle_kurz'].'` ';

@@ -43,7 +43,7 @@ var $lang = array();
 	//--------------------------------------------
 	function action($action = null) {
 
-		$tabellen = $this->db->select($this->settings['query']['identifiers'].'', array('row','bezeichner_lang'),null,'pos');
+		$tabellen = $this->db->select($this->settings['query']['identifiers'].'', array('row','bezeichner_lang'),null,'`pos`');
 		if(is_array($tabellen)) {
 			$this->tables = $tabellen;
 		}
