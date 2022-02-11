@@ -298,8 +298,8 @@ var $__delimiter = '[~]';
 			}
 
 			if(isset($this->id)) {
-				$t->add('ID: '.$this->id,'id');
-				$t->add(date('Y-m-d H:i',$this->date),'date');
+				$t->add('<div style="margin: 30px 0 0 0;">ID: '.$this->id.'</div>','id');
+				$t->add('<div>'.$this->lang['label_date'].': '.date('Y-m-d H:i',$this->date).'</div>','date');
 			} else {
 				$t->add('','id');
 				$t->add('','date');
@@ -568,8 +568,6 @@ var $__delimiter = '[~]';
 										array('row',$fields[$k]['row'])
 									);	
 								}
-
-
 
 								// changelog
 								if($error === '') {

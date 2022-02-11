@@ -132,8 +132,9 @@ var $pass;
 	 */
 	//---------------------------------------
 	function connect($url, $params = '')	{
-		$c = curl_init($url);
+		$c = curl_init();
 
+		curl_setopt($c, CURLOPT_URL, $url);
 		curl_setopt($c, CURLOPT_POST, 1);
 		curl_setopt($c, CURLOPT_POSTFIELDS, $params);
 

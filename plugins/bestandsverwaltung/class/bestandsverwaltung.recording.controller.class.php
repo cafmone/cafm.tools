@@ -68,6 +68,7 @@ var $lang = array(
 		'button_back_new' => 'Record',
 		'button_back_select' => 'Survey',
 		'label_location' => 'Location',
+		'label_date' => 'Date',
 	),
 );
 

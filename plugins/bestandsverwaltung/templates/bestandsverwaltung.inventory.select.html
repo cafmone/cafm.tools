@@ -316,7 +316,7 @@ function ajax(params, callback){
 	html = $.ajax({
 		url: "api.php",
 		global: false,
-		type: "POST",
+		type: "GET",
 		data: params,
 		dataType: "html",
 		async: true,
@@ -406,15 +406,11 @@ function doExport(form) {
 			<a onclick="toggle_box('filter');return false;" href="#" class="btn btn-sm {filtered}" style="margin: 0 0 0 6px;width:35px;display:block;float:left;" title="{button_title_filter}"><span class="icon icon-filter"></span></a>
 
 		<!-- {add} //-->
+		
 			<div style="float:right;margin: 0 0 0 0;">
 				{filter_group}
-
-
-
-			<a onclick="toggle_box('export');return false;" href="#" class="btn btn-sm btn-default" style="margin: 0 6px 0 6px;width:35px;;display:block;float:left;" title="{button_title_export}"><span class="icon icon-export"></span></a>
-			<a onclick="toggle_box('printout');return false;" href="#" class="btn btn-sm btn-default" style="margin: 0 0 0 0;width:35px;display:block;float:left;" title="{button_title_print}"><span class="icon icon-print"></span></a>
-	
-
+				<a onclick="toggle_box('export');return false;" href="#" class="btn btn-sm btn-default" style="margin: 0 6px 0 6px;width:35px;;display:block;float:left;" title="{button_title_export}"><span class="icon icon-export"></span></a>
+				<a onclick="toggle_box('printout');return false;" href="#" class="btn btn-sm btn-default" style="margin: 0 0 0 0;width:35px;display:block;float:left;" title="{button_title_print}"><span class="icon icon-print"></span></a>
 				<input class="btn btn-sm btn-default float-left submit" style="margin: 0 0 0 6px;" title="{button_title_refresh}" name="bestand_select[action]" value="&#8635;" type="submit">
 				<div id="anchortop" class="noprint" style="float:left;padding: 4px 0 0 0; margin: 0 15px 0 20px;"><a href="#anchorbottom" title="{button_title_down}"><span class="icon icon-menu-down"></span></a></div>
 			</div>
@@ -426,18 +422,14 @@ function doExport(form) {
 		</div>
 
 		<div id="filter_section" style="display:none;">
-
 			<div id="filter_form">
-
 				<ul class="nav nav-tabs">
 					<li style="" class="nav-item" class="nav-item active"><a class="nav-link active" data-toggle="tab" href="#filter_default">{tab_filter_default}</a></li>
 					<li style="display:{css_tab_filter_custom};" class="nav-item"><a class="nav-link" data-toggle="tab" href="#filter_custom">{tab_filter_custom}</a></li>
 					<li style="display:{css_tab_filter_prozess};" class="nav-item"><a class="nav-link" data-toggle="tab" href="#filter_process">{tab_filter_process}</a></li>
 					<li style="display:{css_tab_filter_todos};" class="nav-item"><a class="nav-link" data-toggle="tab" href="#filter_todos">{tab_filter_todos}</a></li>
 					<li style="" class="nav-item"><a class="nav-link" data-toggle="tab" href="#filter_link">{tab_filter_link}</a></li>
-
 				</ul>
-
 				<div class="tab-content">
 					<div id="filter_default" class="tab-pane active">
 						{filter_id}
@@ -484,23 +476,8 @@ function doExport(form) {
 							<a href="#" class="btn btn-default icon icon-copy" title="{button_title_link2clipboard}" onclick="phppublisher.clipboard('LinkBox');"></a>
 						</div>
 					</div>
-
-				</div>
-
-			</div>
-
-<!--
-			<div id="filter_submit" class="col-sm-5 col-xs-12">
-				<div style="margin-right:10px;">
-					<div style="float:right;clear:both;">{filter_group_s}</div>
-					<div style="float:right;clear:both;">{filter_group_m}</div>
-					<div style="float:right;clear:both;">{filter_group_b}</div>
-					<div style="float:right;clear:both;margin-bottom:15px;">{submit}</div>
-					<div style="float:right;clear:both;">{linkbox}</div>
-					<div style="line-height:0px;height:0px;clear:both;" class="floatbreaker">&#160;</div>
 				</div>
 			</div>
-//-->
 			<div style="line-height:0px;height:0px;clear:both;" class="floatbreaker">&#160;</div>
 		</div>
 
@@ -563,6 +540,7 @@ function doExport(form) {
 	</div>
 </div>
 
+<!--
 <div id="updatewrapper" style="width:580px;display:none;position:fixed;top:0px;left:0px;">
 <div id="updatepicker" class="function-box panel panel-default noprint" style="width:580px;height:550px;position:absolute;left:0;top:0;">
 	<div id="updatehead" class="panel-heading" 
@@ -586,6 +564,7 @@ function doExport(form) {
 		<div id="update_canvas" class="canvas" style="overflow:auto;padding:15px 15px 15px 15px;"></div>
 </div>
 </div>
+//-->
 
 <!--
 <div id="changelogwrapper" style="width:580px;display:none;">
@@ -664,10 +643,10 @@ function doExport(form) {
 var todosfilter = {
 	target : document.getElementById('filter_todos_interval'),
 	init : function( element ) {
-		this.target.innerHTML = '<div style="text-align:center;"><img src="{cssurl}/loading.gif" style="width: 20px; height: 20px; margin:15px 0 0 30px;"></div>';
+		this.target.innerHTML = '<div style="text-align:center;margin-right:120px;"><img src="{cssurl}/loading.gif" style="width: 20px; height: 20px; margin:15px 0 0 30px;"></div>';
 		prefix = element.options[element.selectedIndex].value;
 		if(prefix != '') {
-			params = "&plugin=taetigkeiten&taetigkeiten_action=interval&prefix="+prefix;
+			params = "&plugin=cafm.one&cafm_one_action=interval&prefix="+prefix;
 			ajax(params, 'todosfilterCallback');
 		} else {
 			this.target.innerHTML = '';

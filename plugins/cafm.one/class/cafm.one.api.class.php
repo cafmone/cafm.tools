@@ -437,8 +437,8 @@ var $lang = array(
 		if($visible === true) {
 			$prefix = $this->response->html->request()->get('prefix');
 			if($prefix !== '') {
-				require_once(CLASSDIR.'plugins/taetigkeiten/class/taetigkeiten.class.php');
-				$taetigkeiten = new taetigkeiten($this->file, $this->response);
+				require_once(CLASSDIR.'plugins/cafm.one/class/cafm.one.class.php');
+				$taetigkeiten = new cafm_one($this->file, $this->response, $this->db, $this->user);
 				$interval = $taetigkeiten->interval($prefix);
 				$d = array();
 				if(is_array($interval)) {
