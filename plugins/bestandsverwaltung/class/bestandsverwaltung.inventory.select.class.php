@@ -411,7 +411,7 @@ var $__attribs;
 			$head['bezeichner']['title'] = $this->lang['label_identifier'];
 			$head['bezeichner']['sortable'] = true;
 			$head['bezeichner']['hidden'] = true;
-			$head['date']['title'] = 'Datum';
+			$head['date']['title'] = $this->lang['label_date'];
 			$head['date']['sortable'] = true;
 			$head['date']['hidden'] = true;
 			// Custom Filters
@@ -710,7 +710,7 @@ var $__attribs;
 		$o->value = 'single';
 		$groups[] = $o;
 		$o = $this->response->html->option();
-		$o->label = 'Bezeichner';
+		$o->label = $this->lang['label_identifier'];
 		$o->value = 'bezeichner';
 		$groups[] = $o;
 
@@ -751,7 +751,7 @@ var $__attribs;
 		$d['filter_bezeichner']['label']                     = $this->lang['label_identifier'];
 		$d['filter_bezeichner']['object']['type']            = 'htmlobject_input';
 		$d['filter_bezeichner']['object']['attrib']['name']  = 'filter[bezeichner]';
-		$d['filter_bezeichner']['object']['attrib']['title'] = 'Example: CO_A,BK%';
+		$d['filter_bezeichner']['object']['attrib']['title'] = $this->lang['title_filter_identifier'];
 		if(isset($this->filter['bezeichner']) && $this->filter['bezeichner'] !== '') {
 			$this->__filters['bezeichner'] = $this->lang['label_identifier'].': '.$this->filter['bezeichner'];
 		}
@@ -869,14 +869,14 @@ var $__attribs;
 			if(is_array($todos)) {
 				$this->__todos = $todos;
 				array_unshift($this->__todos,array('prefix'=>'','lang'=>''));
-				$d['filter_prefix']['label']                       = 'Todos';
+				$d['filter_prefix']['label']                       = $this->lang['label_todo_obligations'];
 				$d['filter_prefix']['css']                         = '';
 				$d['filter_prefix']['object']['type']              = 'htmlobject_select';
 				$d['filter_prefix']['object']['attrib']['index']   = array('prefix','lang');
 				$d['filter_prefix']['object']['attrib']['name']    = 'filter[todos][prefix]';
 				$d['filter_prefix']['object']['attrib']['options'] = $this->__todos;
 				$d['filter_prefix']['object']['attrib']['style']   = 'width: 300px;';
-				$d['filter_prefix']['object']['attrib']['handler'] = 'onmousedown="phppublisher.select.init(this, \'Todos\'); return false;" onchange="todosfilter.init(this);"';
+				$d['filter_prefix']['object']['attrib']['handler'] = 'onmousedown="phppublisher.select.init(this, \''.$this->lang['label_todo_obligations'].'\'); return false;" onchange="todosfilter.init(this);"';
 
 				if(isset($this->filter['todos']['prefix']) && $this->filter['todos']['prefix'] !== '') {
 
@@ -890,6 +890,7 @@ var $__attribs;
 					if(is_array($interval)) {
 						$this->__interval = $interval;
 						array_unshift($interval, array('key'=>'','label'=>''));
+						## TODO translation
 						$d['filter_interval']['label']                       = 'Interval';
 						$d['filter_interval']['css']                         = '';
 						$d['filter_interval']['object']['type']              = 'htmlobject_select';
@@ -1013,13 +1014,14 @@ var $__attribs;
 
 		// handle export todos
 		if(isset($todos) && is_array($todos)) {
+			## TODO translation
 			$tables[] = array('tabelle_kurz'=>'todos','tabelle_lang'=>'Todos');
 		}
 
 		// export link
 		$tables[] = array('tabelle_kurz'=>'link','tabelle_lang'=>'Link');
 
-		$d['export_table']['label']                        = 'Details';
+		$d['export_table']['label']                        = $this->lang['label_export_details'];
 		$d['export_table']['css']                          = 'autosize';
 		$d['export_table']['object']['type']               = 'htmlobject_select';
 		$d['export_table']['object']['css']                = 'form-control-sm';
@@ -1028,9 +1030,6 @@ var $__attribs;
 		$d['export_table']['object']['attrib']['multiple'] = true;
 		$d['export_table']['object']['attrib']['options']  = $tables;
 		$d['export_table']['object']['attrib']['style']    = 'width:150px; height: 115px;';
-		#if($this->response->html->request()->get('export[table]') === '' && is_array($tables)) {
-		#	$d['export_table']['object']['attrib']['selected'] = array($tables[0]['tabelle_kurz']);
-		#}
 
 		$d['bom']['label']                     = 'BOM';
 		$d['bom']['css']                       = 'autosize';
@@ -1038,25 +1037,25 @@ var $__attribs;
 		$d['bom']['object']['type']            = 'htmlobject_input';
 		$d['bom']['object']['attrib']['type']  = 'checkbox';
 		$d['bom']['object']['attrib']['name']  = 'export[bom]';
-		$d['bom']['object']['attrib']['title'] = 'Add utf-8 Byte Order Mark';
+		$d['bom']['object']['attrib']['title'] = $this->lang['title_export_bom'];
 		if(isset($this->settings['export']['bom'])) {
 			$d['bom']['object']['attrib']['checked'] = true;
 		}
 
 		// inline export ?
-		$d['inline']['label']                     = 'Inline';
+		$d['inline']['label']                     = $this->lang['label_export_inline'];
 		$d['inline']['css']                       = 'autosize';
 		$d['inline']['style']                     = 'margin: 0; float:right;clear:right;';
 		$d['inline']['object']['type']            = 'htmlobject_input';
 		$d['inline']['object']['attrib']['type']  = 'checkbox';
 		$d['inline']['object']['attrib']['name']  = 'export[inline]';
-		$d['inline']['object']['attrib']['title'] = 'Print export instead of download';
+		$d['inline']['object']['attrib']['title'] = $this->lang['title_export_inline'];
 
 		$o = array();
 		$o[] = array('\n');
 		$o[] = array('\r\n');
 
-		$d['linefeed']['label']                       = 'Linefeed';
+		$d['linefeed']['label']                       = $this->lang['label_export_linefeed'];
 		$d['linefeed']['css']                         = 'autosize';
 		$d['linefeed']['object']['type']              = 'htmlobject_select';
 		$d['linefeed']['object']['attrib']['index']   = array(0,0);
@@ -1065,7 +1064,7 @@ var $__attribs;
 		$d['linefeed']['object']['attrib']['id']      = 'delimiter';
 		$d['linefeed']['object']['attrib']['style']   = 'width:65px;';
 		$d['linefeed']['object']['attrib']['css']     = 'form-control-sm';
-		$d['linefeed']['object']['attrib']['title']   = 'Linefeed';
+		$d['linefeed']['object']['attrib']['title']   = $this->lang['title_export_linefeed'];
 		if(isset($this->settings['export']['linefeed'])) {
 			$d['linefeed']['object']['attrib']['selected'] = array($this->settings['export']['linefeed']);
 		} else {
@@ -1077,7 +1076,7 @@ var $__attribs;
 		$o[] = array(';');
 		$o[] = array('\t');
 
-		$d['delimiter']['label']                       = 'Delimiter';
+		$d['delimiter']['label']                       = $this->lang['label_export_delimiter'];
 		$d['delimiter']['css']                         = 'autosize';
 		$d['delimiter']['object']['type']              = 'htmlobject_select';
 		$d['delimiter']['object']['attrib']['index']   = array(0,0);
@@ -1086,7 +1085,7 @@ var $__attribs;
 		$d['delimiter']['object']['attrib']['id']      = 'delimiter';
 		$d['delimiter']['object']['attrib']['style']   = 'width:65px;';
 		$d['delimiter']['object']['attrib']['css']     = 'form-control-sm';
-		$d['delimiter']['object']['attrib']['title']   = 'Column separator';
+		$d['delimiter']['object']['attrib']['title']   = $this->lang['title_export_delimiter'];
 		if(isset($this->settings['export']['delimiter'])) {
 			$d['delimiter']['object']['attrib']['selected'] = array($this->settings['export']['delimiter']);
 		} else {
@@ -1098,7 +1097,7 @@ var $__attribs;
 		$o[] = array("'","'");
 		$o[] = array('quot','&#34;');
 
-		$d['enclosure']['label']                       = 'Enclosure';
+		$d['enclosure']['label']                       = $this->lang['label_export_enclosure'];
 		$d['enclosure']['css']                         = 'autosize';
 		$d['enclosure']['object']['type']              = 'htmlobject_select';
 		$d['enclosure']['object']['attrib']['index']   = array(0,1);
@@ -1107,7 +1106,7 @@ var $__attribs;
 		$d['enclosure']['object']['attrib']['id']      = 'enclosure';
 		$d['enclosure']['object']['attrib']['style']   = 'width:65px;';
 		$d['enclosure']['object']['attrib']['css']     = 'form-control-sm';
-		$d['enclosure']['object']['attrib']['title']   = 'Field enclosure';
+		$d['enclosure']['object']['attrib']['title']   = $this->lang['title_export_enclosure'];
 		if(isset($this->settings['export']['enclosure'])) {
 			$d['enclosure']['object']['attrib']['selected'] = array($this->settings['export']['enclosure']);
 		} else {
@@ -1120,7 +1119,7 @@ var $__attribs;
 		$d['export']['object']['attrib']['type']      = 'button';
 		$d['export']['object']['attrib']['name']      = 'doexport';
 		$d['export']['object']['attrib']['value']     = 'export';
-		$d['export']['object']['attrib']['label']     = 'Export';
+		$d['export']['object']['attrib']['label']     = $this->lang['button_export'];
 		$d['export']['object']['attrib']['handler']   = 'onclick="doExport(this.form);"';
 
 		// Printout
@@ -1128,7 +1127,7 @@ var $__attribs;
 		$d['printout']['object']['attrib']['css']       = 'btn btn-default';
 		$d['printout']['object']['attrib']['type']      = 'submit';
 		$d['printout']['object']['attrib']['name']      = 'doprintout';
-		$d['printout']['object']['attrib']['value']     = 'Printout';
+		$d['printout']['object']['attrib']['value']     = $this->lang['button_printout'];
 
 		$mode[] = array('text');
 		$mode[] = array('form');
@@ -1136,7 +1135,7 @@ var $__attribs;
 			$mode[] = array('todos');
 		}
 
-		$d['printout_mode']['label']                       = 'Mode';
+		$d['printout_mode']['label']                       = $this->lang['label_print_mode'];
 		$d['printout_mode']['css']                         = 'autosize';
 		$d['printout_mode']['object']['type']              = 'htmlobject_select';
 		$d['printout_mode']['object']['attrib']['index']   = array(0,0);
@@ -1198,6 +1197,7 @@ var $__attribs;
 				}
 				// no matching bezeichner return empty
 				if(!isset($bezeichner)) {
+					## TODO translation
 					$_REQUEST[$this->message_param] = 'Filter '.$this->filter['bezeichner'].' returned no result';
 					return array();
 				}
@@ -1285,6 +1285,7 @@ var $__attribs;
 			}
 
 			if(!isset($bezeichner)) {
+				## TODO translation
 				$_REQUEST[$this->message_param] = 'Filter returned no todos';
 				return array();
 			}
@@ -1293,7 +1294,7 @@ var $__attribs;
 		// build bezeichner where
 		if(isset($bezeichner) && !in_array('*', $bezeichner)) {
 			## TODO identifier hits
-			// $this->__filters[] = '<div class="hits">'.$this->lang['label_identifier_hits'].': '.count($bezeichner).'</div>';
+			//$this->__filters[] = '<div class="hits">'.$this->lang['label_identifier_hits'].': '.count($bezeichner).'</div>';
 			if($where === '') {
 				$where .= 'WHERE bezeichner_kurz=\''.implode('\' OR bezeichner_kurz=\'', $bezeichner).'\' ';
 			} else {
@@ -1375,10 +1376,11 @@ var $__attribs;
 				$this->exports['id'] = 'ID';
 			}
 
-			$this->exports['bezeichner'] = 'Bezeichner';
+			$this->exports['bezeichner'] = $this->lang['label_identifier'];
 
 			// handle grouping
 			if(isset($this->filter['group']) && $this->filter['group'] === 'bezeichner') {
+				## TODO translation
 				$this->exports['SUMM'] = 'Summe';
 			}
 
@@ -1387,11 +1389,12 @@ var $__attribs;
 				// handle grouping
 				if(!isset($this->filter['group']) || $this->filter['group'] === 'single') {
 					if(in_array('standort',$table)) {
-						$this->exports['RAUMBUCH']   = 'Standort';
-						$this->exports['RAUMBUCHID'] = 'Standort ID';
+						$this->exports['RAUMBUCH']   = $this->lang['label_location'];
+						$this->exports['RAUMBUCHID'] = $this->lang['label_location'].' ID';
 					}
 				}
 				if(in_array('todos',$table)) {
+					## TODO translation
 					$this->exports['todos'] = 'Todos';
 				}
 				$mb = '';
