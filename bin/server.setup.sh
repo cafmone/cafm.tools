@@ -172,5 +172,5 @@ fi
 
 #mkdir /var/www/class/
 #chmod 0777 /var/www/class/
-#svn checkout https://svn.code.sf.net/p/phppublisher/code/trunk/phppublisher /var/www/class/phppublisher
+#svn checkout https://github.com/cafmone/cafm.tools.git/trunk /var/www/class/cafm.tools
 
