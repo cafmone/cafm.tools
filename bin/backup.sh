@@ -11,7 +11,7 @@ NOW=$(date +"%Y%m%d%H%M%S")
 # install sshpass
 if ! [ -x "$(command -v sshpass)" ]; then
 	apt -y install sshpass
-	
+fi	
 
 for ix in ${!TARGETS[*]}
 do
