@@ -201,22 +201,24 @@ var $lang = array(
 
 		if($this->file->exists( $GLOBALS['settings']['config']['basedir'].'login/dokumentation/' )) {
 
-			$docu  = '<div id="betand_docu" class="panel panel-default">';
-			$docu .= '<div class="panel-heading">';
-			$docu .= '<h3 class="panel-title">Dokumentation</h3>';
+			$docu  = '<div id="betand_docu" class="card">';
+			$docu .= '<div class="card-header">';
+			$docu .= 'Dokumentation';
 			$docu .= '</div>';
-			$docu .= '<div class="list-group">';
+			$docu .= '<div class="list-group list-group-flush">';
 
-			if($this->file->exists( $GLOBALS['settings']['config']['basedir'].'login/dokumentation/inhalt.html' )) {
-				$a = $response->html->a();
-				$a->css   = 'list-group-item';
-				$a->href   = $GLOBALS['settings']['config']['baseurl'].'login/dokumentation/inhalt.html';
-				$a->label  = 'Inhalt';
-				$docu .= $a->get_string();
-			}
+			#if($this->file->exists( $GLOBALS['settings']['config']['basedir'].'login/dokumentation/inhalt.html' )) {
+			#	$a = $response->html->a();
+			#	$a->css   = 'list-group-item list-group-item-action';
+			#	$a->target = '_blank';
+			#	$a->href   = $GLOBALS['settings']['config']['baseurl'].'login/dokumentation/inhalt.html';
+			#	$a->label  = 'Inhalt';
+			#	$docu .= $a->get_string();
+			#}
 
 			$a = $response->html->a();
-			$a->css   = 'list-group-item';
+			$a->css   = 'list-group-item list-group-item-action';
+			#$a->target = '_blank';
 			$a->href   = $GLOBALS['settings']['config']['baseurl'].'login/dokumentation/';
 			$a->label  = 'Dateien';
 			$docu .= $a->get_string();

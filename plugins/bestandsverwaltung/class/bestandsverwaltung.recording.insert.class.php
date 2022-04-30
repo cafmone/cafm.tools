@@ -451,13 +451,15 @@ var $__delimiter = '[~]';
 
 			$f['TODO']   = $form->get_request('TODO');
 			$f['SYSTEM'] = $form->get_request('SYSTEM');
+			if($f['SYSTEM'] === '') {
+				$f['SYSTEM'] = array();
+			}
+			
 			foreach($this->tables as $k => $t) {
 				$f[$k] = $form->get_request($k);
 			}
 			$id   = $form->get_request('deviceid');
 			$user = $this->controller->user->get();
-
-
 
 			// check id
 			$check = $this->db->select('bestand','id',array('id'=>$id));
@@ -469,7 +471,10 @@ var $__delimiter = '[~]';
 			if(isset($error) && $error !== '') {
 				$response->error = $error;
 			} else {
-				$f['SYSTEM']['USER']  = $user['login'];
+			
+				// auto add current user by System vars
+				$f['SYSTEM']['USER'] = $user['login'];
+				
 				$d['id']              = $id;
 				$d['bezeichner_kurz'] = $this->bezeichner;
 				$d['date']            = time();
