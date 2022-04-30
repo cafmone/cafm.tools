@@ -278,7 +278,7 @@ var $thisdir;
 	function help( $obj ) {
 		echo '<pre>';
 		print_r($obj);
-		if(get_class_methods($obj)) {
+		if(is_object($obj) && get_class_methods($obj)) {
 			echo join("()\n", get_class_methods($obj)).'()';
 		}
 		echo '</pre>';
