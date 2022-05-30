@@ -157,7 +157,7 @@ var $__attribs;
 		$url .= '?index_action=plugin';
 		$url .= '&index_action_plugin=bestandsverwaltung';
 		$url .= '&'.$this->controller->controller->actions_name.'=download';
-		$url .= '&path=/bestand/devices/';
+		$url .= '&path=/devices/';
 		$this->href_download  = $url;
 
 		require_once(CLASSDIR.'plugins/bestandsverwaltung/class/bestandsverwaltung.class.php');

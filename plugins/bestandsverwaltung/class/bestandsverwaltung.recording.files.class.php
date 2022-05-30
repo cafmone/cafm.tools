@@ -101,7 +101,7 @@ var $datadir;
 
 		$action     = $pc->html->request()->get($pc->__prefix.'['.$pc->actions_name.']');
 		$script     = '';
-		$url        = $this->response->get_url($this->controller->controller->actions_name, 'download').'&path=/bestand/devices/'.$this->id;
+		$url        = $this->response->get_url($this->controller->controller->actions_name, 'download').'&path=/devices/'.$this->id;
 		if($controller->dir !== '..' && $controller->dir !== '') {
 			$url  = $url.'/'.$controller->dir;	
 		} 
