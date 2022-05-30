@@ -35,8 +35,10 @@ var $identifier_name = 'cafm_one_ident';
 * @var array
 */
 var $lang = array(
-	'action_enable' => 'on',
-	'action_disable' => 'off'
+	'label_comment' => 'Comment',
+	'button_enable'  => 'on',
+	'button_disable' => 'off',
+	'button_toggle'  => 'toggle',
 );
 
 	//--------------------------------------------
@@ -88,6 +90,9 @@ var $lang = array(
 			break;
 			case 'interval':
 				$this->interval(true);
+			break;
+			case 'toggle':
+				$this->toggle(true);
 			break;
 		}
 	}
@@ -179,14 +184,20 @@ var $lang = array(
 					echo '<input type="hidden" name="prefix" value="'.$prefix.'">';
 					echo '<input type="hidden" name="interval" value="'.$interval.'">';
 					echo implode('', $form);
-					echo '<div style="text-align: right;">';
-					echo '<div class="input-group">';
-					echo '<label class="control-label" style="padding-right: 10px;margin: 7px 0 0 0;"><b>Arbeitskarte</b></label>';
-					echo '<div class="input-group-btn">';
-					echo '<input type="submit" name="bestand_recording_action[todos][pdf]" value=".pdf" class="btn btn-default">';
-					echo '<input type="submit" name="bestand_recording_action[todos][doc]" value=".doc" class="btn btn-default">';
-					echo '</div>';
-					echo '</div>';
+					echo '<div class="clearfix" style="margin-bottom: 15px;width: 100%;">';
+					echo ' <div class="float-left">';
+					echo '  <label class="" style="border: 0 none;margin: 5px 0 0 0;"><b>Arbeitskarte</b></label>';
+					echo ' </div>';
+					echo ' <div class="float-right">';
+					echo '  <div class="input-group">';
+					echo '   <div class="input-group-prepend">';
+					echo '    <input title="Download as PDF document" type="submit" name="bestand_recording_action[todos][pdf]" value="PDF" class="btn btn-default">';
+					echo '   </div>';
+					echo '   <div class="input-group-append">';
+					echo '    <input title="Download as Word document" type="submit" name="bestand_recording_action[todos][doc]" value="DOC" class="btn btn-default">';
+					echo '   </div>';
+					echo '  </div>';
+					echo ' </div>';
 					echo '</div>';
 					echo '</form>';
 				}
@@ -281,14 +292,20 @@ var $lang = array(
 					echo '<input type="hidden" name="bezeichner" value="'.$bezeichner.'">';
 					echo '<input type="hidden" name="prefix" value="'.$prefix.'">';
 					echo '<input type="hidden" name="interval" value="'.$interval.'">';
-					echo '<div style="text-align: right;">';
-					echo '<div class="input-group">';
-					echo '<label class="control-label" style="padding-right: 10px;margin: 7px 0 0 0;"><b>Arbeitskarte</b></label>';
-					echo '<div class="input-group-btn">';
-					echo '<input type="submit" name="bestand_recording_action[todos][pdf]" value=".pdf" class="btn btn-default">';
-					echo '<input type="submit" name="bestand_recording_action[todos][doc]" value=".doc" class="btn btn-default">';
-					echo '</div>';
-					echo '</div>';
+					echo '<div class="clearfix" style="margin-bottom: 15px;width: 100%;">';
+					echo ' <div class="float-left">';
+					echo '  <label class="" style="border: 0 none;margin: 5px 0 0 0;"><b>Arbeitskarte</b></label>';
+					echo ' </div>';
+					echo ' <div class="float-right">';
+					echo '  <div class="input-group">';
+					echo '   <div class="input-group-prepend">';
+					echo '    <input title="Download as PDF document" type="submit" name="bestand_recording_action[todos][pdf]" value="PDF" class="btn btn-default">';
+					echo '   </div>';
+					echo '   <div class="input-group-append">';
+					echo '    <input title="Download as Word document" type="submit" name="bestand_recording_action[todos][doc]" value="DOC" class="btn btn-default">';
+					echo '   </div>';
+					echo '  </div>';
+					echo ' </div>';
 					echo '</div>';
 					echo '</form>';
 				}
@@ -306,13 +323,14 @@ var $lang = array(
 				}
 				$mode = 'confirm';
 			}
+
 			$output = $this->taetigkeiten->details2html($bezeichner, $todofields, $prefix, $interval, $id, $disabled, $mode);
 			if($output !== '') {
 				echo $output;
 			}
 		}
 	}
-
+	
 	//--------------------------------------------
 	/**
 	 * Disable
@@ -337,7 +355,7 @@ var $lang = array(
 				$check = $this->db->select('todos_disabled','*',array('device'=>$id, 'prefix'=>$prefix, 'todo'=>$todo));
 				if(is_array($check)) {
 					$submit = $form->get_elements('submit');
-					$submit->value = $this->lang['action_enable'];
+					$submit->value = $this->lang['button_enable'];
 					$submit->name = $this->response->id.'[submit][on]';
 					$form->add($submit,'submit');
 					$str  = '<div style="text-align:center;">';
@@ -350,17 +368,17 @@ var $lang = array(
 				} else {
 					if($check === '') {
 						$submit = $form->get_elements('submit');
-						$submit->value = $this->lang['action_disable'];
+						$submit->value = $this->lang['button_disable'];
 						$submit->name = $this->response->id.'[submit][off]';
 						$form->add($submit,'submit');
 
 						$columns = $this->db->handler()->columns($this->db->db, 'todos_disabled');
-						$d['comment']['label']                    = 'Comment';
-						$d['comment']['required']                 = true;
+						$d['comment']['label']                    = $this->lang['label_comment'];
+						$d['comment']['css']                      = 'autosize';
 						$d['comment']['object']['type']           = 'htmlobject_textarea';
 						$d['comment']['object']['attrib']['name'] = 'comment';
-						$d['comment']['object']['attrib']['cols'] = 30;
-						$d['comment']['object']['attrib']['rows'] = 6;
+						$d['comment']['object']['attrib']['cols'] = 32;
+						$d['comment']['object']['attrib']['rows'] = 4;
 						if(isset($columns['comment']['length'])) {
 							$d['comment']['object']['attrib']['maxlength'] = $columns['comment']['length'];
 						}
@@ -384,12 +402,12 @@ var $lang = array(
 							$data['device']  = $form->get_static('id');
 							$data['prefix']  = $form->get_static('prefix');
 							$data['todo']    = $form->get_static('todo');
-							$data['comment'] = $form->get_request('comment');
+							($form->get_request('comment') !== '') ? $data['comment'] = $form->get_request('comment') : $data['comment'] = 'No Comment';
 							$data['user']    = $user['login'];
 							$data['date']    = time();
 							$error = $this->db->insert('todos_disabled', $data);
 							if($error === '') {
-								echo 'off';
+								echo $data['todo'].',off;;';
 								exit();
 							} else {
 								echo '<div class="msgBox alert alert-danger">'.$error.'</div>';
@@ -401,7 +419,7 @@ var $lang = array(
 							$data['todo']    = $form->get_static('todo');
 							$error = $this->db->delete('todos_disabled', $data);
 							if($error === '') {
-								echo 'on';
+								echo $data['todo'].',on;;';
 								exit();
 							} else {
 								echo '<div class="msgBox alert alert-danger">'.$error.'</div>';
@@ -422,6 +440,102 @@ var $lang = array(
 				echo $t->get_string();
 			} else {
 				echo '<div class="msgBox alert alert-danger"><b>Error:</b> Missing parameter(s)</div>';
+			}
+		}
+	}
+	
+	//--------------------------------------------
+	/**
+	 * Toggle
+	 *
+	 * @access private
+	 */
+	//--------------------------------------------
+	function toggle($visible = false) {
+		if($visible === true) {
+		
+			$id     = $this->response->html->request()->get('id');
+			$prefix = $this->response->html->request()->get('prefix');
+			$todo   = $this->response->html->request()->get('todo');
+
+			if($id !== '' && $prefix !== '' && $todo !== '') {
+			
+				$this->response->add('id',$id);
+				$this->response->add('prefix',$prefix);
+				$this->response->add('todo',$todo);
+
+				$form = $this->response->get_form($this->actions_name, 'toggle');
+				
+				$submit = $form->get_elements('submit');
+				$submit->value = $this->lang['button_toggle'];
+				$submit->name = $this->response->id.'[submit]';
+				$form->add($submit,'submit');
+				$form->id = 'todos_disable_form';
+				$form->display_errors = false;
+				$form->remove($this->response->id.'[cancel]');
+
+				$columns = $this->db->handler()->columns($this->db->db, 'todos_disabled');
+				$d['comment']['label']                    = $this->lang['label_comment'];
+				$d['comment']['css']                      = 'autosize';
+				$d['comment']['object']['type']           = 'htmlobject_textarea';
+				$d['comment']['object']['attrib']['name'] = 'comment';
+				$d['comment']['object']['attrib']['cols'] = 32;
+				$d['comment']['object']['attrib']['rows'] = 4;
+				if(isset($columns['comment']['length'])) {
+					$d['comment']['object']['attrib']['maxlength'] = $columns['comment']['length'];
+				}
+				$form->add($d);
+				
+				if(!$form->get_errors() && $this->response->submit()) {
+					$user = $this->user->get();
+					$data['device']  = $form->get_static('id');
+					$data['prefix']  = $form->get_static('prefix');
+					($form->get_request('comment') !== '') ? $data['comment'] = $form->get_request('comment') : $data['comment'] = 'No Comment';
+					$data['user']    = $user['login'];
+					$data['date']    = time();
+
+					$msg = '';
+					$todos = explode(',', $form->get_static('todo'));
+					if(is_array($todos)) {
+						foreach($todos as $do) {
+							$data['todo'] = $do;
+							$check = $this->db->select('todos_disabled','*',array('device'=>$id, 'prefix'=>$prefix, 'todo'=>$do));
+							if(is_array($check)) {
+								$error = $this->db->delete('todos_disabled', '`row`=\''.$check[0]['row'].'\'');
+								if($error === '') {
+									$msg .= $data['todo'].',on;;';
+								} else {
+									echo '<div class="msgBox alert alert-danger">'.$error.'</div>';
+									exit();
+								}
+							} 
+							elseif($check === '') {
+								$error = $this->db->insert('todos_disabled', $data);
+								if($error === '') {
+									$msg .= $data['todo'].',off;;';
+								} else {
+									echo '<div class="msgBox alert alert-danger">'.$error.'</div>';
+									exit();
+								}
+							} else {
+								echo '<div class="msgBox alert alert-danger">'.$error.'</div>';
+								exit();
+							}
+						}
+					}
+					if($msg !== '') {
+						echo $msg;
+						exit();
+					}
+				}
+				
+				$t = $this->response->html->template($this->tpldir.'/cafm.one.api.disable.html');
+				// disable form on print
+				$t->add($this->response->html->thisfile, 'thisfile');
+				$t->add($form);
+				$t->group_elements(array('param_' => 'form'));
+
+				echo $t->get_string();
 			}
 		}
 	}

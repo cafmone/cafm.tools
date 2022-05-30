@@ -876,7 +876,8 @@ var $__attribs;
 				$d['filter_prefix']['object']['attrib']['name']    = 'filter[todos][prefix]';
 				$d['filter_prefix']['object']['attrib']['options'] = $this->__todos;
 				$d['filter_prefix']['object']['attrib']['style']   = 'width: 300px;';
-				$d['filter_prefix']['object']['attrib']['handler'] = 'onmousedown="phppublisher.select.init(this, \''.$this->lang['label_todo_obligations'].'\'); return false;" onchange="todosfilter.init(this);"';
+				#$d['filter_prefix']['object']['attrib']['handler'] = 'onmousedown="phppublisher.select.init(this, \''.$this->lang['label_todo_obligations'].'\'); return false;" onchange="todosfilter.init(this);"';
+				$d['filter_prefix']['object']['attrib']['handler'] = 'onmousedown="phppublisher.select.init(this, \''.$this->lang['label_todo_obligations'].'\'); return false;"';
 
 				if(isset($this->filter['todos']['prefix']) && $this->filter['todos']['prefix'] !== '') {
 
@@ -884,9 +885,10 @@ var $__attribs;
 					$this->__filters[] = 'Todos: '.$this->__todos[$this->filter['todos']['prefix']]['lang'];
 
 					// handle todo attribs
-					$attribs  = $this->taetigkeiten->attribs($this->filter['todos']['prefix']);
-					$interval = $this->taetigkeiten->interval($this->filter['todos']['prefix']);
+					#$attribs  = $this->taetigkeiten->attribs($this->filter['todos']['prefix']);
+					#$interval = $this->taetigkeiten->interval($this->filter['todos']['prefix']);
 
+/*
 					if(is_array($interval)) {
 						$this->__interval = $interval;
 						array_unshift($interval, array('key'=>'','label'=>''));
@@ -905,7 +907,9 @@ var $__attribs;
 					} else {
 						$d['filter_interval'] = '';
 					}
+*/
 
+/*
 					// handle todo attribs
 					if(is_array($attribs)) {
 						if(isset($this->__todos[$this->filter['todos']['prefix']]['bezeichner'])) {
@@ -938,11 +942,12 @@ var $__attribs;
 					} else {
 						$d['tfilter_0'] = '';
 					}
-
+*/
 				} else {
 					$d['filter_interval'] = '';
 					$d['tfilter_0'] = '';
 				}
+
 			} else {
 				$div = $this->response->html->div();
 				$div->add($todos);

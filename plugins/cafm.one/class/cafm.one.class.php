@@ -339,11 +339,11 @@ class cafm_one
 			$i = 0;
 			foreach($result as $todos) {
 				// handle prefix label
-				if($i === 0) {
-					$i = 1;
-				} else {
+				#if($i === 0) {
+				#	$i = 1;
+				#} else {
 					$str .= '<br>';
-				}
+				#}
 				if(isset($todos['label']) && $showlabel === true){
 					$str .= '<h3>'.$todos['label'].'</h3>'."\n";
 				}
@@ -381,11 +381,16 @@ class cafm_one
 										$tmp .= '<div class="box" style="margin: 0 0 0 15px;" id="'.$blockid.'">'."\n";
 										$tmp .= '<div class="head" style="margin: 0 0 10px 0;">';
 										$tmp .= '<b>'.$bgroup['label'].'</b>'.$bglink;
+
 										// only init js when device available
 										if(isset($disablemode) && $disablemode !== '') {
 											if($disablemode === 'internal') {
 												$label = 'toggle';
-												$tmp .= '<input type="button" value="'.$label.'" class="noprint btn btn-sm btn-default" style="margin:0 0 0 10px; padding: 4px; line-height:10px;" onclick="todospicker.modal.init(\''.$blockid.'\',\''.$todos['prefix'].'\',\'\');" value="'.$label.'">';
+												$tmp .= '<input type="button" value="'.$label.'" class="noprint btn btn-sm btn-default" style="margin:0 0 0 10px; padding: 4px; line-height:10px;" onclick="todospicker.modal.init(\''.$blockid.'\',\''.$todos['prefix'].'\',\'\');">';
+											}
+											elseif($disablemode === 'confirm' && count($bgroup['todos']) > 1) {
+												$label = 'toggle';
+												$tmp .= '<input type="button" value="'.$label.'" class="noprint btn btn-sm btn-default" style="margin:0 0 0 10px; padding: 4px; line-height:10px;" onclick="todospicker.modal.toggle(\''.$blockid.'\',\''.$deviceid.'\',\''.$todos['prefix'].'\');">';
 											}
 										}
 										$tmp .= '</div>'."\n";
@@ -432,7 +437,9 @@ class cafm_one
 											$tmp .= '<span'.$marker.'>';
 											// replace \n by <br>
 											$tmp .= str_replace("\n", '<br>', $value['label']);
-											$tmp .= ' ('.$value['interval'].' / '.$value['period'].' / '.$value['person'].')';
+											if($value['interval'] !== '0' && $value['period'] !== '0' && $value['person'] !== '0') {
+												$tmp .= '<br>[ '.$value['interval'].' / '.$value['period'].' / '.$value['person'].' ]';
+											}
 											$tmp .= '</span> ';
 											$tmp .= $tlink;
 											if(isset($value['risks'])) {
@@ -453,10 +460,11 @@ class cafm_one
 
 												}
 											}
-											$tmp .= '<div style="clear:both;margin:0 0 3px 0;" class="floatbreaker">&#160;</div>'."\n";
+											$tmp .= '<div style="clear:both;margin:0 0 8px 0;" class="floatbreaker">&#160;</div>'."\n";
 											$tmp .= '</div>'."\n";
 											$tmp .= '</div>'."\n";
 										}
+										$tmp .= '<br>'."\n";
 										$tmp .= '</div>'."\n";
 									}
 									if($tmp !== '') {

@@ -217,23 +217,53 @@ var todospicker = {
 			this.element = document.getElementById(elementid);
 			this.prefix = prefix;
 			this.todoid = todoid;
+			phppublisher.modal.width = '400px';
 			this.modalid = phppublisher.modal.init('<div style="text-align:center;margin: 30px 0 0 0;"><img src="{cssurl}/loading.gif"></div>');
 			$('#'+this.modalid).modal('show');
-			params = "&plugin=taetigkeiten&taetigkeiten_action=disable&id="+id+"&prefix="+prefix+"&todo="+todoid;
+			params = "&plugin=cafm.one&cafm_one_action=disable&id="+id+"&prefix="+prefix+"&todo="+todoid;
+			ajax(params, 'todospickerModalCallback');
+		},
+		toggle : function( elementid, id, prefix ){
+			this.id = id;
+			this.element = document.getElementById(elementid);
+			this.prefix = prefix;
+			phppublisher.modal.width = '400px';
+			this.modalid = phppublisher.modal.init('<div style="text-align:center;margin: 30px 0 0 0;"><img src="{cssurl}/loading.gif"></div>');
+			$('#'+this.modalid).modal('show');
+
+			blockid = '';
+			buttons = this.element.getElementsByTagName('button');
+			for(i = 0; i < buttons.length; i++) {
+				node = buttons[i].parentNode;
+				blockid += node.id;
+				if(i < (buttons.length -1)) {
+					blockid += ',';
+				}
+			}
+			params = "&plugin=cafm.one&cafm_one_action=toggle&id="+id+"&prefix="+prefix+"&todo="+blockid;
 			ajax(params, 'todospickerModalCallback');
 		},
 		print : function(response) {
-			if(response == 'on') {
-				this.element.getElementsByTagName('span')[0].style.textDecoration = 'none';
-				this.element.getElementsByTagName('button')[0].value = 'off';
-				this.element.getElementsByTagName('button')[0].innerHTML = 'off';
-				$('#'+this.modalid).modal('hide');
-			}
-			else if(response == 'off') {
-				this.element.getElementsByTagName('span')[0].style.textDecoration = 'line-through';
-				this.element.getElementsByTagName('button')[0].value = 'on';
-				this.element.getElementsByTagName('button')[0].innerHTML = 'on';
-				$('#'+this.modalid).modal('hide');
+			if(response.indexOf(';;') !== -1) {
+				rows = response.split(';;');
+				for(i in rows) {
+					data = rows[i].split(',');
+					if(data[0] !== '') {
+						element = document.getElementById(data[0]);
+						if(data[1] == 'on') {
+							element.getElementsByTagName('span')[0].style.textDecoration = 'none';
+							element.getElementsByTagName('button')[0].value = 'off';
+							element.getElementsByTagName('button')[0].innerHTML = 'off';
+							$('#'+this.modalid).modal('hide');
+						}
+						else if(data[1] == 'off') {
+							element.getElementsByTagName('span')[0].style.textDecoration = 'line-through';
+							element.getElementsByTagName('button')[0].value = 'on';
+							element.getElementsByTagName('button')[0].innerHTML = 'on';
+							$('#'+this.modalid).modal('hide');
+						}
+					}
+				}
 			} else {
 				phppublisher.modal.print(response);
 				// redirect form
@@ -615,8 +645,8 @@ function doExport(form) {
 </div>
 </div>
 
-<div id="todoswrapper" style="width:580px;display:none;">
-<div id="todospicker" class="function-box card noprint" style="width:580px;height:450px;position:absolute;left:0;top:0;">
+<div id="todoswrapper" style="width:680px;display:none;">
+<div id="todospicker" class="function-box card noprint" style="width:680px;height:450px;position:absolute;left:0;top:0;">
 	<div class="card-header"
 			onmousedown="Drag.init(document.getElementById('todoswrapper'));"
 			onmouseup="document.getElementById('todoswrapper').onmousedown = null;">
@@ -640,6 +670,7 @@ function doExport(form) {
 <script type="text/javascript">
 {jsparams}
 
+/*
 var todosfilter = {
 	target : document.getElementById('filter_todos_interval'),
 	init : function( element ) {
@@ -656,6 +687,7 @@ var todosfilter = {
 		this.target.innerHTML = response;
 	}
 }
+*/
 
 var details = {
 	count : document.getElementById('count'),
