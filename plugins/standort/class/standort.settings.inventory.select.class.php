@@ -133,7 +133,7 @@ var $lang = array(
 		}
 
 		$head = array();
-		$head['filter']['title'] = '<span class="glyphicon glyphicon-filter"></span>';
+		$head['filter']['title'] = '<span class="icon icon-filter"></span>';
 		$head['filter']['sortable'] = false;
 		$head['filter']['style'] = 'width: 60px;text-align:center;';
 		$head['id']['title'] = $this->lang['table_id'];
@@ -167,7 +167,7 @@ var $lang = array(
 					$u = $this->response->html->a();
 					$u->href    = $this->response->get_url($this->actions_name, 'update' ).'&id='.$o['id'].$tparams;
 					$u->title   = sprintf($this->lang['title_edit'], $o['id']);
-					$u->css     = 'icon icon-edit edit btn btn-default btn-xs';
+					$u->css     = 'icon icon-edit edit btn btn-default btn-sm';
 					$u->style   = 'margin: 0 0 0 0; display: block;';
 					$u->handler = 'onclick="phppublisher.wait();"';
 					$links .= $u->get_string();
@@ -175,14 +175,14 @@ var $lang = array(
 					$i = $this->response->html->a();
 					$i->href    = $this->response->get_url($this->actions_name, 'insert' ).'&parent='.$o['id'].$tparams;
 					$i->title   = sprintf($this->lang['title_append'], $o['id']);
-					$i->css     = 'icon icon-plus btn btn-default btn-xs';
+					$i->css     = 'icon icon-plus btn btn-default btn-sm';
 					$i->style   = 'margin: 3px 0 0 0; display: block;';
 					$i->handler = 'onclick="phppublisher.wait();"';
 					$links .= $i->get_string();
 
 
 					$r = $this->response->html->a();
-					$r->css = 'icon icon-trash remove btn btn-default btn-xs';
+					$r->css = 'icon icon-trash remove btn btn-default btn-sm';
 					if(!isset($o['last'])) {
 						$r->style = 'margin: 3px 0 0 0; display: inline-block; visibility:hidden;';
 					} else {
@@ -201,10 +201,9 @@ var $lang = array(
 						$matches = count($keys);
 					}
 					if($matches > 0) {
-						$c = $this->controller->controller;
+						$baseurl = $GLOBALS['settings']['config']['baseurl'].'login/?index_action=plugin&index_action_plugin=bestandsverwaltung&bestandsverwaltung_action=inventory';
 						$f = $this->response->html->a();
-						$f->href    = $c->response->get_url($c->actions_name, 'inventory' ).'&filter[raumbuch]='.$o['id'];
-
+						$f->href    = $baseurl.'&filter[raumbuch]='.$o['id'];
 						$f->title   = $this->lang['title_filter'];
 						$f->css     = 'btn btn-default btn-xs';
 						$f->style   = 'margin: 0 0 0 0; display: block;';
