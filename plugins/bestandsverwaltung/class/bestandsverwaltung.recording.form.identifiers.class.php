@@ -151,7 +151,8 @@ var $table_bezeichner;
 
 		$sql  = 'SELECT ';
 		$sql .= '`b`.`bezeichner_kurz` as bezeichner, ';
-		$sql .= '`b`.`bezeichner_lang` as label ';
+		$sql .= '`b`.`bezeichner_lang` as label, ';
+		$sql .= '`b`.`status` as status ';
 		$sql .= 'FROM `'.$this->table_bezeichner.'` AS b ';
 		if(isset($this->filter['bezeichner']) && $this->filter['bezeichner'] !== '') {
 			// handle counter
@@ -159,7 +160,7 @@ var $table_bezeichner;
 			$bez = $this->db->handler()->escape($this->filter['bezeichner']);
 			$sql .= 'WHERE `b`.`bezeichner_kurz` LIKE \''.$bez.'\' ';
 		}
-		$sql .= 'GROUP BY bezeichner, label ';
+		$sql .= 'GROUP BY bezeichner, label, status ';
 		$sql .= 'ORDER BY label';
 
 		$bezeichner = $this->db->handler()->query($sql);
@@ -188,8 +189,12 @@ var $table_bezeichner;
 					#$this->response->html->help($result);
 					
 					if(is_array($result)) {
+						$label = $b['label'].' ('.$b['bezeichner'].')';
+						if(isset($b['status']) && $b['status'] === 'off') {
+							$label .= ' &#x271D;';
+						}
 						$output[$b['bezeichner']]['attribs'] = $result;
-						$output[$b['bezeichner']]['label']   = $b['label'].' ('.$b['bezeichner'].')';
+						$output[$b['bezeichner']]['label']   = $label;
 						$used_identifiers++;
 					}
 				}

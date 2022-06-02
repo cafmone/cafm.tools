@@ -472,7 +472,7 @@ var $datatypes = array(
 		}
 */
 
-		$bezeichner = $this->db->select($this->table_bezeichner, 'bezeichner_kurz,bezeichner_lang', null, 'bezeichner_lang');
+		$bezeichner = $this->db->select($this->table_bezeichner, 'bezeichner_kurz,bezeichner_lang,status', null, 'bezeichner_lang');
 		$selected = array();
 		if(is_array($bezeichner)) {
 			if(isset($this->fields['bezeichner_kurz']) && $this->fields['bezeichner_kurz'] !== '') {
@@ -487,7 +487,12 @@ var $datatypes = array(
 			foreach($bezeichner as $b) {
 				if(in_array($b['bezeichner_kurz'], $selected)) {
 
-					$d['selected_bez'.$i]['label'] = $b['bezeichner_lang'].' ('.$b['bezeichner_kurz'].')';
+					$label = $b['bezeichner_lang'] .' ('.$b['bezeichner_kurz'].')';
+					if(isset($b['status']) && $b['status'] === 'off') {
+						$label .= ' &#x271D;';
+					}
+
+					$d['selected_bez'.$i]['label'] = $label;
 					if($b['bezeichner_kurz'] !== '*') {
 						$d['selected_bez'.$i]['id'] = $b['bezeichner_kurz'];
 					}
@@ -504,7 +509,12 @@ var $datatypes = array(
 
 				} else {
 
-					$d['available_bez'.$i]['label'] = $b['bezeichner_lang'].' ('.$b['bezeichner_kurz'].')';
+					$label = $b['bezeichner_lang'] .' ('.$b['bezeichner_kurz'].')';
+					if(isset($b['status']) && $b['status'] === 'off') {
+						$label .= ' &#x271D;';
+					}
+
+					$d['available_bez'.$i]['label'] = $label;
 					if($b['bezeichner_kurz'] !== '*') {
 						$d['available_bez'.$i]['id'] = $b['bezeichner_kurz'];
 					}
