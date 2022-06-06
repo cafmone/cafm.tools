@@ -41,6 +41,13 @@ var $pass;
 * @var enum [mysql]
 */
 var $type;
+/**
+* changelog file
+* @access public
+* @var string
+*/
+var $changelog;
+
 
 	//--------------------------------------------
 	/**
@@ -159,6 +166,10 @@ var $type;
 		else if($this->type === 'file') {
 			$result = $this->handler->query("INSERT", $path, $data);
 		}
+		// track last change
+		if(isset($this->changelog) && $result === '') {
+			$result = $this->__log();
+		}
 		return $result;
 	}
 
@@ -200,6 +211,10 @@ var $type;
 		if($this->type === 'file') {
 			$result = $this->handler->query("UPDATE", $path, $data, $where);
 		}
+		// track last change
+		if(isset($this->changelog) && $result === '') {
+			$result = $this->__log();
+		}
 		return $result;
 	}
 
@@ -225,6 +240,10 @@ var $type;
 		}
 		if($this->type === 'file') {
 			$result = $this->handler->query("DELETE", $path, null, $where);
+		}
+		// track last change
+		if(isset($this->changelog) && $result === '') {
+			$result = $this->__log();
 		}
 		return $result;
 	}
@@ -405,6 +424,19 @@ var $type;
 		}
 		require_once( $this->__path.'/'.$name.'.class.php' );
 		return new $class( $this->host, $this->user, $this->pass, $this->db );
+	}
+
+	//--------------------------------------------
+	/**
+	 * Log last Change
+	 *
+	 * @access protected
+	 * @return string
+	 */
+	//--------------------------------------------	
+	function __log() {
+		(@touch($this->changelog) === true) ? $return = '' : $return = 'Error: Failed to write db log to '.$this->changelog;
+		return $return;
 	}
 
 }

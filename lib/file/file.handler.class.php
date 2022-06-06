@@ -224,7 +224,11 @@ var $arExcludedFiles = array('.', '..');
 			$ar['name']      = $pi["basename"];
 			$ar['dir']       = $pi["dirname"];
 			$ar['filesize']  = filesize($path);
-			$ar['date']      = date($this->date_format, filemtime ($path));
+			if(isset($this->date_format)) {
+				$ar['date'] = date($this->date_format, filemtime ($path));
+			} else {
+				$ar['date'] = filemtime ($path);
+			}
 			if(isset($pi["extension"])) {
 				$ar['extension'] = strtolower($pi["extension"]);
 			} else {
@@ -278,7 +282,11 @@ var $arExcludedFiles = array('.', '..');
 		if(file_exists($path)) {
 			$ar["path"]        = $path;
 			$ar["name"]        = basename($path);
-			$ar["date"]        = date($this->date_format, filemtime ($path));
+			if(isset($this->date_format)) {
+				$ar['date'] = date($this->date_format, filemtime ($path));
+			} else {
+				$ar['date'] = filemtime ($path);
+			}
 			$ar["permissions"] = $this->get_permissions_octal($path);
 			$ar["read"]        = is_executable($path);
 			$ar["write"]       = is_writeable($path);

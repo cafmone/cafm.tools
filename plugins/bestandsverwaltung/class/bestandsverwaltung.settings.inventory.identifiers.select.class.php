@@ -30,6 +30,12 @@
 class bestandsverwaltung_settings_inventory_identifiers_select
 {
 /**
+*  date as formated string
+*  @access public
+*  @var string
+*/
+var $date_format = "Y-m-d H:i";
+/**
 * translation
 * @access public
 * @var string
@@ -95,6 +101,12 @@ var $lang = array();
 		$d->css     = 'icon icon-download btn btn-default btn-sm';
 		$d->style   = 'margin: 5px 4px 0 0; display: inline-block;';
 
+		// handle db changelog
+		$change = '';
+		if(isset($this->db->changelog) && $this->file->exists($this->db->changelog)) {
+			$change = date($this->date_format, filemtime ($this->db->changelog));
+		}
+
 		$t = $response->html->template($this->tpldir.'bestandsverwaltung.settings.inventory.identifiers.select.html');
 		$t->add($response->html->thisfile,'thisfile');
 		$t->add($response->table,'table');
@@ -106,6 +118,7 @@ var $lang = array();
 		$t->add($i, 'insert');
 		$t->add($s, 'sync');
 		$t->add($d, 'download');
+		$t->add($change, 'change');
 
 		$t->group_elements(array('param_' => 'form'));
 		return $t;
