@@ -606,8 +606,8 @@ var $lang = array(
 	//--------------------------------------------
 	function printtodos($visible = false) {
 		if($visible === true) {
-			require_once(CLASSDIR.'plugins/taetigkeiten/class/taetigkeiten.api.class.php');
-			$controller = new taetigkeiten_api($this->file, $this->response, $this->db, $this->user);
+			require_once(CLASSDIR.'plugins/cafm.one/class/cafm.one.api.class.php');
+			$controller = new cafm_one_api($this->file, $this->response, $this->db, $this->user);
 			$controller->actions_name = $this->actions_name;
 			$controller->message_param = $this->message_param;
 			$controller->tpldir = $this->tpldir;

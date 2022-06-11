@@ -429,11 +429,16 @@ class cafm_one
 												$label  = 'on';
 												$marker = ' style="text-decoration:line-through;"';
 											}
-											// genrated elment id
-											$element = $key;
+											// generate element id
+											$elementid = $key;
+											if(isset($deviceid) && $deviceid !== '') {
+												$elementid = $deviceid.$elementid;
+											}
+											
 											$tmp .= '<div class="box"'.$style.'>';
 											$tmp .= '<div style="float:left;width:25px;text-align:right;">&bull;</div>'."\n";
-											$tmp .= '<div style="margin: 0 0 0 35px;" id="'.$element.'">';
+											$tmp .= '<div style="margin: 0 0 0 35px;" id="'.$elementid.'">';
+											
 											$tmp .= '<span'.$marker.'>';
 											// replace \n by <br>
 											$tmp .= str_replace("\n", '<br>', $value['label']);
@@ -448,10 +453,10 @@ class cafm_one
 											// only init js when device available
 											if(isset($disablemode) && $disablemode !== '') {
 												if($disablemode === 'confirm' && isset($deviceid) && $deviceid !== '') {
-													$tmp .= '<button type="button" value="'.$label.'" class="noprint btn btn-sm btn-default" style="margin:0 0 0 10px; padding: 3px; line-height:10px; width:30px;" onclick="todospicker.modal.init(\''.$element.'\',\''.$deviceid.'\',\''.$todos['prefix'].'\',\''.$key.'\');">'.$label.'</button>';
+													$tmp .= '<button type="button" value="'.$label.'" class="noprint btn btn-sm btn-default" style="margin:0 0 0 10px; padding: 3px; line-height:10px; width:30px;" onclick="todospicker.modal.init(\''.$elementid.'\',\''.$deviceid.'\',\''.$todos['prefix'].'\',\''.$key.'\');">'.$label.'</button>';
 												}
 												else if($disablemode === 'internal') {
-													$tmp .= '<button type="button" value="'.$label.'" class="noprint btn btn-sm btn-default" style="margin:0 0 0 10px; padding: 3px; line-height:10px; width:30px;" onclick="todospicker.modal.init(\''.$element.'\',\''.$todos['prefix'].'\',\''.$key.'\');">'.$label.'</button>';
+													$tmp .= '<button type="button" value="'.$label.'" class="noprint btn btn-sm btn-default" style="margin:0 0 0 10px; padding: 3px; line-height:10px; width:30px;" onclick="todospicker.modal.init(\''.$elementid.'\',\''.$todos['prefix'].'\',\''.$key.'\');">'.$label.'</button>';
 													if(array_key_exists($key, $disabled)) {
 														$tmp .= '<input id="'.$todos['prefix'].'-'.$key.'" type="checkbox" name="disabled['.$key.']" value="on" checked="checked" style="position: absolute; left:-2000px; top:-2000px; visibility: hidden;">';
 													}

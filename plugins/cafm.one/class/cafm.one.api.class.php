@@ -407,7 +407,7 @@ var $lang = array(
 							$data['date']    = time();
 							$error = $this->db->insert('todos_disabled', $data);
 							if($error === '') {
-								echo $data['todo'].',off;;';
+								echo $id.$data['todo'].',off;;';
 								exit();
 							} else {
 								echo '<div class="msgBox alert alert-danger">'.$error.'</div>';
@@ -419,7 +419,7 @@ var $lang = array(
 							$data['todo']    = $form->get_static('todo');
 							$error = $this->db->delete('todos_disabled', $data);
 							if($error === '') {
-								echo $data['todo'].',on;;';
+								echo $id.$data['todo'].',on;;';
 								exit();
 							} else {
 								echo '<div class="msgBox alert alert-danger">'.$error.'</div>';
@@ -503,7 +503,7 @@ var $lang = array(
 							if(is_array($check)) {
 								$error = $this->db->delete('todos_disabled', '`row`=\''.$check[0]['row'].'\'');
 								if($error === '') {
-									$msg .= $data['todo'].',on;;';
+									$msg .= $id.$data['todo'].',on;;';
 								} else {
 									echo '<div class="msgBox alert alert-danger">'.$error.'</div>';
 									exit();
@@ -512,7 +512,7 @@ var $lang = array(
 							elseif($check === '') {
 								$error = $this->db->insert('todos_disabled', $data);
 								if($error === '') {
-									$msg .= $data['todo'].',off;;';
+									$msg .= $id.$data['todo'].',off;;';
 								} else {
 									echo '<div class="msgBox alert alert-danger">'.$error.'</div>';
 									exit();

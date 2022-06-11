@@ -235,7 +235,8 @@ var todospicker = {
 			buttons = this.element.getElementsByTagName('button');
 			for(i = 0; i < buttons.length; i++) {
 				node = buttons[i].parentNode;
-				blockid += node.id;
+				//remove device id from node.id
+				blockid += node.id.replace(id,'');
 				if(i < (buttons.length -1)) {
 					blockid += ',';
 				}
@@ -346,7 +347,7 @@ function ajax(params, callback){
 	html = $.ajax({
 		url: "api.php",
 		global: false,
-		type: "GET",
+		type: "POST",
 		data: params,
 		dataType: "html",
 		async: true,
