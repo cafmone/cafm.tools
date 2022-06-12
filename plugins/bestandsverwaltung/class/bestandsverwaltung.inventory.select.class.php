@@ -106,6 +106,12 @@ var $__attribs;
 				if(isset($tmp[1])) {
 					$this->filters[$tmp[1]]['table'] = $tmp[0];
 					$this->filters[$tmp[1]]['key']   = $tmp[1];
+					$this->filters[$tmp[1]]['label'] = $tmp[1];
+					
+					$lang = $this->db->select('bestand_'.$tmp[0],'*',array('merkmal_kurz'=>$tmp[1]));
+					if(is_array($lang)) {
+						$this->filters[$tmp[1]]['label'] = $lang[0]['merkmal_lang'];
+					}
 				}
 			}
 		}
@@ -427,18 +433,20 @@ var $__attribs;
 			$head['date']['title'] = $this->lang['label_date'];
 			$head['date']['sortable'] = true;
 			$head['date']['hidden'] = true;
-			// Custom Filters
-			if(isset($this->filters) && is_array($this->filters)) {
-				foreach($this->filters as $f) {
-					$key = $f['key'];
-					$head[$key]['title'] = $key;
-					$head[$key]['hidden'] = true;
-				}
-			}
 			$head['data']['title'] = '&#160;';
 			$head['data']['sortable'] = false;
 			$head['action']['title'] = '&#160;';
 			$head['action']['sortable'] = false;
+
+			// Custom Filters head
+			if(isset($this->filters) && is_array($this->filters)) {
+				foreach($this->filters as $f) {
+					$key = $f['key'];
+					$head[$key]['title'] = $f['label'];
+					$head[$key]['hidden'] = true;
+				}
+			}
+
 		}
 
 		$tparams = '';
@@ -525,12 +533,12 @@ var $__attribs;
 							}
 						}
 
-						// Custom Filters
+						// Custom Filters table output
 						if(isset($this->filters) && is_array($this->filters)) {
 							foreach($this->filters as $f) {
 								$key = $f['key'];
 								if(isset($id[$key]) && $id[$key] !== '') {
-									$data .= $key.': '.$id[$key].'<br>';
+									$data .= $f['label'].': '.$id[$key].'<br>';
 								}
 							}
 						}
@@ -657,20 +665,15 @@ var $__attribs;
 					$d['date']       = $id['date'];
 					$d['data']       = $data;
 					$d['action']     = $update;
-					// Custom Filters
-					if(isset($this->filters) && is_array($this->filters)) {
-						foreach($this->filters as $f) {
-							$key = $f['key'];
-							$d[$key] = $id[$key];
-						}
-					}
 
-					// Custom Filters
+					// Custom Filters td
 					if(isset($this->filters) && is_array($this->filters)) {
 						foreach($this->filters as $f) {
 							$key = $f['key'];
 							if(isset($id[$key]) && $id[$key] !== '') {
 								$d[$key] = $id[$key];
+							} else {
+								$d[$key] = '';
 							}
 						}
 					}
@@ -857,7 +860,7 @@ var $__attribs;
 			foreach($this->filters as $f) {
 				$key = $f['key'];
 			
-				$d['cfilter_'.$key]['label']                     = $key;
+				$d['cfilter_'.$key]['label']                     = $f['label'];
 				$d['cfilter_'.$key]['object']['type']            = 'htmlobject_input';
 				$d['cfilter_'.$key]['object']['attrib']['name']  = 'filter['.$key.']';
 				$d['cfilter_'.$key]['object']['attrib']['style'] = '';
@@ -866,7 +869,7 @@ var $__attribs;
 					if(isset($this->filter['not'][$key])) {
 						$not = ' (not)';
 					}
-					$this->__filters[$key] = $key.': '.$this->filter[$key].$not;
+					$this->__filters[$key] = $f['label'].': '.$this->filter[$key].$not;
 				} else {
 					if(isset($this->filter['not'][$key])) {
 						$this->__filters[] = $key.': <i>NULL</i>';
