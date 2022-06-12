@@ -104,8 +104,8 @@ var $__attribs;
 			foreach($this->settings['filter'] as $k => $f) {
 				$tmp = explode('::', $f);
 				if(isset($tmp[1])) {
-					$this->filters[$k]['table'] = $tmp[0];
-					$this->filters[$k]['key']   = $tmp[1];
+					$this->filters[$tmp[1]]['table'] = $tmp[0];
+					$this->filters[$tmp[1]]['key']   = $tmp[1];
 				}
 			}
 		}
