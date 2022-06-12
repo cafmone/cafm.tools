@@ -144,8 +144,6 @@ var $lang = array();
 			}
 			$old = $this->file->get_ini( $this->settings );
 			if(is_array($old)) {
-				#unset($old['settings']);
-				#unset($old['export']);
 				unset($old['filter']);
 				$request = array_merge($old, $request);
 			}
@@ -173,11 +171,6 @@ var $lang = array();
 	//--------------------------------------------
 	function get_form() {
 		$ini  = $this->file->get_ini( $this->settings, true, true );
-		
-		var_dump($ini);
-		
-		
-		
 		$form = $this->response->get_form($this->actions_name, 'custom');
 
 		// Filters
