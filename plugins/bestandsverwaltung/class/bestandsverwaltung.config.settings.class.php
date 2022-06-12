@@ -62,7 +62,6 @@ var $lang = array(
 		"lang_query" => "Database",
 		"lang_export" => "Export",
 		"lang_printout" => "Printout",
-		"lang_filter" => "Custom Filters",
 		"lang_permissions" => "Permissions",
 		"query" => array(
 			"type" => "Type",
@@ -107,7 +106,6 @@ var $lang = array(
 		$t->add($this->lang['lang_permissions'], 'lang_permissions');
 		$t->add($this->lang['lang_export'], 'lang_export');
 		$t->add($this->lang['lang_printout'], 'lang_printout');
-		$t->add($this->lang['lang_filter'], 'lang_filter');
 		$t->add($vars);
 		$t->add($form);
 		$t->group_elements(array('param_' => 'form'));
@@ -132,15 +130,11 @@ var $lang = array(
 			$request = $form->get_request();
 			$old = $this->file->get_ini( $this->settings );
 			if(is_array($old)) {
-				unset($old['query']);
+				unset($old['settings']);
 				unset($old['export']);
-				unset($old['printout']);
-				unset($old['filter']);
-				unset($old['qrcode']);
-				unset($old['recording']);
+				#unset($old['filter']);
 				$request = array_merge($old, $request);
 			}
-
 			if( $error === '' ) {
 				$error = $this->file->make_ini( $this->settings, $request );
 				if( $error === '' ) {
@@ -250,15 +244,15 @@ var $lang = array(
 
 		// Filters
 
-		for($i=0;$i<10;$i++) {
-			$d['filter_f_'.$i]['label']                    = 'merkmal_kurz';
-			$d['filter_f_'.$i]['object']['type']           = 'htmlobject_input';
-			$d['filter_f_'.$i]['object']['attrib']['type'] = 'text';
-			$d['filter_f_'.$i]['object']['attrib']['name'] = 'filter['.$i.']';
-			if(isset($ini['filter'][$i])) {
-				$d['filter_f_'.$i]['object']['attrib']['value'] = $ini['filter'][$i];
-			}
-		}
+		#for($i=0;$i<10;$i++) {
+		#	$d['filter_f_'.$i]['label']                    = 'merkmal_kurz';
+		#	$d['filter_f_'.$i]['object']['type']           = 'htmlobject_input';
+		#	$d['filter_f_'.$i]['object']['attrib']['type'] = 'text';
+		#	$d['filter_f_'.$i]['object']['attrib']['name'] = 'filter['.$i.']';
+		#	if(isset($ini['filter'][$i])) {
+		#		$d['filter_f_'.$i]['object']['attrib']['value'] = $ini['filter'][$i];
+		#	}
+		#}
 
 		$form->display_errors = false;
 		$form->add($d);

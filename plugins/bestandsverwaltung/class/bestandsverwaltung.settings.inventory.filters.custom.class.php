@@ -73,7 +73,7 @@ var $lang = array();
 		$this->response = $controller->response;
 		$this->user     = $controller->user;
 		$this->db       = $controller->db;
-		$this->settings = PROFILESDIR.'bestandsverwaltung.filters.ini';
+		$this->settings = PROFILESDIR.'bestandsverwaltung.ini';
 	}
 
 	//--------------------------------------------
@@ -142,6 +142,13 @@ var $lang = array();
 			if($request === '') {
 				$request = array();
 			}
+			$old = $this->file->get_ini( $this->settings );
+			if(is_array($old)) {
+				#unset($old['settings']);
+				#unset($old['export']);
+				unset($old['filter']);
+				$request = array_merge($old, $request);
+			}
 			$error = $this->file->make_ini( $this->settings, $request );
 			if( $error === '' ) {
 				$msg = $this->lang['msg_update_sucess'];
@@ -166,6 +173,11 @@ var $lang = array();
 	//--------------------------------------------
 	function get_form() {
 		$ini  = $this->file->get_ini( $this->settings, true, true );
+		
+		var_dump($ini);
+		
+		
+		
 		$form = $this->response->get_form($this->actions_name, 'custom');
 
 		// Filters
