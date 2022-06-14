@@ -99,7 +99,7 @@ var $__attribs;
 		}
 		
 		// Custom Filters
-		if(is_array($this->settings['filter'])) {
+		if(isset($this->settings['filter']) && is_array($this->settings['filter'])) {
 			$this->filters = array();
 			foreach($this->settings['filter'] as $k => $f) {
 				$tmp = explode('::', $f);
