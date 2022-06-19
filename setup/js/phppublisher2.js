@@ -589,6 +589,7 @@ phppublisher = {
 			}
 		}
 	},
+
 	modal : {
 		width : '50%',
 		height : '',
@@ -673,6 +674,7 @@ phppublisher = {
 			}
 		}
 	},
+	
 	select : {
 		submit : false,
 		width  : '80%',
@@ -683,8 +685,14 @@ phppublisher = {
 			if(typeof(label) == 'undefined') {
 				label = '';
 			}
-
+			
 			this.element = element;
+
+			this.multiple = false;
+			if(typeof this.element.multiple !== 'undefined' && this.element.multiple !== false) {
+				this.multiple = true;
+			}
+			
 			var content = document.createElement("div");
 			content.style.padding = '15px';
 			content.style.overflow = 'auto';
@@ -727,6 +735,28 @@ phppublisher = {
 			phppublisher.modal.width = this.width;
 			phppublisher.modal.label = label+find.outerHTML;
 			this.modalid = phppublisher.modal.init(content);
+			
+			//
+			if(this.multiple === true) {
+				var btn = document.createElement("button");
+				btn.className = 'btn btn-default';
+				btn.innerHTML = 'Submit';
+				btn.addEventListener("click", function(event) {
+					phppublisher.select.commit();
+				});
+			
+				var footer = document.createElement("div");
+				footer.className = 'modal-footer';
+				footer.style.marginTop = '-15px';
+				
+				footer.appendChild(btn);
+				
+				target = document.getElementById(this.modalid);
+				target = target.getElementsByTagName('div')[0];
+				target = target.getElementsByTagName('div')[0];
+				target = target.getElementsByTagName('div')[0];
+				target.appendChild(footer);
+			}
 
 			// add event to search input
 			document.getElementById('PublisherSelectSearch').addEventListener("keyup", function(event) {
@@ -742,27 +772,63 @@ phppublisher = {
 
 			return null;
 		},
+
 		print : function() {
+
 			for(var i=0; i < this.element.options.length; i++) {
 				opt = document.createElement("button");
 				opt.className = 'list-group-item list-group-item-action';
 				opt.id = 'opt'+i;
-				if(i == this.element.selectedIndex && this.element.selectedIndex != 0) {
+				if(typeof this.element.options[i].selected !== 'undefined' && this.element.options[i].selected !== false) {
 					opt.className = 'list-group-item list-group-item-action active';
 					marked = opt;
 				}
 				opt.style.textAlign = 'left';
 				opt.innerHTML = this.element.options[i].text;
-				(function(x) { opt.addEventListener('click', function(e) { phppublisher.select.commit(x); }) })(i);
+				if(this.multiple === false) {
+					(function(element,x) { 
+						opt.addEventListener('click', function(e) { 
+							element.options[x].selected = 'selected';
+							phppublisher.select.commit(); 
+						}) 
+					})(this.element,i);
+				}
+				if(this.multiple === true) {
+					(function(element,x) { 
+						opt.addEventListener('click', function(e) { 
+							box = document.getElementById(element.id+'Box');
+							if(!box) {
+								box = '';
+							}
+							if(element.options[x].selected !== false) {
+								this.className = 'list-group-item list-group-item-action';
+								element.options[x].selected = '';
+								if(box !== '') {
+									text = box.innerHTML;
+									result = text.replace(element.options[x].label+'<br>','');
+									box.innerHTML = result;
+								}
+							} else {
+								this.className = 'list-group-item list-group-item-action active';
+								element.options[x].selected = 'selected';
+								if(box !== '') {
+									box.innerHTML = box.innerHTML +element.options[x].label+'<br>';
+								}
+							}
+						}) 
+					})(this.element,i);
+				}
 				this.box.appendChild(opt);
 			}
 			// scroll to marked option
-			if(typeof(marked) != 'undefined') {
+			if(typeof(marked) != 'undefined' && this.multiple === false) {
 				marked.scrollIntoView();
 			}
 			this.wait.style.display = 'none';
 		},
+
 		find : function(element) {
+
 			this.box.innerHTML = '';
 			value = element.value;
 			if(value != '') {
@@ -774,12 +840,44 @@ phppublisher = {
 							opt = document.createElement("button");
 							opt.className = 'list-group-item list-group-item-action';
 							opt.id = 'opt'+i;
-							if(i == this.element.selectedIndex && this.element.selectedIndex != 0) {
+							if(typeof this.element.options[i].selected !== 'undefined' && this.element.options[i].selected !== false) {
 								opt.className = 'list-group-item list-group-item-action active';
 							}
 							opt.style.textAlign = 'left';
-							(function(x) { opt.onclick = function() {phppublisher.select.commit(x);} })(i);
 
+							if(this.multiple === false) {
+								(function(element,x) { 
+									opt.addEventListener('click', function(e) { 
+										element.options[x].selected = 'selected';
+										phppublisher.select.commit(); 
+									}) 
+								})(this.element,i);
+							}
+							if(this.multiple === true) {
+								(function(element,x) { 
+									opt.addEventListener('click', function(e) { 
+										box = document.getElementById(element.id+'Box');
+										if(!box) {
+											box = '';
+										}
+										if(element.options[x].selected !== false) {
+											this.className = 'list-group-item list-group-item-action';
+											element.options[x].selected = '';
+											if(box !== '') {
+												text = box.innerHTML;
+												result = text.replace(element.options[x].label+'<br>','');
+												box.innerHTML = result;
+											}
+										} else {
+											this.className = 'list-group-item list-group-item-action active';
+											element.options[x].selected = 'selected';
+											if(box !== '') {
+												box.innerHTML = box.innerHTML +element.options[x].label+'<br>';
+											}
+										}
+									}) 
+								})(this.element,i);
+							}
 							r = new RegExp('('+value+')', "gi");
 							opt.innerHTML = this.element.options[i].text.replace(r, '<b>$1</b>');
 							this.box.appendChild(opt);
@@ -795,8 +893,9 @@ phppublisher = {
 				this.print();
 			}
 		},
+
 		commit : function(index) {
-			this.element.options[index].selected = 'selected';
+			//this.element.options[index].selected = 'selected';
 			$('#'+this.modalid).modal('hide');
 			try {
 				this.element.onchange();

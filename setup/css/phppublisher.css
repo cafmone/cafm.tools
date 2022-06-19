@@ -272,6 +272,7 @@ fieldset[disabled] .btn-default.focus {
 }
 .htmlobject_box .right{
 	float:left;
+	position: relative;
 }
 .htmlobject_box .right .form-control-static {
 	line-height: calc(1.5em + 0.75rem + 2px);
@@ -518,6 +519,10 @@ input.htmlobject.error {
 	font-size: 14px;
 	font-weight: bold;
 	line-height: 20px;
+}
+.modal-footer {
+	padding: 5px 15px 5px 20px;
+	background-color: rgba(0, 0, 0, 0.03);
 }
 
 /* --------------------------------------------

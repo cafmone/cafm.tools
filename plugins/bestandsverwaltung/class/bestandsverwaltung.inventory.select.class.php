@@ -98,6 +98,9 @@ var $__attribs;
 			$this->response->add('filter',$this->filter);
 		}
 		
+		#$this->response->html->help($this->filter);
+		#$this->response->html->help($_REQUEST);
+		
 		// Custom Filters
 		if(isset($this->settings['filter']) && is_array($this->settings['filter'])) {
 			$this->filters = array();
@@ -246,6 +249,14 @@ var $__attribs;
 		$not = $t->get_elements('filter_bezeichner_not');
 		$box->add($not);
 		$t->remove('filter_bezeichner_not');
+		
+		// todos_or
+		$box = $t->get_elements('filter_prefix');
+		$not = $t->get_elements('filter_prefix_or');
+		$box->add('<div class="btn btn-default" style="position:absolute;top:0;left:0;width:180px;">'.$this->lang['label_todo_obligations'].'</div>');
+		$box->add($not);
+		#$box->add('<div class="floatbreaker">&#160;</div>');
+		$t->remove('filter_prefix_or');
 
 		// handle custom filter tab
 		$custom_empty = $t->get_elements('cfilter_0');
@@ -622,14 +633,16 @@ var $__attribs;
 
 					// handle CAFM.ONE connected
 					if(in_array('cafm.one', $this->plugins)) {
-						$todo = '';
+						$todo = array();
 						$interval = '';
-						if(isset($this->filter['todos']['prefix'])) {
+
+						if(isset($this->filter['todos']['prefix']) && is_array($this->filter['todos']['prefix'])) {
 							$todo = $this->filter['todos']['prefix'];
 						}
 						if(isset($this->filter['todos']['interval'])) {
 							$interval = $this->filter['todos']['interval'];
 						}
+						
 						$a        = $response->html->a();
 						$a->href  = '#';
 						$a->label = $this->lang['button_todos'];
@@ -637,9 +650,9 @@ var $__attribs;
 						$a->css   = 'btn btn-sm btn-default todos';
 						// handle grouped
 						if(!isset($id['SUMM']) || $id['SUMM'] === 0) {
-							$a->handler = 'onclick="todospicker.init(\''.$id['bezeichner'].'\',\''.$id['id'].'\',\''.$todo.'\',\''.$interval.'\'); return false;"';
+							$a->handler = 'onclick="todospicker.init(\''.$id['bezeichner'].'\',\''.$id['id'].'\',\''.implode(',',$todo).'\',\''.$interval.'\'); return false;"';
 						} else {
-							$a->handler = 'onclick="todospicker.init(\''.$id['bezeichner'].'\',\'\',\''.$todo.'\',\''.$interval.'\'); return false;"';
+							$a->handler = 'onclick="todospicker.init(\''.$id['bezeichner'].'\',\'\',\''.implode(',',$todo).'\',\''.$interval.'\'); return false;"';
 						}
 						$update .= $a->get_string();
 					}
@@ -783,7 +796,7 @@ var $__attribs;
 		if(isset($this->filter['bezeichner']) && $this->filter['bezeichner'] !== '') {
 			$not = '';
 			if(isset($this->filter['not']['bezeichner'])) {
-				$not = ' (not)';
+				$not = ' [not]';
 			}
 			$this->__filters['bezeichner'] .= $not;
 		}
@@ -859,7 +872,6 @@ var $__attribs;
 		if(isset($this->filters) && is_array($this->filters)) {
 			foreach($this->filters as $f) {
 				$key = $f['key'];
-			
 				$d['cfilter_'.$key]['label']                     = $f['label'];
 				$d['cfilter_'.$key]['object']['type']            = 'htmlobject_input';
 				$d['cfilter_'.$key]['object']['attrib']['name']  = 'filter['.$key.']';
@@ -867,7 +879,7 @@ var $__attribs;
 				if(isset($this->filter[$key]) && $this->filter[$key] !== '') {
 					$not = '';
 					if(isset($this->filter['not'][$key])) {
-						$not = ' (not)';
+						$not = ' [not]';
 					}
 					$this->__filters[$key] = $f['label'].': '.$this->filter[$key].$not;
 				} else {
@@ -890,97 +902,48 @@ var $__attribs;
 			$todos = $this->taetigkeiten->prefixes();
 			if(is_array($todos)) {
 				$this->__todos = $todos;
-				array_unshift($this->__todos,array('prefix'=>'','lang'=>''));
-				$d['filter_prefix']['label']                       = $this->lang['label_todo_obligations'];
-				$d['filter_prefix']['css']                         = '';
-				$d['filter_prefix']['object']['type']              = 'htmlobject_select';
-				$d['filter_prefix']['object']['attrib']['index']   = array('prefix','lang');
-				$d['filter_prefix']['object']['attrib']['name']    = 'filter[todos][prefix]';
-				$d['filter_prefix']['object']['attrib']['options'] = $this->__todos;
-				$d['filter_prefix']['object']['attrib']['style']   = 'width: 300px;';
-				#$d['filter_prefix']['object']['attrib']['handler'] = 'onmousedown="phppublisher.select.init(this, \''.$this->lang['label_todo_obligations'].'\'); return false;" onchange="todosfilter.init(this);"';
+				$d['filter_prefix']['label']                        = '&#160;';
+				$d['filter_prefix']['object']['type']               = 'htmlobject_select';
+				$d['filter_prefix']['object']['attrib']['id']       = 'PrefixSelect';
+				$d['filter_prefix']['object']['attrib']['multiple'] = true;
+				$d['filter_prefix']['object']['attrib']['index']    = array('prefix','lang');
+				$d['filter_prefix']['object']['attrib']['name']     = 'filter[todos][prefix][]';
+				$d['filter_prefix']['object']['attrib']['options']  = $this->__todos;
+				$d['filter_prefix']['object']['attrib']['style']   = 'height:calc(1.5em + 0.75rem + 2px);position:inherit;z-index:2;width:180px;margin: 0 10px 0 0;opacity:0;cursor:pointer;';
 				$d['filter_prefix']['object']['attrib']['handler'] = 'onmousedown="phppublisher.select.init(this, \''.$this->lang['label_todo_obligations'].'\'); return false;"';
 
-				if(isset($this->filter['todos']['prefix']) && $this->filter['todos']['prefix'] !== '') {
+				$d['filter_prefix_or']['object']['type']            = 'htmlobject_input';
+				$d['filter_prefix_or']['object']['attrib']['type']  = 'checkbox';
+				$d['filter_prefix_or']['object']['attrib']['title'] = 'OR';
+				$d['filter_prefix_or']['object']['attrib']['css']   = 'included';
+				$d['filter_prefix_or']['object']['attrib']['name']  = 'filter[or][prefix]';
 
-					// set filter highlight
-					$this->__filters[] = 'Todos: '.$this->__todos[$this->filter['todos']['prefix']]['lang'];
-
-					// handle todo attribs
-					#$attribs  = $this->taetigkeiten->attribs($this->filter['todos']['prefix']);
-					#$interval = $this->taetigkeiten->interval($this->filter['todos']['prefix']);
-
-/*
-					if(is_array($interval)) {
-						$this->__interval = $interval;
-						array_unshift($interval, array('key'=>'','label'=>''));
-						## TODO translation
-						$d['filter_interval']['label']                       = 'Interval';
-						$d['filter_interval']['css']                         = '';
-						$d['filter_interval']['object']['type']              = 'htmlobject_select';
-						$d['filter_interval']['object']['attrib']['index']   = array('key','label');
-						$d['filter_interval']['object']['attrib']['name']    = 'filter[todos][interval]';
-						$d['filter_interval']['object']['attrib']['options'] = $interval;
-						$d['filter_interval']['object']['attrib']['style']   = 'width: 300px;';
-						// set filter highlight
-						if(isset($this->filter['todos']['interval']) && $this->filter['todos']['interval'] !== '') {
-							$this->__filters[] = 'Interval: '.$this->__interval[$this->filter['todos']['interval']]['label'];
+				// set filter highlight
+				$div = $this->response->html->div();
+				$div->id = 'PrefixSelectBox';
+				if(isset($this->filter['todos']['prefix']) && is_array($this->filter['todos']['prefix'])) {
+					foreach($this->filter['todos']['prefix'] as $t) {
+						$or = '';
+						if(isset($this->filter['or']['prefix'])) {
+							$or = ' [or]';
 						}
-					} else {
-						$d['filter_interval'] = '';
+						$this->__filters[] = 'Todos: '.$this->__todos[$t]['lang'].$or;
+						$div->add($this->__todos[$t]['lang'].'<br>');
 					}
-*/
-
-/*
-					// handle todo attribs
-					if(is_array($attribs)) {
-						if(isset($this->__todos[$this->filter['todos']['prefix']]['bezeichner'])) {
-							$__interval = $this->__todos[$this->filter['todos']['prefix']]['bezeichner'];
-						}
-						if(
-							isset($this->filter['todos']['interval']) && 
-							isset($this->__interval[$this->filter['todos']['interval']]['bezeichner'])
-						) {
-							$__interval = $this->__interval[$this->filter['todos']['interval']]['bezeichner'];
-						}
-						foreach($attribs as $a) {
-							$d = array_merge($d, $a['element']);
-							$key = str_replace('tfilter_', '', key($a['element']));
-							if(
-								isset($this->filter['todos']['attribs'][$key]) && 
-								$this->filter['todos']['attribs'][$key] !== ''
-							) {
-								$this->__filters[] = $d['tfilter_'.$key]['label'].': '.$this->filter['todos']['attribs'][$key];
-								// handle attribs bezeichner
-								$bezeichner = explode(',',$a['bezeichner']);
-								foreach($bezeichner as $b) {
-									if(in_array($b, $__interval)) {
-										$this->__attribs[$b][$key] = $this->filter['todos']['attribs'][$key];
-										$this->__attribs['bezeichner'][$b] = $b;
-									}
-								}
-							}
-						}
-					} else {
-						$d['tfilter_0'] = '';
-					}
-*/
-				} else {
-					$d['filter_interval'] = '';
-					$d['tfilter_0'] = '';
 				}
-
+				$d['filter_prefix_box']['object'] = $div;
+				
 			} else {
 				$div = $this->response->html->div();
 				$div->add($todos);
 				$div->style = 'text-align: center;';
 				$d['filter_prefix']['object'] = $div;
-				$d['filter_interval'] = '';
+				$d['filter_prefix_box'] = '';
 				$d['tfilter_0'] = '';
 			}
 			$d['tfilter_0'] = '';
 		} else {
-			$d['filter_interval'] = '';
+			$d['filter_prefix_box'] = '';
 			$d['filter_prefix'] = '';
 			$d['tfilter_0'] = '';
 		}
@@ -992,7 +955,7 @@ var $__attribs;
 				if(isset($this->filter[$r['merkmal_kurz']]) && $this->filter[$r['merkmal_kurz']] !== '') {
 					$not = '';
 					if(isset($this->filter['not'][$r['merkmal_kurz']])) {
-						$not = ' (not)';
+						$not = ' [not]';
 					}
 					if(is_array($this->filter[$r['merkmal_kurz']])) {
 						$tf = implode(', ', $this->filter[$r['merkmal_kurz']]);
@@ -1253,62 +1216,34 @@ var $__attribs;
 			!isset($id) && 
 			isset($this->__todos) && 
 			isset($this->filter['todos']['prefix']) && 
-			$this->filter['todos']['prefix'] !== '' && 
-			isset($this->__todos[$this->filter['todos']['prefix']]['bezeichner'])
+			is_array($this->filter['todos']['prefix']) 
 		){
 			// mark as filtered
 			$this->__filtered = true;
-			// handle todo attribs
-			if(
-				isset($this->filter['todos']['attribs']) && 
-				$this->filter['todos']['attribs'] !== '' && 
-				isset($this->__attribs['bezeichner'])
-			) {
-				$prefix = $this->filter['todos']['prefix'];
-				$interval = '';
-				if(isset($this->filter['todos']['interval']) && $this->filter['todos']['interval'] !== '') {
-					$interval = $this->filter['todos']['interval'];
-				}
-				if(isset($bezeichner)) {
-					$this->__attribs['bezeichner'] = array_intersect($bezeichner, $this->__attribs['bezeichner']);
-					unset($bezeichner);
-				}
-				// check if settings return non empty taetigkeiten
-				foreach($this->__attribs['bezeichner'] as $b) {
-					$x = $this->taetigkeiten->details(
-								$b, 
-								$this->__attribs[$b], 
-								$prefix, 
-								$interval, 
-								false,
-								true,
-								array(),
-								false
-							);
-					// set bezeichner only if x not empty
-					if(is_array($x)) {
-						$bezeichner[] = $b;
+
+			// handle or
+			$or = $this->response->html->request()->get('filter[or][prefix]', true);
+
+			foreach($this->filter['todos']['prefix'] as $t) {
+				if(isset($tmp)) {
+					if(isset($or)) {
+						$this->__todos[$t]['bezeichner'] = array_merge($tmp, $this->__todos[$t]['bezeichner']);
+					} else {
+						$this->__todos[$t]['bezeichner'] = array_intersect($tmp, $this->__todos[$t]['bezeichner']);
 					}
+					unset($tmp);
+					$tmp = $this->__todos[$t]['bezeichner'];
+				} else {
+					$tmp = $this->__todos[$t]['bezeichner'];
 				}
 			}
-			// handle interval
-			else if(
-				isset($this->filter['todos']['interval']) && 
-				$this->filter['todos']['interval'] !== '' && 
-				isset($this->__interval[$this->filter['todos']['interval']]['bezeichner'])
-			) {
-				if(isset($bezeichner)) {
-					$this->__interval[$this->filter['todos']['interval']]['bezeichner'] = array_intersect($bezeichner, $this->__interval[$this->filter['todos']['interval']]['bezeichner']);
-					unset($bezeichner);
-				}
-				$bezeichner = $this->__interval[$this->filter['todos']['interval']]['bezeichner'];
-			} 
-			else {
-				if(isset($bezeichner)) {
-					$this->__todos[$this->filter['todos']['prefix']]['bezeichner'] = array_intersect($bezeichner, $this->__todos[$this->filter['todos']['prefix']]['bezeichner']);
-					unset($bezeichner);
-				}
-				$bezeichner = $this->__todos[$this->filter['todos']['prefix']]['bezeichner'];
+
+			// assemble
+			if(isset($bezeichner) && isset($tmp)) {
+				$bezeichner = array_intersect($bezeichner, $tmp);
+			}
+			elseif(isset($tmp)) {
+				$bezeichner = $tmp;
 			}
 
 			if(!isset($bezeichner)) {
@@ -1344,6 +1279,7 @@ var $__attribs;
 		// handle attrib filters
 		$filter = '';
 		$filters = array();
+		
 		// Custom Filters
 		if(isset($this->filters) && is_array($this->filters)) {
 			foreach($this->filters as $f) {
@@ -1356,15 +1292,6 @@ var $__attribs;
 					$filter .= ', GROUP_CONCAT(DISTINCT if( `merkmal_kurz`=\''.$key.'\' AND `tabelle`=\''.$f['table'].'\', wert, NULL ) ) AS \''.$key.'\' ';
 				} else {
 					$filter .= ', GROUP_CONCAT(DISTINCT if( `merkmal_kurz`=\''.$key.'\' AND `tabelle`=\''.$f['table'].'\', wert, NULL ) ) AS \''.$key.'\' ';
-				}
-			}
-		}
-
-		// Todo attribs filter
- 		if(isset($this->filter['todos']['attribs']) && is_array($this->filter['todos']['attribs'])) {
-			foreach( $this->filter['todos']['attribs'] as $k => $v ) {
-				if($v !== '') {
-					$filter .= ', GROUP_CONCAT(DISTINCT if( `merkmal_kurz`=\''.$k.'\' AND `tabelle`=\'TODO\', wert, NULL ) ) AS \''.$k.'\' ';
 				}
 			}
 		}
@@ -1871,6 +1798,10 @@ var $__attribs;
 	function __printout($ids) {
 		$mode = $this->response->html->request()->get('printout[mode]');
 		$prefix = $this->response->html->request()->get('filter[todos][prefix]');
+		if(!is_array($prefix)) {
+			$prefix = array();
+		}
+		
 		$interval = $this->response->html->request()->get('filter[todos][interval]');
 
 		if(isset($this->filter['group']) && $this->filter['group'] === 'bezeichner' ) {
@@ -1889,7 +1820,7 @@ var $__attribs;
 		$jsparams = substr($jsparams,0, strrpos($jsparams, ","))."\n";
 		$jsparams .= '];'."\n";
 		$jsparams .= 'var printoutmode = \''.$mode.'\';'."\n";
-		$jsparams .= 'var todoprefix = \''.$prefix.'\';'."\n";
+		$jsparams .= 'var todoprefix = \''.implode(',',$prefix).'\';'."\n";
 		$jsparams .= 'var todointerval = \''.$interval.'\';'."\n";
 		return $jsparams;
 	}
