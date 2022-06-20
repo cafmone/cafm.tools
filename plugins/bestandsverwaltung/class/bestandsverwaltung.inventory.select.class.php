@@ -251,12 +251,14 @@ var $__attribs;
 		$t->remove('filter_bezeichner_not');
 		
 		// todos_or
-		$box = $t->get_elements('filter_prefix');
-		$not = $t->get_elements('filter_prefix_or');
-		$box->add('<div class="btn btn-default" style="position:absolute;top:0;left:0;width:180px;">'.$this->lang['label_todo_obligations'].'</div>');
-		$box->add($not);
-		#$box->add('<div class="floatbreaker">&#160;</div>');
-		$t->remove('filter_prefix_or');
+		// handle CAFM.ONE connected
+		if(in_array('cafm.one', $this->plugins)) {
+			$box = $t->get_elements('filter_prefix');
+			$not = $t->get_elements('filter_prefix_or');
+			$box->add('<div class="btn btn-default" style="position:absolute;top:0;left:0;width:180px;">'.$this->lang['label_todo_obligations'].'</div>');
+			$box->add($not);
+			$t->remove('filter_prefix_or');
+		}
 
 		// handle custom filter tab
 		$custom_empty = $t->get_elements('cfilter_0');
