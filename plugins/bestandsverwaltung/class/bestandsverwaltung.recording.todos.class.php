@@ -349,7 +349,7 @@ var $lang = array();
 						$url .= '?index_action=plugin';
 						$url .= '&index_action_plugin=bestandsverwaltung';
 						$url .= '&'.$this->controller->controller->actions_name.'=download';
-						$url .= '&path=/bestand/devices/'.$id.'/';
+						$url .= '&path=/devices/'.$id.'/';
 
 						$pdf->setColor('text',0,0,255);
 						$pdf->setFont('','U');
