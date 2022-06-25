@@ -52,28 +52,25 @@
 	<div class="popunderbox" style="width:480px;min-height:280px;position:relative;" id="bezeichnerbox">&#160;</div>
 </div>
 
-<div id="todoswrapper" style="width:580px;display:none;position:fixed;top:15;left:15px;">
-<div id="todospicker" class="function-box panel panel-default noprint" style="height:450px;">
-	<div class="panel-heading"
-			onclick="MousePosition.init();"
+<div id="todoswrapper" style="width:680px;display:none;">
+<div id="todospicker" class="function-box card noprint" style="width:680px;height:450px;position:absolute;left:0;top:0;">
+	<div class="card-header"
 			onmousedown="Drag.init(document.getElementById('todoswrapper'));"
 			onmouseup="document.getElementById('todoswrapper').onmousedown = null;">
 		<div class="functionbox-capation">
-			<h3 class="panel-title">
 				<span id="todos_title">&#160;</span>
 				<button 
 					type="button" 
 					class="btn btn-xs btn-default shut float-right"
-					 onclick="document.getElementById('todoswrapper').style.display = 'none';">x</button>
+					 onclick="document.getElementById('todoswrapper').style.display = 'none';">&times;</button>
 				<button 
 					typ="button" 
 					class="btn btn-xs btn-default resize float-right" 
 					style="margin-right:3px;" 
 					onclick="phppublisher.editor.fullscreen('','todoswrapper','todospicker');">+</button>
-			</h3>
 		</div>
 	</div>
-	<div id="todos_canvas" class="canvas" style="overflow:auto;padding:15px;"></div>
+	<div id="todos_canvas" class="card-body" style="overflow:auto;padding:15px;"></div>
 </div>
 </div>
 

@@ -22,6 +22,13 @@ class cafm_one_export
 */
 var $actions_name;
 /**
+*  date as formated string
+*  @access public
+*  @var string
+*/
+var $date_format = "Y-m-d H:i";
+
+/**
 * message param
 * @access public
 * @var string
@@ -805,6 +812,13 @@ $result = array();
 								$pdf->SetFont('', 'B', 10);
 								$pdf->Write(5, $todos['label']."\n\n");
 							}
+
+							// timestamp
+							if(isset($todos['time'])){
+								$pdf->SetFont('', '', 8);
+								$pdf->Write(4, 'Last Update '.date($this->date_format, $todos['time'])."\n\n");
+							}
+
 							// copyright
 							if(isset($todos['copyright']) && $todos['copyright'] !== ''){
 								$pdf->setX(PDF_MARGIN_LEFT+3);

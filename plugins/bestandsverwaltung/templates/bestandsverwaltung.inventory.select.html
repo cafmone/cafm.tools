@@ -1,139 +1,5 @@
 <script src="{jsurl}jquery-ui.min.js" type="text/javascript"></script>
 <script language="JavaScript" type="text/javascript">
-/*
-var updatepicker = {
-	id : '',
-	init : function( element, id ) {
-		this.id = id;
-		size = WindowSize();
-		document.getElementById('update_canvas').innerHTML = '<img src="{cssurl}/loading.gif" style="position:absolute;top:150px;left:250px;">';
-
-		document.getElementById('update_canvas').style.height = '92%';
-		document.getElementById(element).position = 'fixed';
-		if(document.getElementById(element).style.left == 0) {
-			document.getElementById(element).style.left = '0px';
-			document.getElementById(element).style.top = '0px';
-		}
-		document.getElementById(element).style.display = 'block';
-		document.getElementById(element).style.zIndex = '1000';
-
-		document.getElementById('update_title').innerHTML = 'Update '+id;
-
-		params = "&plugin=bestandsverwaltung&bestand_action=update&id="+id,
-		ajax(params, updatepickerCallback);
-	},
-	print : function(response) {
-		document.getElementById('update_canvas').innerHTML = response;
-		this.handlers();
-	},
-	update : function( element ) {
-		document.getElementById('update_canvas').innerHTML = '<img src="{cssurl}/loading.gif" style="position:absolute;top:150px;left:300px;">';
-		params = '';
-		for (i = 0; i < element.length ;i++) {
-			if(
-				element.elements[i].name && 
-				element.elements[i].name != 'response[cancel]' && 
-				element.elements[i].name != 'bestand_recording_action[copy]' && 
-				element.elements[i].name != 'bestand_recording_action[todos][pdf]' && 
-				element.elements[i].name != 'bestand_recording_action[todos][csv]' && 
-				element.elements[i].name != 'bestand_recording_action[todos][doc]'
-			) {
-				params += "&"+element.elements[i].name+"="+element.elements[i].value;
-			}
-		}
-		ajax(params, updatepickerCallback);
-	},
-	handlers : function() {
-		// change download form 
-		$(".Filedata").change(function(data){ 
-			$("#phpcommander_upload_form").submit( function(data) {
-				var submittingForm = $(this);
-				var frameName	  = ("upload"+(new Date()).getTime());
-				var uploadInput	= $(".Filedata");
-				var uploadFrame	= $("<iframe src=\"#\" name=\""+frameName+"\">");
-				uploadFrame.css("display", "none");
-				uploadFrame.load(function(data){
-					body = parent.frames[frameName].document.getElementsByTagName('body')[0];
-					setTimeout(function(){
-						uploadFrame.remove();
-					},100);
-					document.getElementById('update_canvas').innerHTML = body.innerHTML;
-					uploadInput.val('');
-					updatepicker.handlers();
-				});
-				$("body:first").append(uploadFrame);
-				submittingForm.attr("target", frameName);
-			}).submit();
-		});
-		// redirect update form
-		document.getElementById('insert_form').onsubmit = function() { updatepicker.update(this); return false; };
-		// redirect file delete function
-		document.getElementById('FileBrowserDel').onclick = function() {
-			form = document.forms['reloadform'];
-			form.elements['pc[folders_action]'].value = 'delete';
-			document.getElementById('identifier').value = document.getElementById('file').value;
-			updatepicker.update(form);
-			return false;
-		};
-		// redirect file rename function
-		document.getElementById('FileBrowserRename').onclick = function() {
-			form = document.forms['reloadform'];
-			file    = document.getElementById('new_name').value;
-			if(	file != '' ) {
-				form.elements['pc[folders_action]'].value = 'rename';
-				document.getElementById('identifier').value = document.getElementById('file').value;
-				form.elements['new[0]'].value = file;
-				updatepicker.update(form);
-			}
-			return false;
-		};
-		// change url for download
-		document.getElementById('url').value = '{href_download}'+this.id+'/';
-		// change target for up link 
-		document.getElementById('insertbottom').setAttribute('href', '#recording_insert_top');
-		// disable sort
-		ths = document.getElementById('FileBrowserTable').getElementsByTagName('th');
-		for (i=0;i<ths.length;i++) {
-			if(ths[i].getElementsByTagName('a')[0]) {
-				ths[i].getElementsByTagName('a')[0].onclick = function() {
-					return false;
-				};
-			}
-		}
-
-	},
-	close : function(element) {
-		document.getElementById('update_canvas').innerHTML = '';
-		document.getElementById(element).style.display = 'none';
-	}
-}
-*/
-
-/*
-var changelogpicker = {
-	init : function( id ) {
-		document.getElementById('changelog_canvas').innerHTML = '<div style="text-align:center;"><img src="{cssurl}/loading.gif" style="margin:150px 0 0 0;"></div>';
-
-		doc = 'changelogwrapper';
-		if(document.getElementById(doc).style.left == 0) {
-			document.getElementById(doc).style.left = '0px';
-			document.getElementById(doc).style.top = '37px';
-		}
-		document.getElementById(doc).style.display = 'block';
-		document.getElementById(doc).style.position = 'fixed';
-		document.getElementById(doc).style.zIndex = '1000';
-		document.getElementById('changelog_canvas').style.height = '92%';
-
-		document.getElementById('changelog_title').innerHTML = 'Changelog '+id;
-		params = "&plugin=bestandsverwaltung&bestand_action=changelog&id="+id;
-		ajax(params, 'changelogpickerCallback');
-	},
-	print : function(response) {
-		document.getElementById('changelog_canvas').innerHTML = response;
-	}
-}
-*/
-
 var copy = {
 	confirm : function( element, id ) {
 		phppublisher.modal.width = '280px';
@@ -319,11 +185,6 @@ var marker = {
 	}
 }
 
-/*
-function updatepickerCallback(response) {
-	updatepicker.print(response);
-}
-*/
 function todospickerCallback(response) {
 	todospicker.print(response);
 }
@@ -574,58 +435,6 @@ function doExport(form) {
 	</div>
 </div>
 
-<!--
-<div id="updatewrapper" style="width:580px;display:none;position:fixed;top:0px;left:0px;">
-<div id="updatepicker" class="function-box panel panel-default noprint" style="width:580px;height:550px;position:absolute;left:0;top:0;">
-	<div id="updatehead" class="panel-heading" 
-			onmousedown="Drag.init(document.getElementById('updatewrapper'));"
-			onmouseup="document.getElementById('updatewrapper').onmousedown = null;">
-		<div class="functionbox-capation">
-			<h3 class="panel-title">
-				<span id="update_title">&#160;</span>
-				<button 
-					type="button" 
-					class="btn btn-xs btn-default float-right shut" 
-					onclick="updatepicker.close('updatewrapper');">x</button>
-				<button 
-					typ="button" 
-					class="btn btn-xs btn-default resize float-right" 
-					style="margin-right:3px;" 
-					onclick="phppublisher.editor.fullscreen('','updatewrapper','updatepicker');">+</button>
-			</h3>
-		</div>
-	</div>
-		<div id="update_canvas" class="canvas" style="overflow:auto;padding:15px 15px 15px 15px;"></div>
-</div>
-</div>
-//-->
-
-<!--
-<div id="changelogwrapper" style="width:580px;display:none;">
-<div id="changelogpicker" class="function-box panel panel-default noprint" style="width:580px;height:450px;position:absolute;left:0;top:0;">
-	<div class="panel-heading"
-			onmousedown="Drag.init(document.getElementById('changelogwrapper'));"
-			onmouseup="document.getElementById('changelogwrapper').onmousedown = null;">
-		<div class="functionbox-capation">
-			<h3 class="panel-title">
-				<span id="changelog_title">&#160;</span>
-				<button 
-					type="button" 
-					class="btn btn-xs btn-default shut float-right"
-					 onclick="document.getElementById('changelogwrapper').style.display = 'none';">x</button>
-				<button 
-					typ="button" 
-					class="btn btn-xs btn-default resize float-right" 
-					style="margin-right:3px;" 
-					onclick="phppublisher.editor.fullscreen('','changelogwrapper','changelogpicker');">+</button>
-			</h3>
-		</div>
-	</div>
-	<div id="changelog_canvas" class="canvas" style="height:350px;overflow:auto;"></div>
-</div>
-</div>
-//-->
-
 <div id="raumbuchwrapper" style="width:580px;display:none;">
 <div id="raumbuchpicker" class="function-box card noprint" style="width:580px;height:450px;position:absolute;left:0;top:0;">
 	<div class="card-header"
@@ -673,25 +482,6 @@ function doExport(form) {
 
 <script type="text/javascript">
 {jsparams}
-
-/*
-var todosfilter = {
-	target : document.getElementById('filter_todos_interval'),
-	init : function( element ) {
-		this.target.innerHTML = '<div style="text-align:center;margin-right:120px;"><img src="{cssurl}/loading.gif" style="width: 20px; height: 20px; margin:15px 0 0 30px;"></div>';
-		prefix = element.options[element.selectedIndex].value;
-		if(prefix != '') {
-			params = "&plugin=cafm.one&cafm_one_action=interval&prefix="+prefix;
-			ajax(params, 'todosfilterCallback');
-		} else {
-			this.target.innerHTML = '';
-		}
-	},
-	print : function(response) {
-		this.target.innerHTML = response;
-	}
-}
-*/
 
 var details = {
 	count : document.getElementById('count'),

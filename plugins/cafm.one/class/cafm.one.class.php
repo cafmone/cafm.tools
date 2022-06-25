@@ -11,6 +11,14 @@
 
 class cafm_one
 {
+/**
+*  date as formated string
+*  @access public
+*  @var string
+*/
+var $date_format = "Y-m-d H:i";
+
+
 	//--------------------------------------------
 	/**
 	 * Constructor
@@ -338,14 +346,18 @@ class cafm_one
 			$str = '';
 			$i = 0;
 			foreach($result as $todos) {
+
 				// handle prefix label
 				#if($i === 0) {
 				#	$i = 1;
 				#} else {
 					$str .= '<br>';
 				#}
-				if(isset($todos['label']) && $showlabel === true){
+				if(isset($todos['label']) && $showlabel === true) {
 					$str .= '<h3>'.$todos['label'].'</h3>'."\n";
+					if(isset($todos['time']) && $todos['time'] !== '') {
+						$str .= '<small>Last Update '.date($this->date_format, $todos['time']).'</small>'."\n";
+					}
 				}
 				if(isset($todos['copyright']) && $todos['copyright'] !== ''){
 					$str .= '<div class="copyright">'.$todos['copyright'].'</div>'."\n";

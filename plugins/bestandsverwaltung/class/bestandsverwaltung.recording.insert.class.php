@@ -98,8 +98,8 @@ var $__delimiter = '[~]';
 	function __construct($controller) {
 		$this->db         = $controller->db;
 		$this->file       = $controller->file;
-		#$this->response   = $controller->response->response();
 		$this->response   = $controller->response;
+		$this->user       = $controller->user;
 		$this->controller = $controller;
 		$this->datadir    = PROFILESDIR.'/bestand/devices/';
 		$this->fields     = array();
@@ -733,7 +733,7 @@ var $__delimiter = '[~]';
 		// handle plugins
 		if(in_array('cafm.one', $this->plugins)) {
 			require_once(CLASSDIR.'plugins/cafm.one/class/cafm.one.class.php');
-			$this->taetigkeiten = new cafm_one($this->file, $this->response);
+			$this->taetigkeiten = new cafm_one($this->file, $this->response, $this->db, $this->user);
 			$fields = array();
 			if(isset($this->fields['TODO'])) {
 				$fields = $this->fields['TODO'];

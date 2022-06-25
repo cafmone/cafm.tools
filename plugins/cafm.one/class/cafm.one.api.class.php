@@ -190,12 +190,7 @@ var $lang = array(
 					echo ' </div>';
 					echo ' <div class="float-right">';
 					echo '  <div class="input-group">';
-					echo '   <div class="input-group-prepend">';
-					echo '    <input title="Download as PDF document" type="submit" name="bestand_recording_action[todos][pdf]" value="PDF" class="btn btn-default">';
-					echo '   </div>';
-					echo '   <div class="input-group-append">';
-					echo '    <input title="Download as Word document" type="submit" name="bestand_recording_action[todos][doc]" value="DOC" class="btn btn-default">';
-					echo '   </div>';
+					echo '   <input title="Download as PDF document" type="submit" name="bestand_recording_action[todos][pdf]" value="PDF" class="btn btn-default">';
 					echo '  </div>';
 					echo ' </div>';
 					echo '</div>';
@@ -298,12 +293,7 @@ var $lang = array(
 					echo ' </div>';
 					echo ' <div class="float-right">';
 					echo '  <div class="input-group">';
-					echo '   <div class="input-group-prepend">';
-					echo '    <input title="Download as PDF document" type="submit" name="bestand_recording_action[todos][pdf]" value="PDF" class="btn btn-default">';
-					echo '   </div>';
-					echo '   <div class="input-group-append">';
-					echo '    <input title="Download as Word document" type="submit" name="bestand_recording_action[todos][doc]" value="DOC" class="btn btn-default">';
-					echo '   </div>';
+					echo '   <input title="Download as PDF document" type="submit" name="bestand_recording_action[todos][pdf]" value="PDF" class="btn btn-default">';
 					echo '  </div>';
 					echo ' </div>';
 					echo '</div>';
