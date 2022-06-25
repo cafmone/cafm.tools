@@ -183,6 +183,9 @@ var $debug = false;
 						case 'text':
 							$tmp['length'] = NULL;
 						break;
+						case 'int':
+							$tmp['length'] = 9;
+						break;
 						default: 
 							$tmp['length'] = intval(preg_replace('~(.*)\((.*)\)(.*)~i', '$2', $column['Type']));
 						break;
