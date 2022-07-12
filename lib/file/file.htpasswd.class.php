@@ -120,7 +120,7 @@ var $lang = array(
 			if(is_array($old)) {
 				foreach($old as $key => $value) {
 	 				if($key === $name) {
-	 					fputs($handle, $name.':'.crypt($password)."\n");
+	 					fputs($handle, $name.':'.crypt($password, base64_encode($password))."\n");
 						$set = true;
 					} else {
 						fputs($handle, "$key:$value");
@@ -128,7 +128,7 @@ var $lang = array(
 				}
 			}
 			if($set === false) {
-				fputs($handle, $name.':'.crypt($password)."\n");
+				fputs($handle, $name.':'.crypt($password, base64_encode($password))."\n");
 			}
  		}
 		// remove user from password file

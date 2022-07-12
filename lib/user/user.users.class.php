@@ -384,7 +384,7 @@ var $lang = array(
 						isset($this->settings['user']['authenticate']) && 
 						$this->settings['user']['authenticate'] === 'db'
 					) {
-						$ini['password'] = crypt($ini['password']);
+						$ini['password'] = crypt($ini['password'], base64_encode($ini['password']));
 					}
 					if($error === '') {
 						$error = $this->query->insert('users', $ini);
@@ -482,7 +482,7 @@ var $lang = array(
 						isset($this->settings['user']['authenticate']) && 
 						$this->settings['user']['authenticate'] === 'db'
 					) {
-						$ini['password'] = crypt($ini['password']);
+						$ini['password'] = crypt($ini['password'], base64_encode($ini['password']));
 					} else {
 						unset($ini['password']);
 					}
