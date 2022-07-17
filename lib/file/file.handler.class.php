@@ -13,6 +13,7 @@ class file_handler
 {
 /**
 *  date as formated string
+*  use "U" for unix timestamp
 *  @access public
 *  @var string
 */
@@ -71,6 +72,10 @@ var $arExcludedFiles = array('.', '..');
 	function __construct() {
 		// solve basename problem
 		setlocale(LC_ALL, 'en_US.UTF8');
+		// grrr, find Windos 
+		if (strtoupper(substr(PHP_OS, 0, 3)) === 'WIN') {
+			$this->WIN = true;
+		}
 	}
 
 	//-------------------------------------------------------
@@ -280,16 +285,21 @@ var $arExcludedFiles = array('.', '..');
 	//-------------------------------------------------------
 	function get_folderinfo($path) {
 		if(file_exists($path)) {
-			$ar["path"]        = $path;
-			$ar["name"]        = basename($path);
+			$ar['path'] = $path;
+			$ar['name'] = basename($path);
 			if(isset($this->date_format)) {
 				$ar['date'] = date($this->date_format, filemtime ($path));
 			} else {
 				$ar['date'] = filemtime ($path);
 			}
 			$ar["permissions"] = $this->get_permissions_octal($path);
-			$ar["read"]        = is_executable($path);
-			$ar["write"]       = is_writeable($path);
+			if(!isset($this->WIN)) {
+				$ar['read']  = is_executable($path);
+				$ar['write'] = is_writable($path);
+			} else {
+				$ar['read']  = true;
+				$ar['write'] = true;
+			}
 			return $ar;
 		}
 	}
