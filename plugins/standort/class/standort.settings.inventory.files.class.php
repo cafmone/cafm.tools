@@ -80,8 +80,6 @@ var $datadir;
 
 		## TODO path
 		$controller = $pc->controller(array($this->datadir.$this->id));
-		
-		var_dump($this->datadir);
 
 		$action     = $pc->html->request()->get($pc->__prefix.'['.$pc->actions_name.']');
 		$script     = '';
