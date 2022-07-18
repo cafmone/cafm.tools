@@ -371,7 +371,7 @@ var $lang = array(
 			$controller->actions_name = $this->actions_name;
 			$controller->tpldir = $this->tpldir;
 			$controller->lang  = $this->lang;
-			$controller->datadir = PROFILESDIR.'/bestand/devices/';
+			$controller->datadir = PROFILESDIR.'/webdav/bestand/devices/';
 			#$controller->identifier_name = $this->identifier_name;
 			#$data = $controller->action();
 			return $controller;

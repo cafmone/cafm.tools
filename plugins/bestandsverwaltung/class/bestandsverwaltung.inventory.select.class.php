@@ -558,7 +558,7 @@ var $__attribs;
 						// handle files
 						$data .= '<br>';
 
-						$path = PROFILESDIR.'/bestand/devices/'.$id['id'];
+						$path = PROFILESDIR.'/webdav/bestand/devices/'.$id['id'];
 						$f = $this->file->get_files($path);
 						foreach($f as $file) {
 

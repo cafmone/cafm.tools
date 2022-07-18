@@ -76,7 +76,7 @@ var $lang = array(
 		$basedir  = $settings['config']['basedir'];
 		$errors   = array();
 
-		$folders = array('standort','standort/templates','standort/lang','standort/devices','import','import/standort');
+		$folders = array('webdav','webdav/standort','webdav/standort/templates','webdav/standort/devices','import','import/standort');
 		foreach($folders as $v) {
 			$target = $this->profilesdir.'/'.$v;
 			if(!$this->file->exists($target)) {
@@ -90,7 +90,7 @@ var $lang = array(
 		if(count($errors) < 1) {
 			$files = $this->file->get_files(CLASSDIR.'plugins/standort/setup/templates');
 			if(is_array($files)) {
-				$target = $this->profilesdir.'/standort/templates/';
+				$target = $this->profilesdir.'/webdav/standort/templates/';
 				foreach($files as $f) {
 					if(!$this->file->exists($target.$f['name'])) {
 						$error = $this->file->copy($f['path'],$target.$f['name']);

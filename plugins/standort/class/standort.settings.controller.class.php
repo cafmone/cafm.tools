@@ -127,7 +127,7 @@ var $tpldir;
 		$this->settings = $controller->settings;
 		$this->classdir = $controller->classdir;
 		$this->profilesdir = $controller->profilesdir;
-		$this->datadir  = $this->profilesdir.'/standort/devices/';
+		$this->datadir  = $this->profilesdir.'/webdav/standort/devices/';
 		$this->lang = $this->user->translate($this->lang, CLASSDIR.'plugins/standort/lang/', 'standort.settings.controller.ini');
 		require_once(CLASSDIR.'plugins/standort/class/standort.class.php');
 		$this->standort = new standort($this->db, $this->file);
@@ -399,7 +399,7 @@ var $tpldir;
 	function download() {
 		require_once(CLASSDIR.'/lib/file/file.mime.class.php');
 		$path = $this->response->html->request()->get('path');
-		$path = $this->profilesdir.''.$path;
+		$path = $this->profilesdir.'/webdav/standort/'.$path;
 		$file = $this->file->get_fileinfo($path);
 		$mime = detect_mime($file['path']);
 

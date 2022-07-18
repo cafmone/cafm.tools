@@ -79,7 +79,7 @@ var $lang = array(
 		$basedir  = $settings['config']['basedir'];
 		$errors   = array();
 
-		$folders = array('bestand','import','bestand/templates','bestand/devices','bestand/raumbuch' );
+		$folders = array('webdav', 'webdav/bestand','webdav/bestand/templates','webdav/bestand/devices' );
 		foreach($folders as $v) {
 			$target = $this->profilesdir.'/'.$v;
 			if(!$this->file->exists($target)) {
@@ -93,7 +93,7 @@ var $lang = array(
 		if(count($errors) < 1) {
 			$files = $this->file->get_files(CLASSDIR.'plugins/bestandsverwaltung/setup/templates');
 			if(is_array($files)) {
-				$target = $this->profilesdir.'/bestand/templates/';
+				$target = $this->profilesdir.'/webdav/bestand/templates/';
 				foreach($files as $f) {
 					if(!$this->file->exists($target.$f['name'])) {
 						$error = $this->file->copy($f['path'],$target.$f['name']);

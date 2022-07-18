@@ -101,7 +101,7 @@ var $__delimiter = '[~]';
 		$this->response   = $controller->response;
 		$this->user       = $controller->user;
 		$this->controller = $controller;
-		$this->datadir    = PROFILESDIR.'/bestand/devices/';
+		$this->datadir    = PROFILESDIR.'/webdav/bestand/devices/';
 		$this->fields     = array();
 
 		$id = $this->response->html->request()->get('id');

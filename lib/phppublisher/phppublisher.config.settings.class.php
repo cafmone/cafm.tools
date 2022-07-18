@@ -96,7 +96,7 @@ var $lang = array(
 
 		$this->folders['custom']   = array('css', 'images', 'js', 'login');
 		$this->folders['static']   = array('fonts');
-		$this->folders['profiles'] = array('backup','export','import','tmp');
+		$this->folders['profiles'] = array('backup','export','import','tmp','webdav');
 	}
 
 	//--------------------------------------------

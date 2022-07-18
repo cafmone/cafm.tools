@@ -103,7 +103,7 @@ var $lang = array();
 				$error = $this->db->insert('changelog',$c);
 
 				// handle files
-				$path = $this->profilesdir.'/bestand/devices/';
+				$path = $this->profilesdir.'/webdav/bestand/devices/';
 				if($this->file->exists($path.$oldid)) {
 					$error = $this->file->copy($path.$oldid, $path.$newid);
 				}

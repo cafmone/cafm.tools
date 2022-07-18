@@ -60,7 +60,7 @@ var $lang = array(
 		$this->response = $controller->response;
 		$this->user = $controller->user;
 		$this->db = $controller->db;
-		$this->datadir = $controller->profilesdir.'bestand/templates/';
+		$this->datadir = $controller->profilesdir.'/webdav/bestand/templates/';
 		$this->controller = $controller;
 		$this->ini = $controller->ini;
 	}

@@ -119,8 +119,8 @@ var $lang = array();
 				$message = array();
 				foreach($request as $key => $id) {
 					// remove folder
-					if($this->file->exists(PROFILESDIR.'/bestand/devices/'.$id)) {
-						$error = $this->file->remove(PROFILESDIR.'/bestand/devices/'.$id, true);
+					if($this->file->exists(PROFILESDIR.'/webdav/bestand/devices/'.$id)) {
+						$error = $this->file->remove(PROFILESDIR.'/webdav/bestand/devices/'.$id, true);
 					} else {
 						$error = '';
 					}

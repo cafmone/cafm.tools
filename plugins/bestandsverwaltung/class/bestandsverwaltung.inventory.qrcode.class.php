@@ -61,7 +61,7 @@ var $lang = array(
 		$this->user = $controller->user;
 		$this->db = $controller->db;
 		$this->controller = $controller;
-		$this->datadir = $controller->profilesdir.'bestand/templates/';
+		$this->datadir = $controller->profilesdir.'/webdav/bestand/templates/';
 		$this->settings = $controller->profilesdir.'bestandsverwaltung.qrcode.ini';
 		$this->ini = $this->file->get_ini( $this->settings, true, true );
 	}

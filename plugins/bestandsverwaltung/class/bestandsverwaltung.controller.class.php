@@ -256,7 +256,7 @@ var $tpldir;
 	function __download() {
 		require_once(CLASSDIR.'/lib/file/file.mime.class.php');
 		$path = $this->response->html->request()->get('path');
-		$path = $this->profilesdir.'bestand/'.$path;
+		$path = $this->profilesdir.'/webdav/bestand/'.$path;
 		$file = $this->file->get_fileinfo($path);
 		$mime = detect_mime($file['path']);
 

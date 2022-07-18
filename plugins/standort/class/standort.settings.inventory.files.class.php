@@ -80,10 +80,12 @@ var $datadir;
 
 		## TODO path
 		$controller = $pc->controller(array($this->datadir.$this->id));
+		
+		var_dump($this->datadir);
 
 		$action     = $pc->html->request()->get($pc->__prefix.'['.$pc->actions_name.']');
 		$script     = '';
-		$url        = $this->response->get_url($this->controller->controller->actions_name, 'download').'&path=/standort/devices/'.$this->id;
+		$url        = $this->response->get_url($this->controller->controller->actions_name, 'download').'&path=devices/'.$this->id;
 		if($controller->dir !== '..' && $controller->dir !== '') {
 			$url  = $url.'/'.$controller->dir;	
 		} 

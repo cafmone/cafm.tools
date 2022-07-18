@@ -340,7 +340,7 @@ var $lang = array();
 
 				// Files
 				if($id !== '') {
-					$path = $this->profilesdir.'/bestand/devices/'.$id;
+					$path = $this->profilesdir.'/webdav/bestand/devices/'.$id;
 					$f = $this->file->get_files($path);
 					if(is_array($f)) {
 						$url  = $_SERVER['REQUEST_SCHEME'].'://';
