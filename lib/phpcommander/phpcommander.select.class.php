@@ -132,7 +132,7 @@ class phpcommander_select
 				if ($this->__pc->allow['download'] !== true) {
 					$link = $this->__pc->html->div();
 					$link->css = 'file';
-					$link->add($label);
+					$link->add('<span class="icon icon-file"></span>'.$label);
 					$link->title = $files[$i]['name'];
 				}
 

@@ -122,7 +122,7 @@ var $tpldir = '';
 							$form->set_error('login', 'unknown' );
 							$_REQUEST['user_login_msg'] = 'Login or Password unknown';
 							// slow down brute force
-							sleep(5);
+							sleep(3);
 						}
 					}
 				}
