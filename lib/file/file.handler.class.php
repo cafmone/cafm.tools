@@ -61,6 +61,12 @@ var $lang = array(
 *  @var array
 */
 var $arExcludedFiles = array('.', '..');
+/**
+*  Detect Windows
+*  @access protected
+*  @var bool
+*/
+protected $WIN;
 
 	//--------------------------------------------
 	/**
@@ -405,6 +411,21 @@ var $arExcludedFiles = array('.', '..');
 	//-------------------------------------------------------
 	function is_writeable($path) {
 		return is_writable($path);
+	}
+	
+	//-------------------------------------------------------
+	/**
+	 * Check system is Windows
+	 *
+	 * @return bool
+	 */
+	//-------------------------------------------------------
+	function is_win() {
+		if(isset($this->WIN)) {
+			return true;
+		} else {
+			return false;
+		}
 	}
 
 	//-------------------------------------------------------
