@@ -214,7 +214,9 @@ var $tpldir = '';
 			$ini = $this->file->get_ini( $this->settings );
 
 			$auth[] = array('session', $this->lang['authorize_session']);
-			$auth[] = array('httpd', $this->lang['authorize_httpd']);
+			if(!$this->file->is_win()) {
+				$auth[] = array('httpd', $this->lang['authorize_httpd']);
+			}
 			$auth[] = array('ldap', $this->lang['authorize_ldap']);
 
 			$d['user_authorize']['label']                       = $this->lang['lang_authorize'];

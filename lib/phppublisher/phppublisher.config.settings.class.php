@@ -569,6 +569,10 @@ var $lang = array(
 		if(isset($ini['config']['link_virtual'])){
 			$d['link_virtual']['object']['attrib']['checked'] = true;
 		}
+		// Handle Windows
+		if($this->file->is_win()) {
+			$d['link_virtual']['object']['attrib']['disabled'] = true;			
+		}
 
 		// FOLDERS 
 		// customizeable
@@ -652,3 +656,4 @@ var $lang = array(
 
 }
 ?>
+
