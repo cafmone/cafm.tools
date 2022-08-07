@@ -1,5 +1,7 @@
-To run CAFM.TOOLS on Windows, use [XAMPP](https://www.apachefriends.org/de/index.html)    
-This **README** expectes a portable version like [XAMPP Poratble 8.0.19](https://sourceforge.net/projects/xampp/files/XAMPP%20Windows/8.0.19/xampp-portable-windows-x64-8.0.19-0-VS16.zip/download) on an USB Device  
+To run CAFM.TOOLS on Windows, use [XAMPP](https://www.apachefriends.org/de/index.html)  
+  
+  
+This **README** expectes a portable version for example [XAMPP Poratble 8.0.19](https://sourceforge.net/projects/xampp/files/XAMPP%20Windows/8.0.19/xampp-portable-windows-x64-8.0.19-0-VS16.zip/download) on an USB Device  
   
 1. [Download](https://github.com/cafmone/cafm.tools/archive/refs/heads/main.zip) CAFM.TOOLS and extract zip content to xampp/ directory   
 2. Browse xampp/htpdocs directory  
