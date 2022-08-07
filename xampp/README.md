@@ -3,9 +3,9 @@ To run CAFM.TOOLS on Windows, use [XAMPP](https://www.apachefriends.org/de/index
   
 This **README** expectes a portable version (example: [XAMPP Poratble 8.0.19](https://sourceforge.net/projects/xampp/files/XAMPP%20Windows/8.0.19/xampp-portable-windows-x64-8.0.19-0-VS16.zip/download)) running on an USB Drive  
   
-1. Download [CAFM.TOOLS](https://github.com/cafmone/cafm.tools/archive/refs/heads/main.zip) and extract zip content to \[USB]/xampp/ directory   
-2. Browse xampp/htpdocs directory  
-3. create file boostrap.php  
+1. Download [CAFM.TOOLS](https://github.com/cafmone/cafm.tools/archive/refs/heads/main.zip) and extract ZIP to \[USB]/xampp/ directory   
+2. Navigate to \[USB]/xampp/htpdocs directory  
+3. Create file boostrap.php  
 ```
 <?php
 /** 
@@ -23,7 +23,7 @@ define("CLASSDIR", "/xampp/cafm.tools-main/");
 define("PROFILESDIR", "/xampp/cafm.tools/xampp/profiles/");
 ?>
 ```
-4. create file index.php  
+4. Create file index.php  
 ```
 <?php
 require_once('bootstrap.php');
