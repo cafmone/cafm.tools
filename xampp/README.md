@@ -1,5 +1,6 @@
-[XAMPP Homepage](https://www.apachefriends.org/de/index.html)  
-[XAMPP Poratble 8.0.19](https://sourceforge.net/projects/xampp/files/XAMPP%20Windows/8.0.19/xampp-portable-windows-x64-8.0.19-0-VS16.zip/download)  
+Who must run CAFM.TOOLS on Windows, can run it on [XAMPP](https://www.apachefriends.org/de/index.html)  
+This README expectes a portable version like [XAMPP Poratble 8.0.19](https://sourceforge.net/projects/xampp/files/XAMPP%20Windows/8.0.19/xampp-portable-windows-x64-8.0.19-0-VS16.zip/download) on an USB Device  
+[download](https://github.com/cafmone/cafm.tools/archive/refs/heads/main.zip) CAFM.TOOLS and extract zip content to xampp/   
   
   
 boostrap.php  
