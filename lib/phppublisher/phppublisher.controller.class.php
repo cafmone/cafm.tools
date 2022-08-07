@@ -120,6 +120,7 @@ var $lang = array(
 				$continue = false;
 			}
 			// handle folders
+			### TODO check folder login is set and exists
 			if(
 				!isset($GLOBALS['settings']['folders']['css']) &&
 				$continue === true
