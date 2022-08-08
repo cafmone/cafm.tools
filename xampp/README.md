@@ -34,21 +34,21 @@ echo $controller->controller()->action()->get_string();
 ```
 5. Start apache and database via XAMPP control interface  
   
-![XAMPP Control Panel](https://raw.githubusercontent.com/cafmone/cafm.tools/main/xampp/howto/1.xampp.control.png)
+![XAMPP Control Panel](https://raw.githubusercontent.com/cafmone/cafm.tools/main/xampp/howto/1.xampp.control.png)  
   
 6. Start [phpMyAdmin](http://127.0.0.1/phpmyadmin) to create new database  
   
-![phpMyAdmin](https://raw.githubusercontent.com/cafmone/cafm.tools/main/xampp/howto/2.phpmyadmin.png)
+![phpMyAdmin](https://raw.githubusercontent.com/cafmone/cafm.tools/main/xampp/howto/2.phpmyadmin.png)  
   
 7. Open [CAFM.TOOLS](http://127.0.0.1/index.php) and save settings  
   
-![CAFM.TOOLS Settings](https://raw.githubusercontent.com/cafmone/cafm.tools/main/xampp/howto/3.cafm.tools.settings.png)
+![CAFM.TOOLS Settings](https://raw.githubusercontent.com/cafmone/cafm.tools/main/xampp/howto/3.cafm.tools.settings.png)  
   
 8. Select and start plugin  
   
-![CAFM.TOOLS Plugins](https://raw.githubusercontent.com/cafmone/cafm.tools/main/xampp/howto/4.cafm.tools.plugins.png)
+![CAFM.TOOLS Plugins](https://raw.githubusercontent.com/cafmone/cafm.tools/main/xampp/howto/4.cafm.tools.plugins.png)  
 9. Configure plugin  
   
-![CAFM.TOOLS Plugin](https://raw.githubusercontent.com/cafmone/cafm.tools/main/xampp/howto/5.cafm.tools.plugin.png)
+![CAFM.TOOLS Plugin](https://raw.githubusercontent.com/cafmone/cafm.tools/main/xampp/howto/5.cafm.tools.plugin.png)  
 
 
