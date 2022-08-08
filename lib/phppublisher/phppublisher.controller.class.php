@@ -97,6 +97,7 @@ var $lang = array(
 	 */
 	//--------------------------------------------
 	function setup() {
+		$continue = true;
 		if($this->user->is_admin()) {
 			$continue = true;
 			// handle folder permissions
@@ -122,11 +123,17 @@ var $lang = array(
 				$continue = false;
 			}
 			// handle folders
-			### TODO check folder login is set and exists
 			if(
-				!isset($GLOBALS['settings']['folders']['css']) &&
+				!isset($GLOBALS['settings']['folders']['login']) &&
 				$continue === true
 			) {
+				$_REQUEST[$this->actions_name] = 'config';
+				$_REQUEST['config_action'] = 'settings';
+				$_REQUEST['config_msg'] = 'Please configure folders';
+				$this->action = 'config';
+				$continue = false;
+			}
+			else if($this->file->exists($GLOBALS['settings']['config']['basedir'].$GLOBALS['settings']['folders']['login']) === false) {
 				$_REQUEST[$this->actions_name] = 'config';
 				$_REQUEST['config_action'] = 'settings';
 				$_REQUEST['config_msg'] = 'Please configure folders';
@@ -251,6 +258,7 @@ var $lang = array(
 				$continue = true;
 			}
 		}
+		return $continue;
 	}
 
 	//--------------------------------------------
@@ -330,7 +338,7 @@ var $lang = array(
 			$t->add($url = $s['config']['baseurl'].$s['folders']['images'], 'imgurl');
 		}
 
-		$this->setup();
+		$continue = $this->setup();
 		$this->response->params[$this->actions_name] = $this->action;
 
 		$content = array();
@@ -401,7 +409,7 @@ var $lang = array(
 		}
 
 		// handle login dir
-		if(isset($s['folders']['login'])) {
+		if(isset($s['folders']['login']) && $continue === true) {
 			$login = $s['folders']['login'];
 			$base  = $s['config']['basedir'];
 			if(
