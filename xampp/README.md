@@ -5,7 +5,7 @@ This Installation Guide expectes a portable version (example: [XAMPP Poratble 8.
   
 1. Download [CAFM.TOOLS](https://github.com/cafmone/cafm.tools/archive/refs/heads/main.zip) and extract ZIP to \[USB]/xampp/ directory  
 2. Navigate to \[USB]/xampp/htpdocs directory  
-3. Create file boostrap.php  
+3. Create file \[USB]/xampp/htpdocs/boostrap.php  
 ```
 <?php
 /** 
@@ -23,7 +23,7 @@ define("CLASSDIR", "/xampp/cafm.tools-main/");
 define("PROFILESDIR", "/xampp/cafm.tools/xampp/profiles/");
 ?>
 ```
-4. Create file index.php  
+4. Create file \[USB]/xampp/htpdocs/index.php  
 ```
 <?php
 require_once('bootstrap.php');
@@ -32,4 +32,5 @@ $controller = new cafm_tools();
 echo $controller->controller()->action()->get_string();
 ?>
 ```
-
+5. Start apache and database via XAMPP control interface  
+![XAMPP Control Panel](https://raw.githubusercontent.com/cafmone/cafm.tools/main/xampp/howto/1.xampp.control.png)
