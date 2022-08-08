@@ -36,7 +36,7 @@ echo $controller->controller()->action()->get_string();
   
 ![XAMPP Control Panel](https://raw.githubusercontent.com/cafmone/cafm.tools/main/xampp/howto/1.xampp.control.png)
   
-6. Start phpMyAdmin to create new user  
+6. Start phpMyAdmin to create new database  
   
-![phpMyAdmin User](https://raw.githubusercontent.com/cafmone/cafm.tools/main/xampp/howto/2.phpmyadmin.user.png)
+![phpMyAdmin](https://raw.githubusercontent.com/cafmone/cafm.tools/main/xampp/howto/2.phpmyadmin.png)
 
