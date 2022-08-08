@@ -43,4 +43,12 @@ echo $controller->controller()->action()->get_string();
 7. Open [CAFM.TOOLS](http://127.0.0.1/index.php) and save settings  
   
 ![CAFM.TOOLS Settings](https://raw.githubusercontent.com/cafmone/cafm.tools/main/xampp/howto/3.cafm.tools.settings.png)
+  
+8. Select and start plugin  
+  
+![CAFM.TOOLS Plugins](https://raw.githubusercontent.com/cafmone/cafm.tools/main/xampp/howto/4.cafm.tools.plugins.png)
+9. Configure plugin  
+  
+![CAFM.TOOLS Plugin](https://raw.githubusercontent.com/cafmone/cafm.tools/main/xampp/howto/5.cafm.tools.plugin.png)
+
 
