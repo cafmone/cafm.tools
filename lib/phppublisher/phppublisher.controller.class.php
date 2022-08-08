@@ -854,7 +854,10 @@ var $lang = array(
 		}
 
 		// Style
-		if(!isset($s['folders']['css'])) {
+		if(
+			!isset($s['folders']['css']) || 
+			$this->file->exists($s['config']['basedir'].$s['folders']['css'].'phppublisher.css') === false
+		) {
 			$style  = $t->get_elements('style');
 			$style .= '<style type="text/css">'.$this->file->get_contents(CLASSDIR.'setup/css/bootstrap.css').'</style>'."\n";
 			$style .= '<style type="text/css">'.$this->file->get_contents(CLASSDIR.'setup/css/phppublisher.css').'</style>'."\n";
