@@ -20,7 +20,7 @@ define("CLASSDIR", "/xampp/cafm.tools-main/");
  * Path must be absolute and end with a /.
  * Directory must be writeable.
  */
-define("PROFILESDIR", "/xampp/cafm.tools/xampp/profiles/");
+define("PROFILESDIR", "/xampp/cafm.tools-main/xampp/profiles/");
 ?>
 ```
 4. Create file \[USB]/xampp/htpdocs/index.php  
