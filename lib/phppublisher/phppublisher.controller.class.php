@@ -62,6 +62,8 @@ var $lang = array(
 		$this->langdir     = $phppublisher->langdir;
 		$this->tpldir      = CLASSDIR.'templates/';
 
+		$this->title       = $phppublisher->title;
+
 		## TODO check files
 		if($this->file->exists($this->PROFILESDIR.'templates')) {
 			$this->tpldir = $this->PROFILESDIR.'templates/';
@@ -395,7 +397,7 @@ var $lang = array(
 		if(isset($s['config']['title']) && $s['config']['title'] !== '') {
 			$t->add($s['config']['title'], 'label');
 		} else {
-			$t->add('PHPPublisher', 'label');
+			$t->add($this->title, 'label');
 		}
 
 		// handle login dir

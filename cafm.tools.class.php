@@ -1,6 +1,6 @@
 <?php
 /**
- * C
+ * CAFM.TOOLS
  *
  * @package phppublisher
  * @author Alexander Kuballa <akuballa@users.sourceforge.net>
@@ -10,6 +10,8 @@
  */
 require_once(__DIR__.'/lib/phppublisher/phppublisher.class.php');
 
-class cafm_tools extends phppublisher { }
+class cafm_tools extends phppublisher {
+	var $title = 'CAFM.tools';
+}
 
 ?>

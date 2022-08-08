@@ -61,6 +61,8 @@ var $lang = array(
 		$this->PROFILESDIR = $controller->PROFILESDIR;
 		$this->LIBDIR      = $controller->LIBDIR;
 
+		$this->title       = $controller->title;
+
 		if($this->file->exists($this->PROFILESDIR.'lang')) {
 			$this->langdir = $this->PROFILESDIR.'lang/';
 		}
@@ -200,7 +202,7 @@ var $lang = array(
 		$content['request'] = $this->response->get_array($this->actions_name, 'settings' );
 		$content['onclick'] = false;
 		if($this->action === 'settings'){
-			$this->__title = 'PHPPublisher / '.$this->lang['tab_settings'];
+			$this->__title = $this->title.' / '.$this->lang['tab_settings'];
 			$content['active']  = true;
 		}
 		return $content;
@@ -235,7 +237,7 @@ var $lang = array(
 		$content['request'] = $this->response->get_array($this->actions_name, 'plugins' );
 		$content['onclick'] = false;
 		if($this->action === 'plugins'){
-			$this->__title = 'PHPPublisher / '.$this->lang['tab_plugins'];
+			$this->__title = $this->title.' / '.$this->lang['tab_plugins'];
 			$content['active']  = true;
 		}
 		return $content;
@@ -272,7 +274,7 @@ var $lang = array(
 		$content['request'] = $this->response->get_array($this->actions_name, 'users' );
 		$content['onclick'] = false;
 		if($this->action === 'users'){
-			$this->__title = 'PHPPublisher / '.$this->lang['tab_users'];
+			$this->__title = $this->title.' / '.$this->lang['tab_users'];
 			$content['active']  = true;
 		}
 		return $content;
@@ -317,7 +319,7 @@ var $lang = array(
 					$content['onclick'] = false;
 					if($action === $value){
 						$content['active']  = true;
-						$this->__title = 'PHPPublisher / '.ucfirst($value);
+						$this->__title = $this->title.' / '.ucfirst($value);
 						if($this->file->exists(CLASSDIR.'plugins/'.$value.'/'.$value.'.config.css')) {
 							$this->__style = $this->file->get_contents(CLASSDIR.'plugins/'.$value.'/'.$value.'.config.css');
 						}

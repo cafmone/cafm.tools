@@ -16,7 +16,19 @@ class phppublisher
 * @access public
 * @var string
 */
-var $profilesdir;
+var $PROFILESDIR;
+/**
+* path to phppublisher lib
+* @access public
+* @var string
+*/
+var $LIBDIR;
+/**
+* default page title
+* @access public
+* @var string
+*/
+var $title = 'PHPpublisher';
 
 	//--------------------------------------------
 	/**
