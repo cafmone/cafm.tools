@@ -862,7 +862,7 @@ var $lang = array(
 			$this->file->exists($s['config']['basedir'].$s['folders']['css'].'phppublisher.css') === false
 		) {
 			$style  = $t->get_elements('style');
-			$style .= '<style type="text/css">'.$this->file->get_contents(CLASSDIR.'setup/css/bootstrap.css').'</style>'."\n";
+			$style .= '<style type="text/css">'.$this->file->get_contents(CLASSDIR.'setup/css/bootstrap4.css').'</style>'."\n";
 			$style .= '<style type="text/css">'.$this->file->get_contents(CLASSDIR.'setup/css/phppublisher.css').'</style>'."\n";
 			$t->add($style, 'style');
 		} else {
