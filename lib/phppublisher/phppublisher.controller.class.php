@@ -883,9 +883,14 @@ var $lang = array(
 		}
 
 		// Script
-		if(!isset($s['folders']['js'])) {
+		if(
+			!isset($s['folders']['js']) || 
+			$this->file->exists($s['config']['basedir'].$s['folders']['js'].'phppublisher.js') === false
+		) {
 			$script  = $t->get_elements('script');
+			$script .= '<script type="text/javascript">'.$this->file->get_contents(CLASSDIR.'setup/js/jquery.min.js').'</script>'."\n";
 			$script .= '<script type="text/javascript">'.$this->file->get_contents(CLASSDIR.'setup/js/phppublisher.js').'</script>'."\n";
+			$script .= '<script>$(document).ready(function (){ $(\'#Leftbar\').toggleClass(\'active\'); });</script>';
 			$t->add($script, 'script');
 		} else {
 			$path    = $s['config']['basedir'].$s['folders']['js'];
