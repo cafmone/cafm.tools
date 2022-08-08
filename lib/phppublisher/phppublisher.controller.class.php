@@ -215,8 +215,6 @@ var $lang = array(
 			}
 
 			// make sure at least one plugin is started
-
-/*
 			if(
 				!isset($this->plugins[0]) &&
 				$continue === true &&
@@ -229,7 +227,7 @@ var $lang = array(
 				$this->action = 'config';
 				$continue = false;
 			}
-*/
+
 			// handle templates folder
 			if(
 				$this->file->exists($this->PROFILESDIR.'templates/') &&
