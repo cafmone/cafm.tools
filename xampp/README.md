@@ -33,4 +33,10 @@ echo $controller->controller()->action()->get_string();
 ?>
 ```
 5. Start apache and database via XAMPP control interface  
+  
 ![XAMPP Control Panel](https://raw.githubusercontent.com/cafmone/cafm.tools/main/xampp/howto/1.xampp.control.png)
+  
+6. Start phpMyAdmin to create new user  
+  
+![phpMyAdmin User](https://raw.githubusercontent.com/cafmone/cafm.tools/main/xampp/howto/2.phpmyadmin.user.png)
+
