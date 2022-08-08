@@ -36,7 +36,7 @@ echo $controller->controller()->action()->get_string();
   
 ![XAMPP Control Panel](https://raw.githubusercontent.com/cafmone/cafm.tools/main/xampp/howto/1.xampp.control.png)  
   
-6. Start [phpMyAdmin](http://127.0.0.1/phpmyadmin) to create new database  
+6. Start [phpMyAdmin](http://127.0.0.1/phpmyadmin) to create a database  
   
 ![phpMyAdmin](https://raw.githubusercontent.com/cafmone/cafm.tools/main/xampp/howto/2.phpmyadmin.png)  
   
@@ -50,5 +50,9 @@ echo $controller->controller()->action()->get_string();
 9. Configure plugin  
   
 ![CAFM.TOOLS Plugin](https://raw.githubusercontent.com/cafmone/cafm.tools/main/xampp/howto/5.cafm.tools.plugin.png)  
+  
+10. Import database  
+  
+![CAFM.TOOLS Plugin](https://raw.githubusercontent.com/cafmone/cafm.tools/main/xampp/howto/6.cafm.tools.import.png)  
 
 
