@@ -99,7 +99,7 @@ var $lang = array(
 	function setup() {
 		$continue = true;
 		if($this->user->is_admin()) {
-			$continue = true;
+
 			// handle folder permissions
 			if(!$this->file->is_writeable($GLOBALS['settings']['config']['basedir'])) {
 				$_REQUEST[$this->actions_name] = 'config';
@@ -122,6 +122,7 @@ var $lang = array(
 				$this->action = 'config';
 				$continue = false;
 			}
+
 			// handle folders
 			if(
 				!isset($GLOBALS['settings']['folders']['login']) &&
@@ -133,7 +134,11 @@ var $lang = array(
 				$this->action = 'config';
 				$continue = false;
 			}
-			else if($this->file->exists($GLOBALS['settings']['config']['basedir'].$GLOBALS['settings']['folders']['login']) === false) {
+			else if(
+				$this->file->exists($GLOBALS['settings']['config']['basedir'].$GLOBALS['settings']['folders']['login']) === false || 
+				$this->file->exists($GLOBALS['settings']['config']['basedir'].$GLOBALS['settings']['folders']['css']) === false || 
+				$this->file->exists($GLOBALS['settings']['config']['basedir'].$GLOBALS['settings']['folders']['js']) === false
+			) {
 				$_REQUEST[$this->actions_name] = 'config';
 				$_REQUEST['config_action'] = 'settings';
 				$_REQUEST['config_msg'] = 'Please configure folders';
