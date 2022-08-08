@@ -36,7 +36,11 @@ echo $controller->controller()->action()->get_string();
   
 ![XAMPP Control Panel](https://raw.githubusercontent.com/cafmone/cafm.tools/main/xampp/howto/1.xampp.control.png)
   
-6. Start phpMyAdmin to create new database  
+6. Start [phpMyAdmin](http://127.0.0.1/phpmyadmin") to create new database  
   
 ![phpMyAdmin](https://raw.githubusercontent.com/cafmone/cafm.tools/main/xampp/howto/2.phpmyadmin.png)
+  
+7. Open [CAFM.TOOLS](http://127.0.0.1/index.php") and save settings  
+  
+![CAFM.TOOLS Settings](https://raw.githubusercontent.com/cafmone/cafm.tools/main/xampp/howto/3.cafm.tools.settings.png)
 
