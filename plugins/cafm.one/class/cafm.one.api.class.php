@@ -165,13 +165,16 @@ var $lang = array(
 				$bezeichner = $result[0]['bezeichner_kurz'];
 				$device = array();
 				foreach($result as $v) {
-					$lang = $this->db->select('bestand_'.$v['tabelle'], array('merkmal_lang'), array('merkmal_kurz' => $v['merkmal_kurz']));
-					if(isset($lang[0]['merkmal_lang'])) {
-						$device[$v['tabelle']][] = '<div>'.$lang[0]['merkmal_lang'].': '.$v['wert'].'</div>';
-					} else {
-						$device[$v['tabelle']][] = '<div>'.$v['merkmal_kurz'].': '.$v['wert'].'</div>';
+					// Translate
+					if($v['tabelle'] !== 'SYSTEM') {
+						$lang = $this->db->select('bestand_'.$v['tabelle'], array('merkmal_lang'), array('merkmal_kurz' => $v['merkmal_kurz']));
+						if(isset($lang[0]['merkmal_lang'])) {
+							$device[$v['tabelle']][] = '<div>'.$lang[0]['merkmal_lang'].': '.$v['wert'].'</div>';
+						} else {
+							$device[$v['tabelle']][] = '<div>'.$v['merkmal_kurz'].': '.$v['wert'].'</div>';
+						}
+						$form[] = '<input type="hidden" name="'.$v['tabelle'].'['.$v['merkmal_kurz'].']" value="'.$v['wert'].'">';
 					}
-					$form[] = '<input type="hidden" name="'.$v['tabelle'].'['.$v['merkmal_kurz'].']" value="'.$v['wert'].'">';
 				}
 
 				if(is_array($device) && count($device) > 0 && $mode === '') {
