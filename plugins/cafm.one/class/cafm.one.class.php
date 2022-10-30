@@ -355,7 +355,7 @@ var $date_format = "Y-m-d H:i";
 				#}
 				if(isset($todos['label']) && $showlabel === true) {
 					$str .= '<h3>'.$todos['label'].'</h3>'."\n";
-					if(isset($todos['time']) && $todos['time'] !== '') {
+					if(isset($todos['time']) && $todos['time'] !== '' && $todos['time'] !== 0) {
 						$str .= '<small>Last Update '.date($this->date_format, $todos['time']).'</small>'."\n";
 					}
 				}
