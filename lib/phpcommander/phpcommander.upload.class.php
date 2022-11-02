@@ -51,6 +51,7 @@ var $lang = array(
 	'uploaded_file' => 'File %s successfully uploaded',
 	'uploaded_files' => 'File(s) successfully uploaded',
 	'error_max_files' => 'An error has occurred. The server can upload %s files at the same time only. Proceed anyway?',
+	'error_max_filesize' => 'File exceeds maximum filesize %s ',
 	'title_upload' => 'Maximum filesize %s',
 	'title_upload_multiple' => 'Maximum %s files, filesize %s',
 );
@@ -101,15 +102,28 @@ var $tpldir;
 	function get_template() {
 
 		$ident = $this->ident;
-		$form  = $this->get_response()->form;
+		$response = $this->get_response();
+		$form = $response->form;
+		
+		// handle file exceeds MAX_FILE_SIZE
+		if($response->html->request()->get('ident') !== '' && $ident === '') {
+			$url = $response->get_url(
+				'',
+				'',
+				$this->message_param.'[error]',
+				sprintf($this->lang['error_max_filesize'], ini_get('upload_max_filesize'))
+			).'&'.$this->__pc->id.'['.$this->__pc->actions_name.']'.'=select';
+			$response->redirect($url);
+		}
 
 		// remove ident from params else endless loop
 		unset($this->__pc->params[$this->__pc->id]['ident']);
-		if(!$form->get_errors()) {
+		if(!$form->get_errors() && $response->submit()) {
 			if($ident !== '') {
 				$this->upload($ident);
 			}
-		} else {
+		}
+		else if($form->get_errors()) {
 			$_REQUEST[$this->message_param] = join('<br>', $form->get_errors());
 		}
 

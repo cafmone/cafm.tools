@@ -391,6 +391,8 @@ class phpcommander_controller
 			$upload->actions_name = $this->__pc->response->actions_name;
 			$upload->message_param = $this->__pc->message_param.'_upload';
 			$upload->tpldir = $this->__pc->tpldir;
+			$upload->lang = $this->__pc->lang['upload'];
+			
 			if($this->__pc->allow['create'] === true) {
 				$upload->allow_create = true;
 			}

@@ -612,9 +612,8 @@ span.importdelimiter {
 /* Icons */
 .filebrowser a.folder,
 .filebrowser a.folder:hover {
-	background: url('server.gif') 0 -100px no-repeat;
 	line-height: 20px !important;
-	padding: 0 0 0 25px !important;
+	padding: 0 0 0 5px !important;
 	color: blue !important;
 	font-size: 12px !important;
 	text-decoration: none !important;
@@ -633,15 +632,22 @@ span.importdelimiter {
 .filebrowser div.file,
 .filebrowser a:hover.file {
 	display: block !important;
-	background: url('server.gif') 0 -50px no-repeat !important;
 	line-height:20px !important;
-	padding: 0 0 0 25px !important;
+	padding: 0 0 0 5px !important;
 	text-decoration: none !important;
 	cursor: pointer !important;
 }
 .filebrowser a.file.denied {
 	color:black;
 }
+/* Icons */
+.filebrowser .file .icon-file {
+	padding: 0 8px 0 2px;
+}
+.filebrowser .folder .icon-folder {
+	padding: 0 10px 0 0;
+}
+
 
 
 

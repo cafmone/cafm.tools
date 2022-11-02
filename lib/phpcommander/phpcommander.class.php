@@ -96,6 +96,15 @@ var $lang = array(
 		'lang_headline' => "Colors",
 		'lang_close'    => "close",
 		),
+	'upload' => array(
+		'upload' => 'Upload',
+		'uploaded_file' => 'File %s successfully uploaded',
+		'uploaded_files' => 'File(s) successfully uploaded',
+		'error_max_files' => 'An error has occurred. The server can upload %s files at the same time only. Proceed anyway?',
+		'error_max_filesize' => 'File exceeds maximum filesize %s ',
+		'title_upload' => 'Maximum filesize %s',
+		'title_upload_multiple' => 'Maximum %s files, filesize %s',
+		),
 	);
 /**
 *  param name for messages
