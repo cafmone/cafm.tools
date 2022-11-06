@@ -370,11 +370,11 @@ var $changelog;
 			if(is_array($order)) {
 				$a = implode(',', $order);
 				$a = $this->handler->escape($a);
-				$r = "ORDER BY $a";
+				$r = "ORDER BY `$a`";
 			}
 			if(is_string($order) && $order !== '') {
 				$a = $this->handler->escape($order);
-				$r = "ORDER BY $a";
+				$r = "ORDER BY `$a`";
 			}
 			return $r;
 		}
