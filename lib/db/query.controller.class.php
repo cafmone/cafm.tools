@@ -558,7 +558,7 @@ var $lang = array(
 				$description .= '<div class="left">';
 				$description .= '<label class="control-label" for="delimiter">Delimiter</label>';
 				$description .= '</div><div class="right">';
-				$description .= '<select class="form-control" id="delimiter" name="export[delimiter]" style="width:60px;">';
+				$description .= '<select class="form-control" id="delimiter" name="export[delimiter]" style="width:80px;">';
 				$description .= '<option value=",">,</option>';
 				$description .= '<option value=";" selected="selected">;</option>';
 				$description .= '<option value="\t">\t</option>';
@@ -569,7 +569,7 @@ var $lang = array(
 				$description .= '<div class="left">';
 				$description .= '<label class="control-label" for="enclosure">Enclosure</label>';
 				$description .= '</div><div class="right">';
-				$description .= '<select class="form-control" id="enclosure" name="export[enclosure]" style="width:60px;">';
+				$description .= '<select class="form-control" id="enclosure" name="export[enclosure]" style="width:80px;">';
 				$description .= '<option value=""></option>';
 				$description .= '<option value="\'">\'</option>';
 				$description .= '<option value="quot" selected="selected">&#34;</option>';
@@ -580,7 +580,7 @@ var $lang = array(
 				$description .= '<div class="left">';
 				$description .= '<label class="control-label" for="linefeed">Linefeed</label>';
 				$description .= '</div><div class="right">';
-				$description .= '<select class="form-control" id="linefeed" name="export[linefeed]" style="width:60px;">';
+				$description .= '<select class="form-control" id="linefeed" name="export[linefeed]" style="width:80px;">';
 				$description .= '<option value="'."\n".'">\n</option>';
 				$description .= '<option value="'."\r\n".'" selected="selected">\r\n</option>';
 				$description .= '</select>';
