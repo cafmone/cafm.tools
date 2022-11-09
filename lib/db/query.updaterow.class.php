@@ -165,13 +165,14 @@ var $lang = array();
 							$d['column_'.$k.'_'.$i]['label']                         = $k;
 							$d['column_'.$k.'_'.$i]['object']['type']                = 'htmlobject_input';
 							$d['column_'.$k.'_'.$i]['object']['attrib']['name']      = 'column['.$i.']['.$k.']';
-							$d['column_'.$k.'_'.$i]['object']['attrib']['maxlength'] = $columns[$k]['length'];
 							if($columns[$k]['null'] === 'no') {
 								$d['column_'.$k.'_'.$i]['required'] = true;
 							}
 							if(stripos($columns[$k]['type'],'int') !== false ) {
 								$d['column_'.$k.'_'.$i]['validate']['regex']    = '/^[0-9]+$/i';
 								$d['column_'.$k.'_'.$i]['validate']['errormsg'] = sprintf('%s must be number', $k);
+							} else {
+								$d['column_'.$k.'_'.$i]['object']['attrib']['maxlength'] = $columns[$k]['length'];
 							}
 							if(isset($v)) {
 								$d['column_'.$k.'_'.$i]['object']['attrib']['value'] = $this->file->remove_utf8_bom($v);

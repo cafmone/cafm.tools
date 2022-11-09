@@ -39,12 +39,15 @@ var $debug = false;
 	 */
 	//--------------------------------------------
 	function __construct($host, $user, $pass, $db = null) {
-		$mysql = @new mysqli($host, $user, $pass, $db);
-		if ($mysql->connect_error) {
-			$this->error = 'Connect Error (' . $mysql->connect_errno . ') '. $mysql->connect_error;
-		} else {
-			$mysql->query("SET NAMES 'utf8'");
-			$this->mysql = $mysql;
+		try { $mysql = new mysqli($host, $user, $pass, $db); }
+		catch (Exception $e) { $this->error = $e->getMessage(); }
+		if(isset($mysql)) {
+			if ($mysql->connect_error) {
+				$this->error = 'Connect Error (' . $mysql->connect_errno . ') '. $mysql->connect_error;
+			} else {
+				$mysql->query("SET NAMES 'utf8'");
+				$this->mysql = $mysql;
+			}
 		}
 	}
 
@@ -67,7 +70,8 @@ var $debug = false;
 			if($multi === true) {
 				$result = $this->mysql->multi_query($query);
 			} else {
-				$result = $this->mysql->query($query);
+				try { $result = $this->mysql->query($query); }
+				catch (Exception $e) { return $e->getMessage(); }
 			}
 			if ($this->mysql->error) {
 				$return  = 'Error (' . $this->mysql->errno . ') '. $this->mysql->error;
@@ -169,10 +173,12 @@ var $debug = false;
 			$sql .= 'EXTRA as `Extra` ';
 			$sql .= 'FROM INFORMATION_SCHEMA.COLUMNS ';
 			$sql .= 'WHERE table_name = \''.$this->escape($table).'\' ';
-			$sql .= 'AND table_schema = \''.$this->escape($db).'\'';
+			$sql .= 'AND table_schema = \''.$this->escape($db).'\' ';
 			if($column !== '') {
-				$sql .= 'AND COLUMN_NAME = \''.$this->escape($column).'\'';
+				$sql .= 'AND COLUMN_NAME = \''.$this->escape($column).'\' ';
 			}
+			$sql .= 'ORDER BY ORDINAL_POSITION';
+			
 			$columns = $this->query($sql);
 			if(is_array($columns)) {
 				foreach($columns as $column) {
