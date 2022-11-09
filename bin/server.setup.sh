@@ -32,6 +32,7 @@ fi
 if ! [ -x "$(command -v mysql)" ]; then
 	apt -y -q install mysql-server
 	mysql -u root -e "CREATE USER 'hostmaster'@'localhost' IDENTIFIED BY 'hostmaster'; FLUSH PRIVILEGES;"
+	mysql -u root -e "GRANT GRANT OPTION ON * . * TO 'hostmaster'@'localhost'; FLUSH PRIVILEGES;"
 	mysql -u root -e "GRANT ALL PRIVILEGES ON * . * TO 'hostmaster'@'localhost'; FLUSH PRIVILEGES;"
 else
 	echo -e "Mysql already installed - nothing to do. $(which mysql)"
