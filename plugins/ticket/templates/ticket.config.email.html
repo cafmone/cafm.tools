@@ -1,0 +1,30 @@
+<div id="form">
+<form action="{thisfile}" class="form-horizontal">
+{form}
+<fieldset>
+	<legend>{label_default}</legend>
+	{active}
+	{auto}
+	{from}
+	{subject}
+	{body}
+</fieldset>
+
+<fieldset>
+	<legend>{label_require_mail_to}</legend>
+	{to_supporter}
+	{to_group}
+	{to_reporter}
+</fieldset>
+
+<fieldset>
+	<legend>{label_allow_custom}</legend>
+	{custom_from}
+	{custom_to}
+	{custom_subject}
+	{custom_body}
+</fieldset>
+
+<div class="buttons">{submit}</div>
+</form>
+</div>

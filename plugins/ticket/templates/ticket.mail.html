@@ -1,0 +1,26 @@
+<div id="ticketmail" class="panel panel-default">
+	<div class="panel-heading">
+		<h3 class="panel-title">{label_mail}</h3>
+	</div>
+
+	<div class="wrapper list-group"">
+		<form action="{thisfile}" method="POST" class="form-horizontal">
+		{form}
+		{from}
+
+		<div class="from"><label class="control-label">{mail_to}</label></div>
+		<div class="to">
+			{to_group}
+			{to_supporter}
+			{to_reporter}
+			<div style="line-height:0px;height:0px;clear:both;" class="floatbreaker">&#160;</div>
+		</div>
+		{to}
+		<div style="line-height:0px;height:0px;clear:both;" class="floatbreaker">&#160;</div>
+
+		{subject}
+		{body}
+		<div class="buttons">{submit}&#160;{cancel}</div>
+		</form>
+	</div>
+</div>

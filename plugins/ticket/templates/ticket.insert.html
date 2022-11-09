@@ -1,0 +1,181 @@
+<div id="ticket">
+<form action="{thisfile}" method="POST" enctype="multipart/form-data" class="form-horizontal">
+	{form}
+
+	<div class="card">
+		<div class="card-header">
+			<h4 style="float:left;margin: 0;">{label_message}</h4>
+			<div style="line-height:0px;height:0px;clear:both;" class="floatbreaker">&#160;</div>
+		</div>
+		<div id="ticket_box" class="wrapper list-group list-group-flush">
+			{subject}
+			<div style="margin: 0 25px 0 0;">
+				<div style="text-align: right; margin: 0 10px 4px 0;">
+					<button class="btn btn-default btn-sm" style="width: 30px;" type="button" onclick="Ticket.html('description', 'AFunctions'); this.blur();">a</button>
+					<button class="btn btn-default btn-sm" style="width: 30px;" type="button" onclick="Ticket.wrap('description', '[[b]]', '[[/b]]'); this.blur();"><b>b</b></button>
+					<button class="btn btn-default btn-sm" style="width: 30px;" type="button" onclick="Ticket.wrap('description', '[[i]]', '[[/i]]'); this.blur();"><i>i</i></button>
+					<button class="btn btn-default btn-sm" style="width: 30px;" type="button" onclick="Ticket.wrap('description', '[[u]]', '[[/u]]'); this.blur();"><u>u</u></button>
+				</div>
+				<div style="">
+					{description}
+					<div style="margin: 0 0 20px 180px">{attachment}</div>
+				</div>
+				<div style="line-height:0px;height:0px;clear:both;" class="floatbreaker">&#160;</div>
+			</div>
+
+			<div style="line-height:0px;height:0px;clear:both;" class="floatbreaker">&#160;</div>
+		</div>
+	</div>
+<br>
+	<div id="info_box">
+		<div id="ticket_infos">
+
+			<div class="card">
+				<div class="card-header">
+					<h4 style="float:left;margin: 0;">{label_supporter}</h4>
+					<div style="line-height:0px;height:0px;clear:both;" class="floatbreaker">&#160;</div>
+				</div>
+				<div id="supporters_box" class="wrapper list-group list-group-flush" style="display:block;text-align:left;margin-left:20px;">
+					<div style="display:inline-block;">
+						{reporter}
+						{group}
+						{supporter}
+					</div>
+					<div style="line-height:0px;height:0px;clear:both;" class="floatbreaker">&#160;</div>
+				</div>
+			</div>
+<br>
+			<div class="card">
+				<div class="card-header">
+					<h4 style="float:left;margin: 0;">{label_supporter_info}</h4>
+					<div style="line-height:0px;height:0px;clear:both;" class="floatbreaker">&#160;</div>
+				</div>
+				<div id="supporter_info_box" class="wrapper list-group list-group-flush" style="text-align:center;">
+					<div style="display:inline-block;">
+						{flag_01}
+						{flag_02}
+						{flag_03}
+						{flag_04}
+						{flag_05}
+						{flag_06}
+						{flag_07}
+						{flag_08}
+						{flag_09}
+						{flag_10}
+					</div>
+					<div style="line-height:0px;height:0px;clear:both;" class="floatbreaker">&#160;</div>
+				</div>
+			</div>
+<!--
+			<div class="card">
+				<div class="card-header">
+					<h4 style="float:left;margin: 0;">{label_reporter}</h4>
+					<div style="line-height:0px;height:0px;clear:both;" class="floatbreaker">&#160;</div>
+				</div>	
+				<div id="reporter_box" class="wrapper list-group list-group-flush" style="display:block;text-align:center;">
+					<div style="display:inline-block;">
+						{reporter}
+						{reporter_email}
+						{reporter_salutation}
+						{reporter_forename}
+						{reporter_lastname}
+						{reporter_firm}
+						{reporter_office}
+						{reporter_phone}
+					</div>
+					<div style="line-height:0px;height:0px;clear:both;" class="floatbreaker">&#160;</div>
+				</div>
+			</div>
+//-->
+
+		</div>
+	</div>
+
+	<div class="buttons">{submit}</div>
+</form>
+
+
+<div id="AFunctions" style="display:none; background:white;padding:10px;">
+	<form id="AFunctionsForm" onsubmit="return false;" action="#" class="form-horizontal"">
+
+		<div style="text-align:center;">
+			<div style="display:inline-block;">
+				<div class="htmlobject_box form-group autosize" style="float:right;">
+					<div class="left"><label class="control-label" for="a_label">Label</label></div>
+					<div class="right" style="padding: 0 100px 0 0;"><input class="form-control text" type="text" id="a_label" style="width: 250px;"></div>
+					<div style="line-height:0px;height:0px;clear:both;" class="floatbreaker">&#160;</div>
+				</div>
+				<div class="htmlobject_box form-group autosize" style="clear: both; float:right;">
+					<div class="left"><label class="control-label" for="a_url">Url</label></div>
+					<div class="right"><input class="form-control text" type="text" id="a_url" style="width: 350px;"></div>
+					<div style="line-height:0px;height:0px;clear:both;" class="floatbreaker">&#160;</div>
+				</div>
+			</div>
+		</div>
+
+	<div class="buttons"><button id="a_ok" class="btn btn-default" style="clear:both;" type="button">OK</button></div>
+	</form>
+</div>
+
+
+
+</div>
+
+
+<script type="text/javascript">
+
+MousePosition.init();
+
+function xmlRequestObject() {
+	var arg = null;
+	if (typeof XMLHttpRequest != "undefined") {
+		return new XMLHttpRequest();
+	}
+	if (!arg) {
+		try { return new ActiveXObject("Msxml2.XMLHTTP"); }
+		catch(e) {
+			try { return new ActiveXObject("Microsoft.XMLHTTP"); } 
+			catch(e) { return null;  }
+		}
+	}
+}
+function get_users(element) {
+	value    = element.options[element.selectedIndex].value;
+	if(value != '') {
+		id       = element.options[element.selectedIndex].text;
+		error    = null;
+		target   = 'api.php';
+		params   = '';
+		response = '';
+		params   = '&action=plugin&plugin=ticket&command=get_supporters&id='+id;
+		request = new xmlRequestObject();	
+		if (request) {
+			request.open("POST", target, false);
+			request.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+			request.send(params);
+			if(request.status == 200) {
+				response = request.responseText;
+			} else {
+				error = 'error: HTTP ' +request.status+' '+request.statusText;
+			}
+		} else { 
+			error = 'error: no xmlRequestObject'; 
+		}
+		if(!error) {
+			if(response != '') {
+				s = document.getElementById('supporter').parentNode;
+				s.innerHTML = response;
+			} else {
+				s = document.getElementById('supporter').parentNode;
+				s.innerHTML = '<input type="hidden" name="supporter" id="supporter">';
+			}
+		} else {
+			alert(error);
+		}
+	} else {
+		s = document.getElementById('supporter').parentNode;
+		s.innerHTML = '<input type="hidden" name="supporter" id="supporter">';
+	}
+}
+
+</script>
