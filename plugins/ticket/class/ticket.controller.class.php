@@ -725,7 +725,7 @@ var $date_format = "Y/m/d H:i";
 			$d['close'] = $this->lang['label_closed'];
 		}
 		if($mode === 'update') {
-			$response->created  = date($this->date_format, $ini['created']);
+			$response->created = date($this->date_format, $ini['created']);
 		}
 
 		$d['plugin'] = '';
@@ -738,11 +738,49 @@ var $date_format = "Y/m/d H:i";
 				$d['plugin']['object']['type']            = 'htmlobject_input';
 				$d['plugin']['object']['attrib']['name']  = 'plugin';
 				$d['plugin']['object']['attrib']['value'] = htmlentities($plugin);
-				$d['plugin']['object']['attrib']['css']   = 'disabled';
+				$d['plugin']['object']['attrib']['readonly'] = true;
 				$d['plugin']['object']['attrib']['type']  = 'text';
 				if(isset($columns['plugin']['length'])) {
 					$d['plugin']['object']['attrib']['maxlength'] = $columns['plugin']['length'];
 				}
+			}
+		}
+		else if($mode === 'update') {
+			if(isset($ini['plugin'])) {
+				$div = $this->response->html->div();
+				$div->name = 'plugin';
+				$div->add(htmlentities($ini['plugin'], ENT_COMPAT, 'UTF-8'));
+				$d['plugin'] = array();
+				$d['plugin']['label'] = 'Plugin';
+				$d['plugin']['object'] = $div;
+			}
+		}
+
+		$d['referer'] = '';
+		if($mode === 'insert') {
+			$referer = $this->response->html->request()->get('referer');
+			if($referer !== '') {
+				$d['referer'] = array();
+				$d['referer']['label']                     = 'Referer';
+				$d['referer']['static']                    = true;
+				$d['referer']['object']['type']            = 'htmlobject_input';
+				$d['referer']['object']['attrib']['name']  = 'referer';
+				$d['referer']['object']['attrib']['value'] = htmlentities($referer);
+				$d['referer']['object']['attrib']['readonly'] = true;
+				$d['referer']['object']['attrib']['type']  = 'text';
+				if(isset($columns['referer']['length'])) {
+					$d['referer']['object']['attrib']['maxlength'] = $columns['referer']['length'];
+				}
+			}
+		}
+		else if($mode === 'update') {
+			if(isset($ini['referer'])) {
+				$div = $this->response->html->div();
+				$div->name = 'referer';
+				$div->add(htmlentities($ini['referer'], ENT_COMPAT, 'UTF-8'));
+				$d['referer'] = array();
+				$d['referer']['label'] = 'Referer';
+				$d['referer']['object'] = $div;
 			}
 		}
 

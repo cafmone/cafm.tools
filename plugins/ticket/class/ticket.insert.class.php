@@ -99,16 +99,20 @@ var $lang = array();
 				$f['reporter'] = '';
 			}
 		}
+
 		if(!$form->get_errors() && $response->submit()) {
 			$f['created'] = time();
 			if(!isset($response->error)) {
-				$plugin = $form->get_static('plugin');
+
+				$plugin = $form->get_static('plugin', true);
 				if(isset($plugin)) {
 					$f['plugin'] = htmlentities($plugin);
 				}
-				var_dump($f);
-				exit();
-			
+				$referer = $form->get_static('referer', true);
+				if(isset($referer)) {
+					$f['referer'] = htmlentities($referer);
+				}
+
 				$error = $this->db->insert('ticket_tickets', $f);
 				if(isset($error) && $error !== '') {
 					$response->error = $error;

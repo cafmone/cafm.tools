@@ -37,19 +37,23 @@ Ticket.print = function(e) {
 // Html
 //---------------------------------
 Ticket.html = function(id, box, move_x, move_y) {
-	this.box     = document.getElementById(box);
+
+	dolly = document.getElementById(box);
+
 	this.element = document.getElementById(id);
-	this.url     = document.getElementById('a_url');
-	this.target  = document.getElementById('a_target');
-	this.ok      = document.getElementById('a_ok');
-	this.label   = document.getElementById('a_label');
+	this.box     = dolly.cloneNode(true);
+	this.label   = this.box.querySelector('#a_label');
+	this.url     = this.box.querySelector('#a_url');
+	this.ok      = this.box.querySelector('#a_ok');
+
 	sel          = SelectionRange.get(this.element);
 	len          = this.element.value.length;
 	selectedText = this.element.value.substring(sel.start, sel.end);
 	this.label.value = selectedText;
 
+	phppublisher.modal.width = '400px';
 	phppublisher.modal.label = 'a';
-	this.modalid = phppublisher.modal.init(this.box);
+	this.modalid = phppublisher.modal.init(this.box, 'AModal');
 	this.box.style.display = 'block';
 
 	(function(ok, label, url, element, modalid) { ok.onclick = function () {
@@ -66,6 +70,10 @@ Ticket.html = function(id, box, move_x, move_y) {
 			element.focus();
 		}
 	}})(this.ok, this.label, this.url, this.element, this.modalid)
+	
+	
+	// unset selection
+	//this.element.setSelectionRange(0, 0);
 
 	$('#'+this.modalid).modal('show');
 
@@ -76,11 +84,12 @@ Ticket.html = function(id, box, move_x, move_y) {
 	}
 }
 //---------------------------------
-// Html
+// Confirm
 //---------------------------------
 Ticket.confirm = function( element, id ) {
 	phppublisher.modal.width = '280px';
-	var modalid = phppublisher.modal.init('');
+	phppublisher.modal.label = 'Notice';
+	var modalid = phppublisher.modal.init();
 	var c = document.createElement("div");
 	c.style.textAlign = 'center';
 	c.style.margin = '20px';

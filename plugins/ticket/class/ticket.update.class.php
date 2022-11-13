@@ -156,6 +156,8 @@ var $lang = array();
 				unset($f['subject']);
 				unset($f['description']);
 				unset($f['attachment']);
+				unset($f['plugin']);
+				unset($f['referer']);
 				$notice = $f['message'];
 				unset($f['message']);
 
