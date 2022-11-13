@@ -213,7 +213,7 @@ var $lang = array();
 
 					// attachment
 					if(isset($this->controller->settings['settings']['attachment'])) {
-						$result = $this->db->select('ticket_attachments', array('file', 'name'), array('notice', $v['id']));
+						$result = $this->db->select('ticket_attachments', array('file', 'name'), array('ticket' => $this->id, 'notice' => $v['id']));
 						if(is_array($result)) {
 							$a        = $this->response->html->a();
 							$a->name  = '';

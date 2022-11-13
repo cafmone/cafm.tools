@@ -507,7 +507,6 @@ var $date_format = "Y/m/d H:i";
 					$label = $settings['labels'][$v];
 				}
 				$d[$v]['label'] = $label;
-				#$d[$v]['css'] = ' inverted';
 				if($mode !== 'select' && isset($settings['required']) && isset($settings['required'][$v])) {
 					$d[$v]['required'] = true;
 				}
@@ -662,7 +661,7 @@ var $date_format = "Y/m/d H:i";
 			$d['description']['object'] = $div;
 		}
 
-### TODO attachment from class?
+### TODO attachment upload from class?
 
 		$d['attachment'] = '';
 		if(isset($settings['settings']['attachment']) && $mode === 'insert') {
@@ -675,11 +674,10 @@ var $date_format = "Y/m/d H:i";
 			$d['attachment']['object']['attrib']['size']  = '40';
 		}
 
-### TODO select attachment when notice is null
-
 		$d['attachments'] = '';
 		if($mode === 'update') {
-			$result = $this->db->select('ticket_attachments', array('file', 'name'), array('ticket', $ini['id']));
+			$sql = "SELECT `file`,`name` FROM `ticket_attachments` WHERE `ticket`='".$ini['id']."' AND `notice` IS NULL";
+			$result = $this->db->handler->query($sql);
 			if(is_array($result)) {
 				$a        = $response->html->a();
 				$a->css   = 'attachment';
