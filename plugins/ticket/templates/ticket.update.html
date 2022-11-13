@@ -1,4 +1,4 @@
-<div id="ticket" style="margin: 0 0 300px 0;">
+<div id="ticket" style="margin: 0 0 200px 0;">
 
 	<div class="card">
 		<div class="card-header">
@@ -7,77 +7,67 @@
 				<td style="width: 20px;">{back}</td>
 				<td style="width: 50px; white-space:nowrap;"><h4 style="float:left;margin: 0 0 0 10px;">{label_message}</h4></td>
 				<td>{date}</td>
-				<td style="width: 60px;">
+				<td style="width: 100px;">
 					<form action="{thisfile}" method="GET" enctype="multipart/form-data" class="form-horizontal">
 						{form}
 						{close}
 					</form>
 				</td>
+				<td style="width:60px;text-align:right;"><a style="display:block;text-decoration:none;" href="#notice_box" title="{notice_new}" onclick="setfocus(); return false;"><span class="icon icon-plus"></span></a></td>
 			</tr>
 			</table>
 			<div style="line-height:0px;height:0px;clear:both;" class="floatbreaker">&#160;</div>
 		</div>
 
 		<div id="ticket_box" class="wrapper">
-			<div class="float-left" style="width:90%;">
-				{subject}
-				{description}
-				{reporter}
-				{group}
-				{supporter}
-				{attachments}
-			</div>
-
-			<div style="line-height:0px;height:0px;clear:both;" class="floatbreaker">&#160;</div>
-
-			<div id="info_box" class="wrapper" style="position:relative;margin-top:15px;padding-top:25px;">
-				<form action="{thisfile}" method="POST" enctype="multipart/form-data" class="form-horizontal" name="ticketinfos">
+			<form action="{thisfile}" method="POST" enctype="multipart/form-data" class="form-horizontal" name="ticketinfos">
+				<div class="float-left" style="width:90%;">
+					{subject}
+					{description}
+					{attachments}
+					{reporter}
+					{group}
+					{supporter}
+				</div>
+				<div style="line-height:0px;height:0px;clear:both;" class="floatbreaker">&#160;</div>
+				<div id="info_box" class="wrapper" style="position:relative;margin-top:15px;padding-top:25px;">
 					{form}
-					<div style="display:inline-block;width:100%;">
-						<div class="float-left" style="margin: 0 0 0 0; width:60%;">
-							<div style="margin: 0 10px 0 25px; position: relative;">
-								<div style="text-align: right; margin: 0 5px 4px 0; position: absolute; top: 1px; right: 5px;">
-									<button class="btn btn-default btn-sm" style="width: 30px;" type="button" onclick="Ticket.html('message', 'AFunctions'); this.blur();">a</button>
-									<button class="btn btn-default btn-sm" style="width: 30px;" type="button" onclick="Ticket.wrap('message', '[[b]]', '[[/b]]'); this.blur();"><b>b</b></button>
-									<button class="btn btn-default btn-sm" style="width: 30px;" type="button" onclick="Ticket.wrap('message', '[[i]]', '[[/i]]'); this.blur();"><i>i</i></button>
-									<button class="btn btn-default btn-sm" style="width: 30px;" type="button" onclick="Ticket.wrap('message', '[[u]]', '[[/u]]'); this.blur();"><u>u</u></button>
+					<div style="display:inline-block;width:100%;text-align:center;">
+						<div class="clearfix" style="display:inline-block;">
+							<div class="float-left" style="margin: 0 40px 0 0; min-width:400px;">
+								<div style="position: relative;">
+									<div style="text-align: right; margin: 0 5px 4px 0; position: absolute; top: 1px; right: 5px;">
+										<button class="btn btn-default btn-sm" style="width: 30px;" type="button" onclick="Ticket.html('message', 'AFunctions'); this.blur();">a</button>
+										<button class="btn btn-default btn-sm" style="width: 30px;" type="button" onclick="Ticket.wrap('message', '[[b]]', '[[/b]]'); this.blur();"><b>b</b></button>
+										<button class="btn btn-default btn-sm" style="width: 30px;" type="button" onclick="Ticket.wrap('message', '[[i]]', '[[/i]]'); this.blur();"><i>i</i></button>
+										<button class="btn btn-default btn-sm" style="width: 30px;" type="button" onclick="Ticket.wrap('message', '[[u]]', '[[/u]]'); this.blur();"><u>u</u></button>
+									</div>
+									{message}
+									{attachment}
 								</div>
-								{message}
-								{attachment}
+								<div class="" style="margin: 25px 0 0 0;">{submit}</div>
 							</div>
-							<div class="" style="margin: 25px 0 0 20px;">{submit}</div>
-						</div>
-						<div class="float-left" id="ticket_infos" style="width:40%; padding-right:20px;">
-							<div id="reporter_box" style="display:block;">
-								{reporter_email}
-								{reporter_salutation}
-								{reporter_forename}
-								{reporter_lastname}
-								{reporter_firm}
-								{reporter_office}
-								{reporter_phone}
-								<div style="line-height:0px;height:0px;clear:both;" class="floatbreaker">&#160;</div>
-							</div>
-							<div id="supporter_info_box" style="display:block;">
-								{flag_01}
-								{flag_02}
-								{flag_03}
-								{flag_04}
-								{flag_05}
-								{flag_06}
-								{flag_07}
-								{flag_08}
-								{flag_09}
-								{flag_10}
-								<div style="line-height:0px;height:0px;clear:both;" class="floatbreaker">&#160;</div>
+							<div class="float-left" id="ticket_infos" style="min-width:400px;">
+								<div id="supporter_info_box" style="display:block;">
+									{flag_01}
+									{flag_02}
+									{flag_03}
+									{flag_04}
+									{flag_05}
+									{flag_06}
+									{flag_07}
+									{flag_08}
+									{flag_09}
+									{flag_10}
+									<div style="line-height:0px;height:0px;clear:both;" class="floatbreaker">&#160;</div>
+								</div>
 							</div>
 						</div>
 					</div>
 					<div style="line-height:0px;height:0px;clear:both;" class="floatbreaker">&#160;</div>
-				</form>
+				</div>
 			</div>
-		</div>
-
+		</form>
 	</div>
 
 	<div class="card" id="notices" style="margin: 15px 0 0 0;">
@@ -93,7 +83,6 @@
 	</div>
 	<div style="line-height:0px;height:0px;clear:both;" class="floatbreaker">&#160;</div>
 
-
 	<div class="card" style="margin: 15px 0 0 0;">
 		<div class="card-header">
 			<h4 style="float:left;margin: 0;">{label_changelog}</h4>
@@ -107,27 +96,11 @@
 </div>
 
 <script type="text/javascript">
-function xmlRequestObject() {
-	var arg = null;
-	if (typeof XMLHttpRequest != "undefined") {
-		return new XMLHttpRequest();
-		arg = "1";
-	}
-	if (!arg) {
-		try { return new ActiveXObject("Msxml2.XMLHTTP"); }
-		catch(e) {
-			try { return new ActiveXObject("Microsoft.XMLHTTP"); } 
-			catch(e) { return null;  }
-		}
-	}
-}
-
 function setfocus() {
 	window.location.href = "#notice_box";
 	element = document.getElementById('notice');
 	element.focus();
 }
-
 function toggle( id ) {
 	e = document.getElementById(id);
 	b = document.getElementById(id+'_button');
@@ -137,45 +110,6 @@ function toggle( id ) {
 	} else {
 		e.style.display = 'block';
 		b.innerHTML = '-';
-	}
-}
-
-function get_users(element) {
-	value    = element.options[element.selectedIndex].value;
-	if(value != '') {
-		id       = element.options[element.selectedIndex].text;
-		error    = null;
-		target   = 'api.php';
-		params   = '';
-		response = '';
-		params   = '&action=plugin&plugin=ticket&command=get_supporters&id='+id;
-		request = new xmlRequestObject();	
-		if (request) {
-			request.open("POST", target, false);
-			request.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-			request.send(params);
-			if(request.status == 200) {
-				response = request.responseText;
-			} else {
-				error = 'error: HTTP ' +request.status+' '+request.statusText;
-			}
-		} else { 
-			error = 'error: no xmlRequestObject'; 
-		}
-		if(!error) {
-			if(response != '') {
-				s = document.getElementById('supporter').parentNode;
-				s.innerHTML = response;
-			} else {
-				s = document.getElementById('supporter').parentNode;
-				s.innerHTML = '<input type="hidden" name="supporter" id="supporter">';
-			}
-		} else {
-			alert(error);
-		}
-	} else {
-		s = document.getElementById('supporter').parentNode;
-		s.innerHTML = '<input type="hidden" name="supporter" id="supporter">';
 	}
 }
 </script>

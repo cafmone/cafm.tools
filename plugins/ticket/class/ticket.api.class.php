@@ -13,6 +13,7 @@ class ticket_api
 {
 
 var $lang = array(
+	'supporter' => 'Supporter',
 	'ticket_id' => 'Ticket #%s',
 	'link_config' => 'Settings',
 	'link_account' => 'Account',
@@ -75,9 +76,11 @@ var $lang = array(
 				$select->css   = 'htmlobject_select form-control';
 				$select->id    = 'supporter';
 				$select->name  = 'supporter';
+				$select->add(array('','&#160;'), array(0,1));
 				foreach($result as $v) {
 					$select->add(array($v['login']), array(0,0));
 				}
+				$select->handler = 'onmousedown="phppublisher.select.init(this, \''.$this->lang['supporter'].'\'); return false;"';
 				echo $select->get_string();
 			}
 		}	

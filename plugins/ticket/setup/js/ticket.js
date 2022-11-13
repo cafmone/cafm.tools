@@ -75,3 +75,87 @@ Ticket.html = function(id, box, move_x, move_y) {
 		this.url.focus();
 	}
 }
+//---------------------------------
+// Html
+//---------------------------------
+Ticket.confirm = function( element, id ) {
+	phppublisher.modal.width = '280px';
+	var modalid = phppublisher.modal.init('');
+	var c = document.createElement("div");
+	c.style.textAlign = 'center';
+	c.style.margin = '20px';
+	var t = document.createElement("div");
+	t.innerHTML = 'Remove Notice '+id+'?<br><br>';
+	var b = document.createElement("button");
+	b.className = 'btn btn-sm btn-default';
+	b.innerHTML = 'ok';
+	b.type = 'button';
+	b.onclick = function() {
+		$('#'+modalid).modal('hide');
+		phppublisher.wait();
+		location.href = element.href;
+	}
+	c.appendChild(t);
+	c.appendChild(b);
+
+	$('#'+modalid).modal('show');
+	phppublisher.modal.print(c);
+	b.focus();
+}
+
+function xmlRequestObject() {
+	var arg = null;
+	if (typeof XMLHttpRequest != "undefined") {
+		return new XMLHttpRequest();
+	}
+	else {
+		try { return new ActiveXObject("Msxml2.XMLHTTP"); }
+		catch(e) {
+			try { return new ActiveXObject("Microsoft.XMLHTTP"); } 
+			catch(e) { return null;  }
+		}
+	}
+}
+function get_users(element) {
+	value    = element.options[element.selectedIndex].value;
+	if(value != '') {
+		id       = element.options[element.selectedIndex].text;
+		error    = null;
+		target   = 'api.php';
+		params   = '';
+		response = '';
+		params   = '&action=plugin&plugin=ticket&command=get_supporters&id='+id;
+		request = new xmlRequestObject();	
+		if (request) {
+			request.open("POST", target, false);
+			request.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+			request.send(params);
+			if(request.status == 200) {
+				response = request.responseText;
+			} else {
+				error = 'error: HTTP ' +request.status+' '+request.statusText;
+			}
+		} else { 
+			error = 'error: no xmlRequestObject'; 
+		}
+		if(!error) {
+			if(response != '') {
+				s = document.getElementById('supporter').parentNode;
+				s.parentNode.style.visibility = "visible";
+				s.innerHTML = response;
+			} else {
+				s = document.getElementById('supporter').parentNode;
+				s.parentNode.style.visibility = "hidden";
+				s.innerHTML = '<input type="hidden" name="supporter" id="supporter">';
+			}
+		} else {
+			alert(error);
+		}
+	} else {
+		s = document.getElementById('supporter').parentNode;
+		s.parentNode.style.visibility = "hidden";
+		s.innerHTML = '<input type="hidden" name="supporter" id="supporter">';
+	}
+}
+
+

@@ -102,6 +102,13 @@ var $lang = array();
 		if(!$form->get_errors() && $response->submit()) {
 			$f['created'] = time();
 			if(!isset($response->error)) {
+				$plugin = $form->get_static('plugin');
+				if(isset($plugin)) {
+					$f['plugin'] = htmlentities($plugin);
+				}
+				var_dump($f);
+				exit();
+			
 				$error = $this->db->insert('ticket_tickets', $f);
 				if(isset($error) && $error !== '') {
 					$response->error = $error;

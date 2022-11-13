@@ -53,6 +53,9 @@ var $lang = array();
 			$result = array_shift($result);
 			foreach($result as $k => $v) {
 				if($k !== 'updated') {
+					if(is_null($v)) {
+						$v = '';
+					}
 					if(isset($f[$k]) && $f[$k] !== $v) {
 						$c['ticket'] = $this->id;
 						$c['option'] = $k;

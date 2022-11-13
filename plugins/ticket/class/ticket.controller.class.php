@@ -42,6 +42,7 @@ var $lang = array(
 	'group' => 'Group',
 	'supporter' => 'Supporter',
 	'reporter' => 'Reporter',
+	/*
 	'reporter_email' => 'Email',
 	'reporter_salutation' => 'Salutation',
 	'reporter_salutation_mrs' => 'Mrs.',
@@ -51,6 +52,7 @@ var $lang = array(
 	'reporter_office' => 'Office',
 	'reporter_phone' => 'Phone',
 	'reporter_firm' => 'Firm',
+	*/
 	'subject' => 'Subject',
 	'description' => 'Description',
 	'attachment' => 'Attachment',
@@ -71,7 +73,7 @@ var $lang = array(
 	'filter_state_open' => 'open',
 	'filter_state_closed' => 'closed',
 	'filter_no_filter' => 'No filter',
-	'notice_new' => 'New notice',
+	'notice_new' => 'Notice',
 	'notice_private' => 'private',
 	'notice_make_private' => 'click to make private',
 	'notice_make_public' => 'click to make public',
@@ -89,11 +91,11 @@ var $lang = array(
 	'msg_saved' => 'Saved Ticket %s',
 	'msg_updated' => 'Updated Ticket %s',
 	'msg_closed' => 'Closed Ticket %s',
-	'no_result' => 'no result',
+	'no_result' => 'No Result',
 	'error_not_found' => 'Ticket %s not found',
 	'error_no_mailadress' => 'Error: Mail not sent. No user found to send mail to.',
-	'action_reply' => 'Save Reply',
-	'action_close' => 'close ticket',
+	'action_reply' => 'Save Ticket',
+	'action_close' => 'Close Ticket',
 	'back_to_overview' => 'Back to overview'
 );
 var $date_format = "Y/m/d H:i";
@@ -375,6 +377,7 @@ var $date_format = "Y/m/d H:i";
 		$settings = $this->settings;
 		$response = $this->response;
 		$form     = $response->get_form($this->actions_name, $mode);
+		$form->css = 'form-horizontal';
 
 		// handle db field length
 		$columns = $this->db->handler()->columns($this->db->db, 'ticket_tickets');
@@ -405,10 +408,12 @@ var $date_format = "Y/m/d H:i";
 				if(isset($settings['required']['supporter'])) {
 					$d['supporter']['required'] = true;
 				}
+				$d['supporter']['style']                    = 'visibility:hidden;';
 				$d['supporter']['object']['type']           = 'htmlobject_input';
 				$d['supporter']['object']['attrib']['type'] = 'hidden';
 				$d['supporter']['object']['attrib']['name'] = 'supporter';
 				$d['supporter']['object']['attrib']['id']   = 'supporter';
+				$d['supporter']['object']['attrib']['handler'] = 'onmousedown="phppublisher.select.init(this, \''.$this->lang['supporter'].'\'); return false;"';
 
 				$result = $this->db->select('ticket_form', array('option'), array('id', $rg));
 				if(is_array($result)) {
@@ -426,6 +431,7 @@ var $date_format = "Y/m/d H:i";
 					} else {
 						$select->selected = array($tmp);
 					}
+					$select->add(array('','&#160;'), array(0,1));
 					foreach($result as $v) {
 						$select->add(array($v['login']), array(0,0));
 					}
@@ -441,7 +447,8 @@ var $date_format = "Y/m/d H:i";
 				$select->css  = 'htmlobject_select form-control';
 				$select->id   = 'supporter';
 				$select->name = 'supporter';
-				$select->add(array('', sprintf($this->lang['select_value'], $this->lang['supporter']) ), array(0,1));
+				$select->handler = 'onmousedown="phppublisher.select.init(this, \''.$this->lang['supporter'].'\'); return false;"';
+				$select->add(array('','&#160;'), array(0,1));
 				if($this->user instanceof user) {
 					$result = $this->user->query->select('users', array('login'), null, array('login'));
 					if(is_array($result)) {
@@ -500,6 +507,7 @@ var $date_format = "Y/m/d H:i";
 					$label = $settings['labels'][$v];
 				}
 				$d[$v]['label'] = $label;
+				#$d[$v]['css'] = ' inverted';
 				if($mode !== 'select' && isset($settings['required']) && isset($settings['required'][$v])) {
 					$d[$v]['required'] = true;
 				}
@@ -510,9 +518,7 @@ var $date_format = "Y/m/d H:i";
 				if(isset($ini[$v])) {
 					$d[$v]['object']['attrib']['selected'] = array($ini[$v]);
 				}
-				if($v === 'group' && isset($settings['form']['supporter'])) {
-					$d[$v]['object']['attrib']['handler'] = 'onchange="get_users(this); return false;"'; 
-				}
+				$d[$v]['object']['attrib']['handler'] ='onmousedown="phppublisher.select.init(this, \''.$label.'\'); return false;"';
 			} else {
 				$d[$v] = '';
 			}
@@ -534,11 +540,12 @@ var $date_format = "Y/m/d H:i";
 				$select->css = 'form-control';
 				$select->add($option, array(0,1));
 				$select->add($result, array('option','option'));
+				$select->handler = 'onmousedown="phppublisher.select.init(this, \''.$this->lang['group'].'\'); return false;"';
 				if(isset($ini['group'])) {
 					$select->selected = array($ini['group']);
 				}
 				if(isset($settings['form']['supporter'])) {
-					$select->handler = 'onchange="get_users(this); return false;"'; 
+					$select->handler = $select->handler.' onchange="get_users(this); return false;"'; 
 				}
 				$d['group']['object'] = $select;
 			}
@@ -547,10 +554,6 @@ var $date_format = "Y/m/d H:i";
 		// REPORTER INFOS
 		if(isset($settings['form']['reporter'])) {
 			$d['reporter'] = array();
-
-### TODO get users from user object - SSO problem
-
-			#$tusers = $this->user->query()->select('users', '*', null, array('login'));
 			$tusers = $this->user->list_users();
 			$users[0]['login'] = '--empty--';
 			$users[0]['name']  = '&#160;';
@@ -566,103 +569,24 @@ var $date_format = "Y/m/d H:i";
 					$i++;
 				}
 			}
-
 			$d['reporter']['label']                       = $this->lang['reporter'];
 			$d['reporter']['object']['type']              = 'htmlobject_select';
 			$d['reporter']['object']['attrib']['name']    = 'reporter';
 			$d['reporter']['object']['attrib']['index']   = array('login','name');
 			$d['reporter']['object']['attrib']['options'] = $users;
+			$d['reporter']['object']['attrib']['handler'] = 'onmousedown="phppublisher.select.init(this, \''.$this->lang['reporter'].'\'); return false;"';
 			if($mode !== 'select') {
 				if(isset($ini['reporter'])) {
 					$d['reporter']['object']['attrib']['selected'] = array($ini['reporter']);
 				} else {
-					$user = $this->user->get();
-					$d['reporter']['object']['attrib']['selected'] = array($user['login']);
+					if($mode === 'insert') {
+						$user = $this->user->get();
+						$d['reporter']['object']['attrib']['selected'] = array($user['login']);
+					}
 				}
-			}
-
-			$d['ticket_reporter'] = '';
-			if($mode === 'update') {
-				$d['ticket_reporter'] = array();
-				$div = $this->response->html->div();
-				$div->name = 'reporter';
-				if(isset($ini['reporter'])) {
-					$div->add(htmlentities($users[$ini['reporter']]['name'], ENT_COMPAT, 'UTF-8'));
-				}
-				$d['ticket_reporter']['label']  = $this->lang['reporter'];
-				$d['ticket_reporter']['object'] = $div;
-			}
-
-			$d['ticket_supporter'] = '';
-			if($mode === 'update') {
-				$d['ticket_supporter'] = array();
-				$div = $this->response->html->div();
-				$div->name = 'supporter';
-				if(isset($ini['supporter'])) {
-					$div->add(htmlentities($users[$ini['supporter']]['name'], ENT_COMPAT, 'UTF-8'));
-				}
-				$d['ticket_supporter']['label']  = $this->lang['supporter'];
-				$d['ticket_supporter']['object'] = $div;
 			}
 		} else {
 			$d['reporter'] = '';
-			$d['ticket_reporter'] = '';
-			$d['ticket_supporter'] = '';
-		}
-
-		$fields = array(
-			'forename',
-			'lastname',
-			'email',
-			'phone',
-			'office',
-			'firm'
-		);
-		foreach($fields as $v) {
-			if(isset($settings['reporter']['reporter_'.$v])) {
-				$d['reporter_'.$v]['label'] = $this->lang['reporter_'.$v];
-				if(
-					!isset($settings['form']['reporter']) &&
-					isset($settings['required']['reporter_'.$v])
-				) {
-					$d['reporter_'.$v]['required'] = true;
-				}
-				$d['reporter_'.$v]['object']['type']           = 'htmlobject_input';
-				$d['reporter_'.$v]['object']['attrib']['type'] = 'text';
-				$d['reporter_'.$v]['object']['attrib']['name'] = 'reporter_'.$v;
-				$d['reporter_'.$v]['object']['attrib']['id']   = 'reporter_'.$v;
-				if(isset($columns['reporter_'.$v]['length'])) {
-					$d['reporter_'.$v]['object']['attrib']['maxlength'] = $columns['reporter_'.$v]['length'];
-				}
-				if(isset($ini['reporter_'.$v])) {
-					$d['reporter_'.$v]['object']['attrib']['value'] = $ini['reporter_'.$v];
-				}
-			} else {
-				$d['reporter_'.$v] = '';
-			}
-		}
-
-		$d['reporter_salutation'] = '';
-		if(isset($settings['reporter']['reporter_salutation'])) {
-			$d['reporter_salutation'] = array();
-			$salutations = array();
-			$salutations[] = array( '', '&#160;' );
-			$salutations[] = array( 'mrs', $this->lang['reporter_salutation_mrs'] );
-			$salutations[] = array( 'mr', $this->lang['reporter_salutation_mr'] );
-			$d['reporter_salutation']['label'] = $this->lang['reporter_salutation'];
-			if(
-				!isset($settings['form']['reporter']) &&
-				isset($settings['required']['reporter_salutation'])
-			) {
-				$d['reporter_salutation']['required'] = true;
-			}
-			$d['reporter_salutation']['object']['type']               = 'htmlobject_select';
-			$d['reporter_salutation']['object']['attrib']['name']     = 'reporter_salutation';
-			$d['reporter_salutation']['object']['attrib']['index']    = array(0,1);
-			$d['reporter_salutation']['object']['attrib']['options']  = $salutations;
-			if(isset( $ini['reporter_salutation'] )) {
-				$d['reporter_salutation']['object']['attrib']['selected'] = array( $ini['reporter_salutation'] );
-			}
 		}
 
 		$d['subject']['label'] = $this->lang['subject'];
@@ -739,7 +663,7 @@ var $date_format = "Y/m/d H:i";
 ### TODO attachment from class?
 
 		$d['attachment'] = '';
-		if(isset($settings['settings']['attachment'])) {
+		if(isset($settings['settings']['attachment']) && $mode === 'insert') {
 			$d['attachment'] = array();
 			$d['attachment']['object']['type']            = 'htmlobject_input';
 			$d['attachment']['object']['attrib']['style'] = 'margin-top: 15px;';
@@ -775,14 +699,12 @@ var $date_format = "Y/m/d H:i";
 		if($mode === 'update') {
 			$d['message'] = array();
 			$d['message']['label'] = $this->lang['notice_new'];
-			$d['message']['required'] = true;
 			$d['message']['object']['type']            = 'htmlobject_textarea';
 			$d['message']['object']['attrib']['name']  = 'message';
 			$d['message']['object']['attrib']['id']    = 'message';
 			$d['message']['object']['attrib']['value'] = '';
 			$d['message']['object']['attrib']['cols']  = '';
 			$d['message']['object']['attrib']['rows']  = '';
-
 			$n_columns = $this->db->handler()->columns($this->db->db, 'ticket_notices');
 			if(isset($n_columns['notice']['length'])) {
 				$d['message']['object']['attrib']['maxlength'] = $n_columns['notice']['length'];
@@ -804,6 +726,24 @@ var $date_format = "Y/m/d H:i";
 		}
 		if($mode === 'update') {
 			$response->created  = date($this->date_format, $ini['created']);
+		}
+
+		$d['plugin'] = '';
+		if($mode === 'insert') {
+			$plugin = $this->response->html->request()->get('plugin');
+			if($plugin !== '') {
+				$d['plugin'] = array();
+				$d['plugin']['label']                     = 'Plugin';
+				$d['plugin']['static']                    = true;
+				$d['plugin']['object']['type']            = 'htmlobject_input';
+				$d['plugin']['object']['attrib']['name']  = 'plugin';
+				$d['plugin']['object']['attrib']['value'] = htmlentities($plugin);
+				$d['plugin']['object']['attrib']['css']   = 'disabled';
+				$d['plugin']['object']['attrib']['type']  = 'text';
+				if(isset($columns['plugin']['length'])) {
+					$d['plugin']['object']['attrib']['maxlength'] = $columns['plugin']['length'];
+				}
+			}
 		}
 
 		$form->add($d);

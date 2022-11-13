@@ -13,7 +13,7 @@
 	width: auto;
 }
 #ticket .wrapper {
-	padding: 15px 10px 5px 10px;
+	padding: 20px 20px 15px 20px;
 }
 #ticket #description_box.htmlobject_box .left,
 #ticket #notice_box.htmlobject_box .left {
@@ -39,15 +39,13 @@
 #info_box {
 
 }
+/*
 #info_box .htmlobject_box .right select {
 	width:220px;
 }
+*/
 #info_box .htmlobject_box .right .text {
 	width:220px;
-}
-#info_box #supporter_box .right {
-	min-width: 220px;
-	min-height: 34px;
 }
 #info_box .form-horizontal .form-group {
 	margin-left: 0px;
@@ -55,10 +53,6 @@
 }
 #info_box #<div id="info_box">{
 	margin: 0 0 20px 0;
-}
-#info_box #ticket_infos .htmlobject_box{
-	float: right;
-	clear: both;
 }
 #info_box #ticket_infos .left{
 	width: auto;
@@ -116,6 +110,25 @@
 #ticketmail .to .htmlobject_box .left,
 #ticketmail .to .htmlobject_box .right {
 	width: auto;
+}
+
+#supporter_info_box {
+
+}
+#supporters_box .htmlobject_box,
+#supporter_info_box .htmlobject_box {
+	display: inline-block;
+	float: left;
+	clear: both;
+}
+#supporters_box .htmlobject_box .left,
+#supporter_info_box .htmlobject_box .left {
+	float: right;
+	margin-left: 15px;
+}
+#supporters_box .htmlobject_box .right,
+#supporter_info_box .htmlobject_box .right {
+	float: left;
 }
 
 /*

@@ -164,69 +164,34 @@ var $lang = array();
 				$updated = $this->controller->changelog($this->id)->set($f);
 				if($updated === true) {
 					// set updater to notice
-					$f['updater'] = 'notice';
+					$f['updater'] = 'update';
 					$error = $this->db->update('ticket_tickets', $f, array('id', $this->id));
 					if(!isset($error) || $error === '') {
-						// handle notice
-						$user = $this->user->get();
-						if(isset($user)) {
-							$login = $user['login'];
-							$date  = time();
-							$error = $this->db->insert(
-								'ticket_notices',
-								array(
-									'ticket' => $this->id,
-									'login' => $login,
-									'notice' => $notice,
-									'private' => 0,
-									'date' => $date
-								)
-							);
-
-							$lid = $this->db->last_insert_id();
-							if(isset($lid) && $lid !== '') {
-								$this->notice_id = $lid;
-								// handle upload
-								if(
-									$error === '' &&
-									isset($_FILES['attachment']) &&
-									$_FILES['attachment']['name'] !== '' &&
-									isset($this->controller->settings['settings']['attachment']) 
-								) {
-									$attachment = uniqid('f').'_'.$_FILES['attachment']['name'];
-									$path = $this->controller->profilesdir.'/ticket/attachments/'.$this->id;
-									if(!$this->file->exists($path)) {
-										$error = $this->file->mkdir($path);
-									}
-									if(!isset($error) || $error === '') {
-										require_once(CLASSDIR.'lib/file/file.upload.class.php');
-										$upload = new file_upload($this->file);
-										$error = $upload->upload('attachment', $path, $attachment);
-										if($error !== '') {
-											$error = 'Upload error: '.$error['msg'];
-										} else {
-											// handle upload (db)
-											if(isset($attachment)) {
-												$error = $this->db->insert(
-													'ticket_attachments',
-													array(
-														'ticket' => $this->id,
-														'notice' => $lid,
-														'file' => $attachment,
-														'name' => $_FILES['attachment']['name'],
-														'type' => $_FILES['attachment']['type'],
-														'size' => $_FILES['attachment']['size']
-													)
-												);
-											}
-										}
-									}
+						if($notice !== '') {
+							// handle notice
+							$user = $this->user->get();
+							if(isset($user)) {
+								$login = $user['login'];
+								$date  = time();
+								$error = $this->db->insert(
+									'ticket_notices',
+									array(
+										'ticket' => $this->id,
+										'login' => $login,
+										'notice' => $notice,
+										'private' => 0,
+										'date' => $date
+									)
+								);
+								if($error !== '') {
+									$response->error = $error;
+								} else {
+									$response->msg = sprintf($this->lang['msg_updated'], $this->id);
 								}
+							} else {
+								$response->error = 'No User';
 							}
 						} else {
-							$error = 'No User';
-						}
-						if(!isset($error) || $error === '') {
 							$response->msg = sprintf($this->lang['msg_updated'], $this->id);
 						}
 					} else {
@@ -240,6 +205,50 @@ var $lang = array();
 		}
 		return $response;
 	}
+
+/*
+	$lid = $this->db->last_insert_id();
+	if(isset($lid) && $lid !== '') {
+		$this->notice_id = $lid;
+		// handle upload
+		if(
+			$error === '' &&
+			isset($_FILES['attachment']) &&
+			$_FILES['attachment']['name'] !== '' &&
+			isset($this->controller->settings['settings']['attachment']) 
+		) {
+			$attachment = uniqid('f').'_'.$_FILES['attachment']['name'];
+			$path = $this->controller->profilesdir.'/ticket/attachments/'.$this->id;
+			if(!$this->file->exists($path)) {
+				$error = $this->file->mkdir($path);
+			}
+			if(!isset($error) || $error === '') {
+				require_once(CLASSDIR.'lib/file/file.upload.class.php');
+				$upload = new file_upload($this->file);
+				$error = $upload->upload('attachment', $path, $attachment);
+				if($error !== '') {
+					$error = 'Upload error: '.$error['msg'];
+				} else {
+					// handle upload (db)
+					if(isset($attachment)) {
+						$error = $this->db->insert(
+							'ticket_attachments',
+							array(
+								'ticket' => $this->id,
+								'notice' => $lid,
+								'file' => $attachment,
+								'name' => $_FILES['attachment']['name'],
+								'type' => $_FILES['attachment']['type'],
+								'size' => $_FILES['attachment']['size']
+							)
+						);
+					}
+				}
+			}
+		}
+	}
+*/							
+
 
 }
 ?>

@@ -94,7 +94,7 @@ var $lang = array();
 				}
 			}
 			if(isset($response->error)) {
-				$_REQUEST['errormsg'] = $response->error;
+				$_REQUEST[$this->message_param]['error'] = $response->error;
 			}
 			$t = $this->response->html->template($this->tpldir.'ticket.notice.insert.html');
 			$t->add($this->response->html->thisfile, 'thisfile');
@@ -165,7 +165,7 @@ var $lang = array();
 					$del->href  = $this->response->get_url($this->actions_name, 'delete').'&notice='.$v['id'].'&ticket='.$this->id;
 					$del->title = $this->lang['notice_delete'];
 					$del->css   = 'delete icon icon-trash';
-					$del->handler = 'onclick="phppublisher.wait();"';
+					$del->handler = 'onclick="Ticket.confirm(this, \''.$v['id'].'\'); return false;"';
 
 					// handle mkpublic
 					$pub = '';
@@ -252,89 +252,87 @@ var $lang = array();
 		$form     = $response->form;
 		$notice   = $form->get_request('notice');
 
-		if(isset($notice) && $notice !== '') {
-			if(!$form->get_errors() && $response->submit()) {
-				if(!isset($response->error)) {
-					$private = $form->get_request('private');
-					$login   = '';
-					$private = (isset($private) && $private !== '') ? 1 : 0;
-					$user    = $this->user->get();
-					if(isset($user)) {
-						$login = $user['login'];
-					}
-					$date = time();
-					$error = $this->db->insert(
-						'ticket_notices',
+		if(!$form->get_errors() && $response->submit()) {
+			if(!isset($response->error)) {
+				$private = $form->get_request('private');
+				$login   = '';
+				$private = (isset($private) && $private !== '') ? 1 : 0;
+				$user    = $this->user->get();
+				if(isset($user)) {
+					$login = $user['login'];
+				}
+				$date = time();
+				$error = $this->db->insert(
+					'ticket_notices',
+					array(
+						'ticket' => $this->id,
+						'login' => $login,
+						'notice' => $notice,
+						'private' => $private,
+						'date' => $date
+					)
+				);
+				$lid = $this->db->last_insert_id();
+				// set updater and updated
+				if($private !== 1) {
+					$error = $this->db->update(
+						'ticket_tickets',
 						array(
-							'ticket' => $this->id,
-							'login' => $login,
-							'notice' => $notice,
-							'private' => $private,
-							'date' => $date
-						)
+							'updated' => $date,
+							'updater' => 'notice'
+						),
+						array( 'id', $this->id )
 					);
-					$lid = $this->db->last_insert_id();
-					// set updater and updated
-					if($private !== 1) {
-						$error = $this->db->update(
-							'ticket_tickets',
-							array(
-								'updated' => $date,
-								'updater' => 'notice'
-							),
-							array( 'id', $this->id )
-						);
-					}
+				}
 
-					// handle upload
-					if(
-						$error === '' &&
-						isset($_FILES['attachment']) &&
-						$_FILES['attachment']['name'] !== '' &&
-						isset($this->controller->settings['settings']['attachment']) 
-					) {
-						$attachment = uniqid('f').'_'.$_FILES['attachment']['name'];
-						$path = $this->controller->profilesdir.'/ticket/attachments/'.$this->id;
-						if(!$this->file->exists($path)) {
-							$error = $this->file->mkdir($path);
-						}
-						if(!isset($error) || $error === '') {
-							require_once(CLASSDIR.'lib/file/file.upload.class.php');
-							$upload = new file_upload($this->file);
-							$error = $upload->upload('attachment', $path, $attachment);
-							if($error !== '') {
-								$error = 'Upload error: '.$error['msg'];
-							} else {
-								// handle upload (db)
-								if(isset($attachment)) {
-									$error = $this->db->insert(
-										'ticket_attachments',
-										array(
-											'ticket' => $this->id,
-											'notice' => $lid,
-											'file' => $attachment,
-											'name' => $_FILES['attachment']['name'],
-											'type' => $_FILES['attachment']['type'],
-											'size' => $_FILES['attachment']['size']
-										)
-									);
-								}
+				// handle upload
+				if(
+					$error === '' &&
+					isset($_FILES['attachment']) &&
+					$_FILES['attachment']['name'] !== '' &&
+					isset($this->controller->settings['settings']['attachment']) 
+				) {
+					$attachment = uniqid('f').'_'.$_FILES['attachment']['name'];
+					$path = $this->controller->profilesdir.'/ticket/attachments/'.$this->id;
+					if(!$this->file->exists($path)) {
+						$error = $this->file->mkdir($path);
+					}
+					if(!isset($error) || $error === '') {
+						require_once(CLASSDIR.'lib/file/file.upload.class.php');
+						$upload = new file_upload($this->file);
+						$error = $upload->upload('attachment', $path, $attachment);
+						if($error !== '') {
+							$error = 'Upload error: '.$error['msg'];
+						} else {
+							// handle upload (db)
+							if(isset($attachment)) {
+								$error = $this->db->insert(
+									'ticket_attachments',
+									array(
+										'ticket' => $this->id,
+										'notice' => $lid,
+										'file' => $attachment,
+										'name' => $_FILES['attachment']['name'],
+										'type' => $_FILES['attachment']['type'],
+										'size' => $_FILES['attachment']['size']
+									)
+								);
 							}
 						}
 					}
-					if(isset($error) && $error !== '') {
-						$response->error = $error;
-					} else {
-						if($private !== 1) {
-							$response->nid  = $lid;
-						}
-						$response->msg = sprintf($this->lang['msg_saved'], $lid);
+				}
+				if(isset($error) && $error !== '') {
+					$response->error = $error;
+				} else {
+					if($private !== 1) {
+						$response->nid  = $lid;
 					}
+					$response->msg = sprintf($this->lang['msg_saved'], $lid);
 				}
 			}
-			else if($form->get_errors()) {
-				$response->error = implode('<br>', $form->get_errors());
-			}
+		}
+		else if($form->get_errors()) {
+			$response->error = implode('<br>', $form->get_errors());
 		}
 		return $response;
 	}
@@ -440,8 +438,9 @@ var $lang = array();
 		if(isset($columns['notice']['length'])) {
 			$t->maxlength = $columns['notice']['length'];
 		}
-		$d['notice']['label']  = $this->lang['notice_new'];
-		$d['notice']['object'] = $t;
+		$d['notice']['label']    = $this->lang['notice_new'];
+		$d['notice']['required'] = true;
+		$d['notice']['object']   = $t;
 
 		$d['private']['label']                    = $this->lang['notice_private'];
 		$d['private']['css']                      = 'autosize float-right';

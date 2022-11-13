@@ -137,19 +137,19 @@ var $lang = array(
 
 		$response = $this->response;
 		$form = $response->get_form($this->actions_name, 'update');
-
 		$ini = $this->file->get_ini($this->settings);
 
-		$box = $response->html->box();
-		$box->label = '<span class="icon icon-edit" style="margin: 0 10px 0 0;"></span>';
-		$box->css = 'htmlobject_box autosize';
-		$box->style = 'margin: 5px 0 5px 20px';
 		$input = $response->html->input();
 		$input->type = 'text';
 		$input->name = 'id';
 		$input->id = 'ticketshortcut';
-		$input->style = 'width: 80px;';
+		$input->style = 'margin-left:3px;width: 100px;display:inline-block;';
 		$input->css = 'form-control input-sm';
+
+		$box = $response->html->div();
+		$box->add('<span class="icon icon-edit" style="margin: 0 10px 0 0;"></span>');
+		$box->css = 'htmlobject_box autosize';
+		$box->style = 'margin: 5px 0 5px 20px';
 		$box->add($input);
 
 		$new        = $response->html->a();
@@ -165,6 +165,7 @@ var $lang = array(
 		#if(!isset($this->db->type)) {
 		#	$new = '<div style="padding:10px;"><b>Error:</b> Check your db settings</div>';
 		#} else {
+		/*
 			if(isset($ini['form']['reporter'])) {
 				$my        = $response->html->a();
 				$my->href  = $response->html->thisfile.$response->get_string($this->actions_name, 'select', '?', true ).'&filter[login]=reporter&filter[state]=open';
@@ -197,6 +198,7 @@ var $lang = array(
 
 				$group = '<div class="list-group-item list-group-item-action">'.$group->get_string().' ('.$g_open->get_string().')'.'</div>';
 			}
+		*/
 			$all        = $response->html->a();
 			$all->href  = $response->html->thisfile.$response->get_string($this->actions_name, 'select', '?', true );
 			$all->label = '<span class="icon icon-home" style="margin: 0 10px 0 0;"></span> '.$this->lang['all_tickets'];
