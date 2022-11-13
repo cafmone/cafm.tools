@@ -548,6 +548,8 @@ var $date_format = "Y/m/d H:i";
 					$select->handler = $select->handler.' onchange="get_users(this); return false;"'; 
 				}
 				$d['group']['object'] = $select;
+			} else {
+				$d['group'] = '';
 			}
 		}
 
