@@ -400,7 +400,7 @@ var $substr = 200;
 		}
 		else if($result !== '') {
 			$_REQUEST[$this->message_param] = $result;
-			return array();
+			//return array();
 		} else {
 			return array();
 		}
@@ -451,7 +451,6 @@ var $substr = 200;
 
 		$d['filter_state']['label']                       = $this->lang['filter_state'];
 		$d['filter_state']['css']                         = 'autosize';
-		$d['filter_state']['style']                       = 'float:right;clear:both;';
 		$d['filter_state']['object']['type']              = 'htmlobject_select';
 		$d['filter_state']['object']['attrib']['name']    = 'filter[state]';
 		$d['filter_state']['object']['attrib']['index']   = array(0,1);
@@ -476,13 +475,13 @@ var $substr = 200;
 				}
 				$d[$v]['label']                       = $label;
 				$d[$v]['css']                         = 'autosize';
-				$d[$v]['style']                       = 'float:right;clear:both;';
 				$d[$v]['object']['type']              = 'htmlobject_select';
 				$d[$v]['object']['attrib']['name']    = 'filter['.$v.']';
 				$d[$v]['object']['attrib']['index']   = array('id','option');
 				$d[$v]['object']['attrib']['options'] = $result;
-				$d[$v]['object']['attrib']['style']   = 'width: 110px;';
 				$d[$v]['object']['attrib']['handler'] = 'onchange="this.form.submit();phppublisher.wait();return false;"';
+				$d[$v]['object']['attrib']['handler'] = 'onmousedown="phppublisher.select.submit=true;phppublisher.select.init(this, \''.$label.'\'); return false;"';
+
 			} else {
 				$d[$v] = '';
 			}
@@ -511,7 +510,7 @@ var $substr = 200;
 		foreach($elements as $v) {
 			if(isset($settings['form'][$v])) {
 				$d['filter_'.$v]['css']                         = 'autosize';
-				$d['filter_'.$v]['style']                       = 'float:right;clear:both;';
+				#$d['filter_'.$v]['style']                       = 'float:right;clear:both;';
 				$d['filter_'.$v]['label']                       = $this->lang[$v];
 				$d['filter_'.$v]['object']['type']              = 'htmlobject_select';
 				$d['filter_'.$v]['object']['attrib']['name']    = 'filter['.$v.']';
@@ -526,23 +525,20 @@ var $substr = 200;
 
 		$d['subject']['label']                     = $this->lang['subject'];
 		$d['subject']['css']                       = 'autosize';
-		$d['subject']['style']                     = 'float:right;clear:both;';
 		$d['subject']['object']['type']            = 'htmlobject_input';
 		$d['subject']['object']['attrib']['type']  = 'text';
 		$d['subject']['object']['attrib']['name']  = 'filter[subject]';
 		$d['subject']['object']['attrib']['id']    = 'subject';
 		$d['subject']['object']['attrib']['value'] = '';
-		$d['subject']['object']['attrib']['style'] = 'width: 110px;';
+		$d['subject']['object']['attrib']['style'] = 'width: 310px;';
 
 		$d['show_closed']['label']                     = $this->lang['label_show_closed'];
 		$d['show_closed']['css']                       = 'autosize';
-		$d['show_closed']['style']                     = 'float:right;clear:both;';
 		$d['show_closed']['object']['type']            = 'htmlobject_input';
 		$d['show_closed']['object']['attrib']['type']  = 'checkbox';
 		$d['show_closed']['object']['attrib']['name']  = 'filter[closed]';
 		$d['show_closed']['object']['attrib']['value'] = 'show closed';
 		$d['show_closed']['object']['attrib']['handler'] = 'onchange="this.form.submit();phppublisher.wait();return false;"';
-
 
 		$form->add($d);
 		$form->display_errors = false;
