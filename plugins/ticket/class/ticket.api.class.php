@@ -15,11 +15,9 @@ class ticket_api
 var $lang = array(
 	'supporter' => 'Supporter',
 	'ticket_id' => 'Ticket #%s',
-	'link_config' => 'Settings',
-	'link_account' => 'Account',
-	'link_logout' => 'Logout',
 	'select_reporter' => 'Please select a user',
-	'error_insert_email' => 'Email must not be empty or select a name from the list above'
+	'error_insert_email' => 'Email must not be empty or select a name from the list above',
+	'button_new' => 'New Ticket',
 );
 
 	//--------------------------------------------
@@ -32,10 +30,15 @@ var $lang = array(
 	 */
 	//--------------------------------------------
 	function __construct($file, $response, $db, $user) {
-		$this->db       = $db;
 		$this->file     = $file;
 		$this->response = $response;
 		$this->user     = $user;
+		$this->db       = $db;
+		$this->settings = $this->file->get_ini(PROFILESDIR.'/ticket.ini');
+		$this->lang = $this->user->translate($this->lang, CLASSDIR.'plugins/ticket/lang/', 'ticket.api.ini');
+		if(isset($this->settings['settings']['db'])) {
+			$this->db->db = $this->settings['settings']['db'];
+		}
 	}
 
 	//--------------------------------------------
@@ -55,6 +58,9 @@ var $lang = array(
 			break;
 			case 'get_changelog':
 				$this->get_changelog();
+			break;
+			case 'select':
+				$this->select(true);
 			break;
 		}
 	}
@@ -100,6 +106,82 @@ var $lang = array(
 			$controller = new ticket_controller($this->file, $this->response, $this->db, $this->user);
 			echo $controller->changelog($id)->get();
 		}	
+	}
+
+	//--------------------------------------------
+	/**
+	 * Select
+	 *
+	 * @access public
+	 */
+	//--------------------------------------------
+	function select($visible = false) {
+		if($visible === true) {
+			$plugin = $this->response->html->request()->get('callback');
+			$referer = $this->response->html->request()->get('referer');
+			if($plugin !== '' && $referer !== '') {
+				$result = $this->db->select(
+					'ticket_tickets',
+					array('id','subject','updated'),
+					array('plugin' => $plugin, 'referer' => $referer),
+					array('`updated` DESC')
+				);
+				if(is_array($result)) {
+					$head = array();
+					$head['id']['title'] = 'ID';
+					$head['id']['sortable'] = false;
+					$head['id']['style'] = 'width: 50px;';
+					$head['subject']['title'] = 'Subject';
+					$head['subject']['sortable'] = false;
+					$head['button']['title'] = '&#160;';
+					$head['button']['style'] = 'width: 40px;';
+					$head['button']['sortable'] = false;
+
+					$body = array();
+					foreach($result as $r) {
+						$a = $this->response->html->a();
+						$a->href    = '?index_action=plugin&index_action_plugin=ticket&ticket_action=update&id='.$r['id'];
+						$a->css     = 'btn btn-default btn-sm';
+						$a->label   = '<span class="icon icon-edit"></span>';
+						//$a->handler = 'onclick="phppublisher.wait();"';
+						$a->target  = '_blank"';
+						$body[] = array(
+							'id' => $r['id'], 
+							'subject' => $r['subject'],
+							'button' => $a->get_string()
+							);
+					}
+
+					$table = $this->response->html->tablebuilder( 'ticket_select', $this->response->get_array() );
+					$table->sort  = 'updatet';
+					$table->order = 'ASC';
+					$table->limit           = 50;
+					$table->offset          = 0;
+					$table->max             = count($result);
+					$table->css             = 'htmlobject_table table table-bordered';
+					$table->id              = 'ticket_select';
+					$table->sort_form       = false;
+					$table->sort_link       = true;
+					$table->autosort        = true;
+					$table->head            = $head;
+					$table->body            = $body;
+					echo $table->get_string();
+				}
+				elseif($result !== '') {
+					echo '<div class="alert alert-danger">'.$result.'</div>';
+				}
+
+				$a = $this->response->html->a();
+				$a->css = 'btn btn-default';
+				$a->label = $this->lang['button_new'];
+				$a->target = '_blank';
+				$a->href = '?index_action=plugin&index_action_plugin=ticket&ticket_action=insert&plugin='.$plugin.'&referer='.$referer;
+
+				echo '<center>';
+				echo $a->get_string();
+				echo '</center>';
+			}
+		}
 	}
 
 }

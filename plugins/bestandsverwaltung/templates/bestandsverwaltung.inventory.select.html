@@ -184,6 +184,30 @@ var marker = {
 		}
 	}
 }
+var ticketpicker = {
+	init : function( id ) {
+		document.getElementById('ticket_canvas').innerHTML = '<div style="text-align:center;"><img src="{cssurl}/loading.gif" style="margin:150px 0 0 0;"></div>';
+
+		if(document.getElementById('ticketwrapper').style.left == 0) {
+			document.getElementById('ticketwrapper').style.left = '0px';
+			document.getElementById('ticketwrapper').style.top = '74px';
+		}
+		document.getElementById('ticketwrapper').style.display = 'block';
+		document.getElementById('ticketwrapper').style.position = 'fixed';
+		document.getElementById('ticketwrapper').style.zIndex = '1000';
+		document.getElementById('ticket_canvas').style.height = '92%';
+
+		document.getElementById('ticket_title').innerHTML = 'Ticket '+id;
+		params = "&plugin=ticket&command=select&callback=bestandsverwaltung&referer="+id;
+		ajax(params, 'ticketpickerCallback');
+
+	},
+	print : function(response) {
+		document.getElementById('ticket_canvas').innerHTML = response;
+	}
+}
+
+
 
 function todospickerCallback(response) {
 	todospicker.print(response);
@@ -200,6 +224,9 @@ function changelogpickerCallback(response) {
 function raumbuchpickerCallback(response) {
 	raumbuchpicker.print(response);
 }
+function ticketpickerCallback(response) {
+	ticketpicker.print(response);
+}
 function markerCallback(response) {
 	marker.print(response);
 }
@@ -208,7 +235,7 @@ function ajax(params, callback){
 	html = $.ajax({
 		url: "api.php",
 		global: false,
-		type: "POST",
+		type: "GET",
 		data: params,
 		dataType: "html",
 		async: true,
@@ -455,6 +482,29 @@ function doExport(form) {
 		</div>
 	</div>
 	<div id="raumbuch_canvas" class="card-body" style="overflow:auto;padding:15px;"></div>
+</div>
+</div>
+
+<div id="ticketwrapper" style="width:580px;display:none;">
+<div id="ticketpicker" class="function-box card noprint" style="width:580px;height:450px;position:absolute;left:0;top:0;">
+	<div class="card-header"
+			onmousedown="Drag.init(document.getElementById('ticketwrapper'));"
+			onmouseup="document.getElementById('ticketwrapper').onmousedown = null;">
+		<div class="functionbox-capation">
+				<span id="ticket_title">&#160;</span>
+				<button 
+					type="button" 
+					class="btn btn-xs btn-default float-right shut"
+					 onclick="document.getElementById('ticketwrapper').style.display = 'none';">&times;</button>
+				<button 
+					typ="button" 
+					class="btn btn-xs btn-default resize float-right" 
+					style="margin-right:3px;" 
+					onclick="phppublisher.editor.fullscreen('','ticketwrapper','ticketpicker');">+</button>
+
+		</div>
+	</div>
+	<div id="ticket_canvas" class="card-body" style="overflow:auto;padding:15px;"></div>
 </div>
 </div>
 
