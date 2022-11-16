@@ -1,0 +1,41 @@
+<form action="{thisfile}" method="POST" enctype="multipart/form-data" class="form-horizontal">
+{form}
+
+<div style="text-align: right; margin: 0 20px 4px 0;">
+	<button class="btn btn-default btn-sm" style="width: 30px;" type="button" onclick="Tasks.html('notice', 'AFunctions'); this.blur();">a</button>
+	<button class="btn btn-default btn-sm" style="width: 30px;" type="button" onclick="Tasks.wrap('notice', '[[b]]', '[[/b]]'); this.blur();"><b>b</b></button>
+	<button class="btn btn-default btn-sm" style="width: 30px;" type="button" onclick="Tasks.wrap('notice', '[[i]]', '[[/i]]'); this.blur();"><i>i</i></button>
+	<button class="btn btn-default btn-sm" style="width: 30px;" type="button" onclick="Tasks.wrap('notice', '[[u]]', '[[/u]]'); this.blur();"><u>u</u></button>
+</div>
+
+{notice}
+
+<div style="line-height:0px;height:0px;clear:both;" class="floatbreaker">&#160;</div>
+<div style="margin: 10px 0 0 0;">
+	<div style="float:right; margin: 0 20px 0 20px;">{submit}</div>
+	{private}
+	{attachment}
+	<div style="line-height:0px;height:0px;clear:both;" class="floatbreaker">&#160;</div>
+</div>
+</form>
+
+<div id="AFunctions" style="display:none; background:white;padding:10px;">
+	<form id="AFunctionsForm" onsubmit="return false;" action="#" class="form-horizontal"">
+		<div style="text-align:center;">
+			<div style="display:inline-block;">
+				<div class="htmlobject_box form-group autosize" style="float:right;">
+					<div class="left"><label class="control-label" for="a_label">Label</label></div>
+					<div class="right" style="padding: 0 0 0 0;"><input class="form-control text" type="text" id="a_label" style="width: 250px;"></div>
+					<div style="line-height:0px;height:0px;clear:both;" class="floatbreaker">&#160;</div>
+				</div>
+				<div class="htmlobject_box form-group autosize" style="clear: both; float:right;">
+					<div class="left"><label class="control-label" for="a_url">Url</label></div>
+					<div class="right"><input class="form-control text" type="text" id="a_url" style="width: 250px;"></div>
+					<div style="line-height:0px;height:0px;clear:both;" class="floatbreaker">&#160;</div>
+				</div>
+			</div>
+		</div>
+	<div class="buttons"><button id="a_ok" class="btn btn-default" style="clear:both;" type="button">OK</button></div>
+	</form>
+</div>
+

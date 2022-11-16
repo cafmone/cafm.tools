@@ -184,26 +184,26 @@ var marker = {
 		}
 	}
 }
-var ticketpicker = {
-	init : function( id ) {
-		document.getElementById('ticket_canvas').innerHTML = '<div style="text-align:center;"><img src="{cssurl}/loading.gif" style="margin:150px 0 0 0;"></div>';
+var taskspicker = {
+	init : function( referer, tag ) {
+		document.getElementById('tasks_canvas').innerHTML = '<div style="text-align:center;"><img src="{cssurl}/loading.gif" style="margin:150px 0 0 0;"></div>';
 
-		if(document.getElementById('ticketwrapper').style.left == 0) {
-			document.getElementById('ticketwrapper').style.left = '0px';
-			document.getElementById('ticketwrapper').style.top = '74px';
+		if(document.getElementById('taskswrapper').style.left == 0) {
+			document.getElementById('taskswrapper').style.left = '0px';
+			document.getElementById('taskswrapper').style.top = '74px';
 		}
-		document.getElementById('ticketwrapper').style.display = 'block';
-		document.getElementById('ticketwrapper').style.position = 'fixed';
-		document.getElementById('ticketwrapper').style.zIndex = '1000';
-		document.getElementById('ticket_canvas').style.height = '92%';
+		document.getElementById('taskswrapper').style.display = 'block';
+		document.getElementById('taskswrapper').style.position = 'fixed';
+		document.getElementById('taskswrapper').style.zIndex = '1000';
+		document.getElementById('tasks_canvas').style.height = '92%';
 
-		document.getElementById('ticket_title').innerHTML = 'Ticket '+id;
-		params = "&plugin=ticket&command=select&callback=bestandsverwaltung&referer="+id;
-		ajax(params, 'ticketpickerCallback');
+		document.getElementById('tasks_title').innerHTML = 'tasks '+referer+' '+tag;
+		params = "&plugin=tasks&tasks_action=select&callback=bestandsverwaltung&referer="+referer+'&tag='+tag;
+		ajax(params, 'taskspickerCallback');
 
 	},
 	print : function(response) {
-		document.getElementById('ticket_canvas').innerHTML = response;
+		document.getElementById('tasks_canvas').innerHTML = response;
 	}
 }
 
@@ -224,8 +224,8 @@ function changelogpickerCallback(response) {
 function raumbuchpickerCallback(response) {
 	raumbuchpicker.print(response);
 }
-function ticketpickerCallback(response) {
-	ticketpicker.print(response);
+function taskspickerCallback(response) {
+	taskspicker.print(response);
 }
 function markerCallback(response) {
 	marker.print(response);
@@ -485,26 +485,26 @@ function doExport(form) {
 </div>
 </div>
 
-<div id="ticketwrapper" style="width:580px;display:none;">
-<div id="ticketpicker" class="function-box card noprint" style="width:580px;height:450px;position:absolute;left:0;top:0;">
+<div id="taskswrapper" style="width:580px;display:none;">
+<div id="taskspicker" class="function-box card noprint" style="width:580px;height:450px;position:absolute;left:0;top:0;">
 	<div class="card-header"
-			onmousedown="Drag.init(document.getElementById('ticketwrapper'));"
-			onmouseup="document.getElementById('ticketwrapper').onmousedown = null;">
+			onmousedown="Drag.init(document.getElementById('taskswrapper'));"
+			onmouseup="document.getElementById('taskswrapper').onmousedown = null;">
 		<div class="functionbox-capation">
-				<span id="ticket_title">&#160;</span>
+				<span id="tasks_title">&#160;</span>
 				<button 
 					type="button" 
 					class="btn btn-xs btn-default float-right shut"
-					 onclick="document.getElementById('ticketwrapper').style.display = 'none';">&times;</button>
+					 onclick="document.getElementById('taskswrapper').style.display = 'none';">&times;</button>
 				<button 
 					typ="button" 
 					class="btn btn-xs btn-default resize float-right" 
 					style="margin-right:3px;" 
-					onclick="phppublisher.editor.fullscreen('','ticketwrapper','ticketpicker');">+</button>
+					onclick="phppublisher.editor.fullscreen('','taskswrapper','taskspicker');">+</button>
 
 		</div>
 	</div>
-	<div id="ticket_canvas" class="card-body" style="overflow:auto;padding:15px;"></div>
+	<div id="tasks_canvas" class="card-body" style="overflow:auto;padding:15px;"></div>
 </div>
 </div>
 

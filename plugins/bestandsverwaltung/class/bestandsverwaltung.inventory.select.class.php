@@ -633,18 +633,18 @@ var $__attribs;
 						}
 					}
 
-					// handle Ticket connected
-					if(in_array('ticket', $this->plugins)) {
+					// handle Tasks connected
+					if(in_array('tasks', $this->plugins)) {
 						$a        = $response->html->a();
 						$a->href  = '#';
-						$a->label = 'Ticket';
+						$a->label = 'Tasks';
 						$a->title = $this->lang['button_todos'];
 						$a->css   = 'btn btn-sm btn-default todos';
 						// handle grouped
 						if(!isset($id['SUMM']) || $id['SUMM'] === 0) {
-							$a->handler = 'onclick="ticketpicker.init(\''.$id['id'].'\'); return false;"';
+							$a->handler = 'onclick="taskspicker.init(\'device\', \''.$id['id'].'\'); return false;"';
 						} else {
-							$a->handler = 'onclick="ticketpicker.init(\''.$id['id'].'\'); return false;"';
+							$a->handler = 'onclick="taskspicker.init(\'device\',\''.$id['id'].'\'); return false;"';
 						}
 						$update .= $a->get_string();
 					}
