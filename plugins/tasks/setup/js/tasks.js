@@ -112,6 +112,63 @@ Tasks.confirm = function( element, id ) {
 	b.focus();
 }
 
+//---------------------------------
+// Plugin Picker
+//---------------------------------
+var pluginpicker = {
+	init : function( callback, referer, tag, value ) {
+
+		phppublisher.modal.width = '600px';
+		phppublisher.modal.label = callback;
+		var modalid = phppublisher.modal.init();
+
+		params = "&plugin="+callback+"&"+callback+"_action=tasks";
+		if(typeof referer != "undefined") {
+			params += "&referer="+referer;
+		}
+		if(typeof tag != "undefined") {
+			params += "&tag="+tag;
+		}
+		if(typeof value != "undefined") {
+			params += "&value="+value;
+		}
+		ajax(params, 'pluginpickerCallback');
+
+		$('#'+modalid).modal('show');
+		phppublisher.modal.print('');
+
+	},
+	print : function(response) {
+		phppublisher.modal.print(response);
+	}
+}
+function pluginpickerCallback(response) {
+	pluginpicker.print(response);
+}
+function ajax(params, callback){
+	html = $.ajax({
+		url: "api.php",
+		global: false,
+		type: "GET",
+		data: params,
+		dataType: "html",
+		async: true,
+		cache: false,
+		success: function(response){
+			eval(callback)(response);
+		}
+	});
+}
+
+
+
+
+
+
+
+
+
+
 function xmlRequestObject() {
 	var arg = null;
 	if (typeof XMLHttpRequest != "undefined") {

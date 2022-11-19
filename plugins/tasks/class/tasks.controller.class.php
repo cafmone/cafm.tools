@@ -722,87 +722,51 @@ var $date_format = "Y/m/d H:i";
 			$response->created = date($this->date_format, $ini['created']);
 		}
 
-		$d['plugin'] = '';
-		if($mode === 'insert') {
-			$plugin = $this->response->html->request()->get('plugin');
-			if($plugin !== '') {
-				$d['plugin'] = array();
-				$d['plugin']['label']                     = 'Plugin';
-				$d['plugin']['static']                    = true;
-				$d['plugin']['object']['type']            = 'htmlobject_input';
-				$d['plugin']['object']['attrib']['name']  = 'plugin';
-				$d['plugin']['object']['attrib']['value'] = htmlentities($plugin);
-				$d['plugin']['object']['attrib']['readonly'] = true;
-				$d['plugin']['object']['attrib']['type']  = 'text';
-				if(isset($columns['plugin']['length'])) {
-					$d['plugin']['object']['attrib']['maxlength'] = $columns['plugin']['length'];
-				}
-			}
-		}
-		else if($mode === 'update') {
-			if(isset($ini['plugin'])) {
-				$div = $this->response->html->div();
-				$div->name = 'plugin';
-				$div->add(htmlentities($ini['plugin'], ENT_COMPAT, 'UTF-8'));
-				$d['plugin'] = array();
-				$d['plugin']['label'] = 'Plugin';
-				$d['plugin']['object'] = $div;
-			}
-		}
 
-		$d['referer'] = '';
+		// plugin INFOS
+		$elements = array(
+			'callback',
+			'referer',
+			'tag',
+			'value'
+		);
 		if($mode === 'insert') {
-			$referer = $this->response->html->request()->get('referer');
-			if($referer !== '') {
-				$d['referer'] = array();
-				$d['referer']['label']                     = 'Referer';
-				$d['referer']['static']                    = true;
-				$d['referer']['object']['type']            = 'htmlobject_input';
-				$d['referer']['object']['attrib']['name']  = 'referer';
-				$d['referer']['object']['attrib']['value'] = htmlentities($referer);
-				$d['referer']['object']['attrib']['readonly'] = true;
-				$d['referer']['object']['attrib']['type']  = 'text';
-				if(isset($columns['referer']['length'])) {
-					$d['referer']['object']['attrib']['maxlength'] = $columns['referer']['length'];
+			foreach($elements as $v) {
+				$d['plugin_'.$v] = '';
+				$plugin = $this->response->html->request()->get($v);
+				if($plugin !== '') {
+					$d['plugin_'.$v] = array();
+					$d['plugin_'.$v]['label']                     = $v;
+					$d['plugin_'.$v]['static']                    = true;
+					$d['plugin_'.$v]['object']['type']            = 'htmlobject_input';
+					$d['plugin_'.$v]['object']['attrib']['name']  = $v;
+					$d['plugin_'.$v]['object']['attrib']['value'] = htmlentities($plugin);
+					$d['plugin_'.$v]['object']['attrib']['readonly'] = true;
+					$d['plugin_'.$v]['object']['attrib']['type']  = 'text';
+					if(isset($columns[$v]['length'])) {
+						$d['plugin_'.$v]['object']['attrib']['maxlength'] = $columns[$v]['length'];
+					}
 				}
 			}
 		}
-		else if($mode === 'update') {
-			if(isset($ini['referer'])) {
-				$div = $this->response->html->div();
-				$div->name = 'referer';
-				$div->add(htmlentities($ini['referer'], ENT_COMPAT, 'UTF-8'));
-				$d['referer'] = array();
-				$d['referer']['label'] = 'Referer';
-				$d['referer']['object'] = $div;
-			}
-		}
-
-		$d['tag'] = '';
-		if($mode === 'insert') {
-			$tag = $this->response->html->request()->get('tag');
-			if($referer !== '') {
-				$d['tag'] = array();
-				$d['tag']['label']                     = 'Tag';
-				$d['tag']['static']                    = true;
-				$d['tag']['object']['type']            = 'htmlobject_input';
-				$d['tag']['object']['attrib']['name']  = 'tag';
-				$d['tag']['object']['attrib']['value'] = htmlentities($tag);
-				$d['tag']['object']['attrib']['readonly'] = true;
-				$d['tag']['object']['attrib']['type']  = 'text';
-				if(isset($columns['tag']['length'])) {
-					$d['tag']['object']['attrib']['maxlength'] = $columns['tag']['length'];
+		elseif($mode === 'update') {
+			if(isset($ini['callback'])) {
+				$out = array();
+				foreach($elements as $v) {
+					if(isset($ini[$v])) {
+						$out[] = $ini[$v];
+					} else {
+						$out[] = '';
+					}
 				}
-			}
-		}
-		else if($mode === 'update') {
-			if(isset($ini['tag'])) {
-				$div = $this->response->html->div();
-				$div->name = 'tag';
-				$div->add(htmlentities($ini['tag'], ENT_COMPAT, 'UTF-8'));
-				$d['tag'] = array();
-				$d['tag']['label'] = 'Tag';
-				$d['tag']['object'] = $div;
+				$a          = $response->html->button();
+				$a->css     = 'btn btn-default';
+				$a->name    = 'callback';
+				$a->label   = ucfirst($ini['callback']);
+				$a->handler = 'onclick="pluginpicker.init(\''.implode('\',\'',$out).'\');"';
+				$d['plugin_button'] = $a;
+			} else {
+				$d['plugin_dummy'] = '';
 			}
 		}
 

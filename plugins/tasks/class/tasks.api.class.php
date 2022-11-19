@@ -23,7 +23,7 @@ var $lang = array(
 	'ticket_id' => 'Ticket #%s',
 	'select_reporter' => 'Please select a user',
 	'error_insert_email' => 'Email must not be empty or select a name from the list above',
-	'button_new' => 'New Ticket',
+	'button_new' => 'New Task',
 );
 
 	//--------------------------------------------
@@ -65,8 +65,8 @@ var $lang = array(
 			case 'get_changelog':
 				$this->get_changelog();
 			break;
-			case 'select':
-				$this->select(true);
+			case 'tasks':
+				$this->tasks(true);
 			break;
 		}
 	}
@@ -123,21 +123,48 @@ var $lang = array(
 	 * @access public
 	 */
 	//--------------------------------------------
-	function select($visible = false) {
+	function tasks($visible = false) {
 		if($visible === true) {
 
-			$plugin  = $this->response->html->request()->get('callback');
-			$referer = $this->response->html->request()->get('referer');
-			$tag     = $this->response->html->request()->get('tag');
+			// plugin INFOS
+			$params = '';
+			$where = array();
+			$elements = array(
+				'callback',
+				'referer',
+				'tag',
+				'value'
+			);
+			foreach($elements as $v) {
+				$tmp = $this->response->html->request()->get($v);
+				if($tmp !== '') {
+					$params .= '&'.$v.'='.$tmp;
+					$where[$v] = htmlentities($tmp);
+				}
+			}
 
-			if($plugin !== '' && $referer !== '' && $tag !== '') {
+			if($params !== '') {
+
+				$values = array_keys($this->settings['form']);
+				$values[] = 'id';
+				$values[] = 'subject';
+
 				$result = $this->db->select(
 					'tasks_tasks',
-					array('id','subject','updated'),
-					array('plugin' => $plugin, 'referer' => $referer, 'tag' => $tag),
+					$values,
+					$where,
 					array('`updated` DESC')
 				);
 				if(is_array($result)) {
+
+					$options = array();
+					$opts = $this->db->select('tasks_form',array('id','option'));
+					if(is_array($opts)) {
+						foreach($opts as $o) {
+							$options[$o['id']] = $o['option'];
+						}
+					}
+
 					$head = array();
 					$head['id']['title'] = 'ID';
 					$head['id']['sortable'] = false;
@@ -150,6 +177,13 @@ var $lang = array(
 
 					$body = array();
 					foreach($result as $r) {
+						$str = $r['subject'].'<br>';
+						foreach($r as $k => $v) {
+							if(isset($v) && $k !== 'id' && $k !== 'subject') {
+								$tmp = (isset($options[$v])) ? $options[$v] : $v;
+								$str .= $this->settings['labels'][$k].': '.$tmp.'<br>';
+							}
+						}
 						$a = $this->response->html->a();
 						$a->href    = '?index_action=tasks&index_action_plugin=tasks&tasks_action=update&id='.$r['id'];
 						$a->css     = 'btn btn-default btn-sm';
@@ -158,7 +192,7 @@ var $lang = array(
 						$a->target  = '_blank"';
 						$body[] = array(
 							'id' => $r['id'], 
-							'subject' => $r['subject'],
+							'subject' => $str,
 							'button' => $a->get_string()
 							);
 					}
@@ -186,7 +220,7 @@ var $lang = array(
 				$a->css = 'btn btn-default';
 				$a->label = $this->lang['button_new'];
 				$a->target = '_blank';
-				$a->href = '?index_action=plugin&index_action_plugin=tasks&tasks_action=insert&plugin='.$plugin.'&referer='.$referer.'&tag='.$tag;
+				$a->href = '?index_action=plugin&index_action_plugin=tasks&tasks_action=insert'.$params;
 
 				echo '<center>';
 				echo $a->get_string();

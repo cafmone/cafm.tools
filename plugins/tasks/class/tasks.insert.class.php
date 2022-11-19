@@ -52,7 +52,7 @@ var $lang = array();
 			if(isset($response->error)) {
 				$_REQUEST[$this->message_param]['error'] = $response->error;
 			}
-			$t->group_elements(array('param_' => 'form'));
+			$t->group_elements(array('param_' => 'form', 'plugin_' => 'plugin'));
 			return $t;
 		} else {
 			if(isset($this->controller->settings['email']['active'])) {
@@ -104,17 +104,18 @@ var $lang = array();
 			$f['created'] = time();
 			if(!isset($response->error)) {
 
-				$plugin = $form->get_static('plugin', true);
-				if(isset($plugin)) {
-					$f['plugin'] = htmlentities($plugin);
-				}
-				$referer = $form->get_static('referer', true);
-				if(isset($referer)) {
-					$f['referer'] = htmlentities($referer);
-				}
-				$tag = $form->get_static('tag', true);
-				if(isset($tag)) {
-					$f['tag'] = htmlentities($tag);
+				// plugin INFOS
+				$elements = array(
+					'callback',
+					'referer',
+					'tag',
+					'value'
+				);
+				foreach($elements as $v) {
+					$tmp = $form->get_static($v, true);
+					if(isset($tmp)) {
+						$f[$v] = htmlentities($tmp);
+					}
 				}
 
 				$error = $this->db->insert('tasks_tasks', $f);
@@ -146,7 +147,6 @@ var $lang = array();
 										'tasks_attachments',
 										array(
 											'tasks' => $lid,
-											//'notice' => '',
 											'file' => $attachment,
 											'name' => $_FILES['attachment']['name'],
 											'type' => $_FILES['attachment']['type'],

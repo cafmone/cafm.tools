@@ -85,7 +85,7 @@ var $lang = array();
 
 				$t->add($this->controller->changelog($this->id)->get(), 'changelog');
 				$t->add($response->form);
-				$t->group_elements(array('param_' => 'form'));
+				$t->group_elements(array('param_' => 'form', 'plugin_' => 'plugin'));
 				if(isset($response->error)) {
 					$_REQUEST[$this->message_param]['error'] = $response->error;
 				}
@@ -156,9 +156,10 @@ var $lang = array();
 				unset($f['subject']);
 				unset($f['description']);
 				unset($f['attachment']);
-				unset($f['plugin']);
+				unset($f['callback']);
 				unset($f['referer']);
 				unset($f['tag']);
+				unset($f['value']);
 				$notice = $f['message'];
 				unset($f['message']);
 
