@@ -138,7 +138,7 @@ var gewerk = {
 			ajax(params, 'gewerkCallback');
 
 		} else {
-			params = 'plugin=bestandsverwaltung&bestand_action=gewerke';
+			params = 'plugin=bestandsverwaltung&bestandsverwaltung_action=gewerke';
 			if(mode == 'insert') {
 				params += '&jsaction=insert&key='+this.path;
 			}
@@ -200,11 +200,11 @@ var bezeichner = {
 			ajax(params, 'bezeichnerCallback');
 		} else {
 			if(mode == 'insert') {
-				params = 'plugin=bestandsverwaltung&bestand_action=bezeichner&subaction=insert&key='+this.gewerk;
+				params = 'plugin=bestandsverwaltung&bestandsverwaltung_action=bezeichner&subaction=insert&key='+this.gewerk;
 				ajax(params, 'bezeichnerCallback');
 			}
 			else if(mode == 'delete') {
-				params = 'plugin=bestandsverwaltung&bestand_action=bezeichner&subaction=delete&key='+this.gewerk;
+				params = 'plugin=bestandsverwaltung&bestandsverwaltung_action=bezeichner&subaction=delete&key='+this.gewerk;
 				ajax(params, 'bezeichnerCallback');
 			}
 		}
@@ -263,7 +263,7 @@ $(function() {
 		content: function() {
 			var element = $( this );
 			var bezeichner = element.attr( "title" );
-			var params = "&plugin=bestandsverwaltung&bestand_action=help&bezeichner="+bezeichner;
+			var params = "&plugin=bestandsverwaltung&bestandsverwaltung_action=help&bezeichner="+bezeichner;
 			var text = $.ajax({
 				url: "api.php",
 				global: false,

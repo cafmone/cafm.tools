@@ -2,7 +2,7 @@ var bezeichnerhelp = {
 	init: function(element) {
 		if(typeof element.dataset.content == 'undefined') {
 			var bezeichner = element.title;
-			var params = "&plugin=bestandsverwaltung&bestand_action=help&bezeichner="+bezeichner;
+			var params = "&plugin=bestandsverwaltung&bestandsverwaltung_action=help&bezeichner="+bezeichner;
 			setTimeout((function(params, element) {
 				bezeichnerhelp.ajax(params,element);
 			})(params, element), 10);

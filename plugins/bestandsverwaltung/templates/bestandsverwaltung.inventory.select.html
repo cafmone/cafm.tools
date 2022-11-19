@@ -41,7 +41,7 @@ var raumbuchpicker = {
 		document.getElementById('raumbuch_canvas').style.height = '92%';
 
 		document.getElementById('raumbuch_title').innerHTML = 'Standort '+id;
-		params = "&plugin=bestandsverwaltung&bestand_action=raumbuch&id="+raumbuch;
+		params = "&plugin=bestandsverwaltung&bestandsverwaltung_action=raumbuch&id="+raumbuch;
 		ajax(params, 'raumbuchpickerCallback');
 	},
 	print : function(response) {
@@ -175,7 +175,7 @@ var marker = {
 			element.style.color = '';
 			element.className = 'icon icon-star-empty';
 		}
-		params = "&plugin=bestandsverwaltung&bestand_action=marker&id="+id+"&color="+element.style.color;
+		params = "&plugin=bestandsverwaltung&bestandsverwaltung_action=marker&id="+id+"&color="+element.style.color;
 		ajax(params, 'markerCallback');
 	},
 	print : function(response) {
@@ -185,7 +185,7 @@ var marker = {
 	}
 }
 var taskspicker = {
-	init : function( referer, tag ) {
+	init : function( referer, value ) {
 		document.getElementById('tasks_canvas').innerHTML = '<div style="text-align:center;"><img src="{cssurl}/loading.gif" style="margin:150px 0 0 0;"></div>';
 
 		if(document.getElementById('taskswrapper').style.left == 0) {
@@ -197,8 +197,8 @@ var taskspicker = {
 		document.getElementById('taskswrapper').style.zIndex = '1000';
 		document.getElementById('tasks_canvas').style.height = '92%';
 
-		document.getElementById('tasks_title').innerHTML = 'tasks '+referer+' '+tag;
-		params = "&plugin=tasks&tasks_action=select&callback=bestandsverwaltung&referer="+referer+'&tag='+tag;
+		document.getElementById('tasks_title').innerHTML = 'tasks '+referer+' '+value;
+		params = "&plugin=tasks&tasks_action=tasks&callback=bestandsverwaltung&referer="+referer+'&value='+value;
 		ajax(params, 'taskspickerCallback');
 
 	},
@@ -561,9 +561,9 @@ var details = {
 			/* handle filter group  */
 			if(group) {
 				if(group == 'bezeichner' && printoutmode == 'todos') {
-					html = this.ajax('plugin=bestandsverwaltung&bestand_action=printtodos&bezeichner='+jsparams[num]+'&prefix='+todoprefix+'&interval='+todointerval);
+					html = this.ajax('plugin=bestandsverwaltung&bestandsverwaltung_action=printtodos&bezeichner='+jsparams[num]+'&prefix='+todoprefix+'&interval='+todointerval);
 				} else {
-					html = this.ajax('plugin=bestandsverwaltung&bestand_action=details&id='+jsparams[num]+'&mode='+printoutmode+'&prefix='+todoprefix+'&interval='+todointerval);
+					html = this.ajax('plugin=bestandsverwaltung&bestandsverwaltung_action=details&id='+jsparams[num]+'&mode='+printoutmode+'&prefix='+todoprefix+'&interval='+todointerval);
 				}
 			} else {
 				alert('Error group param');

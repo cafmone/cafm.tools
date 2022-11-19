@@ -34,7 +34,7 @@ class bestandsverwaltung_api
 * @access public
 * @var string
 */
-var $actions_name = 'bestand_action';
+var $actions_name = 'bestandsverwaltung_action';
 /**
 * message param
 * @access public
@@ -133,6 +133,9 @@ var $lang = array(
 			break;
 			case 'printtodos':
 				$this->printtodos(true);
+			break;
+			case 'tasks':
+				$this->tasks(true);
 			break;
 		}
 	}
@@ -661,6 +664,34 @@ var $lang = array(
 
 				echo $form->get_string();
 			}
+		}
+	}
+
+	//--------------------------------------------
+	/**
+	 * Taks
+	 *
+	 * @access public
+	 */
+	//--------------------------------------------
+	function tasks($visible = false) {
+		if($visible === true) {
+			// plugin INFOS
+			$params = '';
+			$where = array();
+			$elements = array(
+				'referer',
+				'tag',
+				'value'
+			);
+			foreach($elements as $v) {
+				$tmp = $this->response->html->request()->get($v);
+				if($tmp !== '') {
+					$params .= '&'.$v.'='.$tmp;
+					$where[$v] = htmlentities($tmp);
+				}
+			}
+			var_dump($where);
 		}
 	}
 

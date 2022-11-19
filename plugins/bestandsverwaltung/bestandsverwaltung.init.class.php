@@ -16,7 +16,7 @@ class bestandsverwaltung_init
 * @access public
 * @var string
 */
-var $actions_name = 'bestand_action';
+var $actions_name = 'bestandsverwaltung_action';
 /**
 * message param
 * @access public
