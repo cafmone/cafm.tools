@@ -406,7 +406,7 @@ var $substr = 200;
 			return $result;
 		}
 		else if($result !== '') {
-			$_REQUEST[$this->message_param] = $result;
+			$_REQUEST[$this->message_param]['error'] = $result;
 			//return array();
 		} else {
 			return array();

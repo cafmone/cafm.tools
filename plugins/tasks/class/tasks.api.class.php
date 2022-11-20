@@ -145,7 +145,11 @@ var $lang = array(
 
 			if($params !== '') {
 
-				$values = array_keys($this->settings['form']);
+				if(isset($this->settings['form'])) {
+					$values = array_keys($this->settings['form']);
+				} else {
+					$values = array();
+				}
 				$values[] = 'id';
 				$values[] = 'subject';
 
@@ -215,17 +219,17 @@ var $lang = array(
 				}
 				elseif($result !== '') {
 					echo '<div class="alert alert-danger">'.$result.'</div>';
+				} else {
+					$a = $this->response->html->a();
+					$a->css = 'btn btn-default';
+					$a->label = $this->lang['button_new'];
+					$a->target = '_blank';
+					$a->href = '?index_action=plugin&index_action_plugin=tasks&tasks_action=insert'.$params;
+
+					echo '<center>';
+					echo $a->get_string();
+					echo '</center>';
 				}
-
-				$a = $this->response->html->a();
-				$a->css = 'btn btn-default';
-				$a->label = $this->lang['button_new'];
-				$a->target = '_blank';
-				$a->href = '?index_action=plugin&index_action_plugin=tasks&tasks_action=insert'.$params;
-
-				echo '<center>';
-				echo $a->get_string();
-				echo '</center>';
 			}
 		}
 	}
