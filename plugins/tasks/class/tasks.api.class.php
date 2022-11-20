@@ -181,7 +181,8 @@ var $lang = array(
 						foreach($r as $k => $v) {
 							if(isset($v) && $k !== 'id' && $k !== 'subject') {
 								$tmp = (isset($options[$v])) ? $options[$v] : $v;
-								$str .= $this->settings['labels'][$k].': '.$tmp.'<br>';
+								$label = (isset($this->settings['labels'][$k])) ? $this->settings['labels'][$k] : $k;
+								$str .= $label.': '.$tmp.'<br>';
 							}
 						}
 						$a = $this->response->html->a();

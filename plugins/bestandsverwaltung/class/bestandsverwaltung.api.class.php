@@ -684,14 +684,31 @@ var $lang = array(
 				'tag',
 				'value'
 			);
-			foreach($elements as $v) {
-				$tmp = $this->response->html->request()->get($v);
-				if($tmp !== '') {
-					$params .= '&'.$v.'='.$tmp;
-					$where[$v] = htmlentities($tmp);
-				}
+			
+			$referer = $this->response->html->request()->get('referer');
+			$tag = $this->response->html->request()->get('tag');
+			$value = $this->response->html->request()->get('value');
+			
+			if($referer === 'device' && $value !== '') {
+				$_REQUEST['id'] = $value;
+				$_REQUEST['mode'] = 'text';
+				$this->details(true);
+
+				$str  = '<div style="text-align:right;">';
+				$str .= '<a class="btn btn-default icon icon-edit" ';
+				$str .= 'target="_blank" ';
+				$str .= 'href="?index_action=plugin';
+				$str .= '&index_action_plugin=bestandsverwaltung';
+				$str .= '&bestandsverwaltung_action=inventory';
+				$str .= '&inventory_action=update';
+				$str .= '&id='.$value.'"></a>';
+				$str .= '</div>';
+				
+				echo $str;
+				
 			}
-			var_dump($where);
+
+
 		}
 	}
 

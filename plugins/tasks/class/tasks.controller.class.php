@@ -760,7 +760,7 @@ var $date_format = "Y/m/d H:i";
 					}
 				}
 				$a          = $response->html->button();
-				$a->css     = 'btn btn-default';
+				$a->css     = 'btn btn-default callback float-right';
 				$a->name    = 'callback';
 				$a->label   = ucfirst($ini['callback']);
 				$a->handler = 'onclick="pluginpicker.init(\''.implode('\',\'',$out).'\');"';
