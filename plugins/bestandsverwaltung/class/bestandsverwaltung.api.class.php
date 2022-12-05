@@ -693,8 +693,22 @@ var $lang = array(
 				$_REQUEST['id'] = $value;
 				$_REQUEST['mode'] = 'text';
 				$this->details(true);
-
+				
+				
+				// overview
 				$str  = '<div style="text-align:right;">';
+				$str .= '<a class="btn btn-default icon icon-edit" ';
+				$str .= 'target="_blank" ';
+				$str .= 'href="?index_action=plugin';
+				$str .= '&index_action_plugin=bestandsverwaltung';
+				$str .= '&bestandsverwaltung_action=inventory';
+				$str .= '&inventory_action=select';
+				$str .= '&filter[id]='.$value.'"></a>';
+				$str .= '</div>';
+
+				/*
+				// edit
+				$str .= '<div style="text-align:right;">';
 				$str .= '<a class="btn btn-default icon icon-edit" ';
 				$str .= 'target="_blank" ';
 				$str .= 'href="?index_action=plugin';
@@ -703,6 +717,7 @@ var $lang = array(
 				$str .= '&inventory_action=update';
 				$str .= '&id='.$value.'"></a>';
 				$str .= '</div>';
+				*/
 				
 				echo $str;
 				

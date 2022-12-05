@@ -216,6 +216,17 @@ var $lang = array(
 					$table->head            = $head;
 					$table->body            = $body;
 					echo $table->get_string();
+
+					$a = $this->response->html->a();
+					$a->css = 'btn btn-default';
+					$a->label = $this->lang['button_new'];
+					$a->target = '_blank';
+					$a->href = '?index_action=plugin&index_action_plugin=tasks&tasks_action=insert'.$params;
+
+					echo '<center>';
+					echo $a->get_string();
+					echo '</center>';
+					
 				}
 				elseif($result !== '') {
 					echo '<div class="alert alert-danger">'.$result.'</div>';
