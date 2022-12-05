@@ -31,7 +31,12 @@
 					{supporter}
 				</div>
 				<div style="line-height:0px;height:0px;clear:both;" class="floatbreaker">&#160;</div>
-				<div id="info_box" class="wrapper" style="position:relative;margin-top:15px;padding-top:25px;">
+
+				<div style="text-align:left; margin-top: 15px;">
+					<button style="width:30%; margin: 0" class="btn btn-default btn-sm" id="info_box_button" type="button" onclick="toggle('info_box');">&#9660;</button>
+				</div>
+
+				<div id="info_box" class="wrapper" style="display:none;position:relative;margin-top:15px;padding-top:25px;">
 					{form}
 					<div style="display:inline-block;width:100%;text-align:center;">
 						<div class="clearfix" style="display:inline-block;">
@@ -67,6 +72,7 @@
 					</div>
 					<div style="line-height:0px;height:0px;clear:both;" class="floatbreaker">&#160;</div>
 				</div>
+				
 			</div>
 		</form>
 	</div>
@@ -107,10 +113,10 @@ function toggle( id ) {
 	b = document.getElementById(id+'_button');
 	if(e.style.display == 'block') {
 		e.style.display = 'none';
-		b.innerHTML = '+';
+		b.innerHTML = '&#9660;';
 	} else {
 		e.style.display = 'block';
-		b.innerHTML = '-';
+		b.innerHTML = '&#9660;';
 	}
 }
 </script>
