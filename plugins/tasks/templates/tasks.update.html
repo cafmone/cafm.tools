@@ -32,8 +32,12 @@
 				</div>
 				<div style="line-height:0px;height:0px;clear:both;" class="floatbreaker">&#160;</div>
 
-				<div style="text-align:left; margin-top: 15px;">
-					<button style="width:30%; margin: 0" class="btn btn-default btn-sm" id="info_box_button" type="button" onclick="toggle('info_box');">&#9660;</button>
+				<div class="htmlobject_box" style="text-align:left; margin-top: 14px;">
+					<div class="left">&#160;</div>
+					<div class="right" style="width: 100px;">
+						<button style="width:100%; margin: 0 0 0 10px" class="btn btn-default btn-sm" id="info_box_button" type="button" onclick="toggle('info_box');">&#9660;</button>
+					</div>
+					<div style="line-height:0px;height:0px;clear:both;" class="floatbreaker">&#160;</div>
 				</div>
 
 				<div id="info_box" class="wrapper" style="display:none;position:relative;margin-top:15px;padding-top:25px;">
@@ -90,15 +94,7 @@
 	</div>
 	<div style="line-height:0px;height:0px;clear:both;" class="floatbreaker">&#160;</div>
 
-	<div class="card" style="margin: 15px 0 0 0;">
-		<div class="card-header">
-			<h4 style="float:left;margin: 0;">{label_changelog}</h4>
-			<div style="line-height:0px;height:0px;clear:both;" class="floatbreaker">&#160;</div>
-		</div>
-		<div id="changelog_box" style="display:block;padding:15px 15px 0 15px;">
-			{changelog}
-		</div>
-	</div>
+	{changelog}
 
 </div>
 

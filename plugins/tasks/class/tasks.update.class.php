@@ -78,12 +78,23 @@ var $lang = array();
 				}
 
 				$t->add($this->lang['label_message'].' '.$this->id, 'label_message');
-				$t->add($this->lang['label_changelog'], 'label_changelog');
-
 				$t->add($this->controller->notice('read'), 'notices');
 				$t->add($this->controller->notice('insert'), 'notice');
 
-				$t->add($this->controller->changelog($this->id)->get(), 'changelog');
+				$str = '';
+				$changelog = $this->controller->changelog($this->id)->get();
+					if($changelog !== '') {
+					$str .= '<div class="card" style="margin: 15px 0 0 0;">';
+					$str .= '  <div class="card-header">';
+					$str .= '    <h4 style="float:left;margin: 0;">'.$this->lang['label_changelog'].'</h4>';
+					$str .= '  </div>';
+					$str .= '  <div id="changelog_box" style="display:block;padding:15px 15px 0 15px;">';
+					$str .= '   '.$changelog;
+					$str .= '  </div>';
+					$str .= '</div>';
+				}
+				$t->add($str, 'changelog');
+				
 				$t->add($response->form);
 				$t->group_elements(array('param_' => 'form', 'plugin_' => 'plugin'));
 				if(isset($response->error)) {

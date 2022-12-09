@@ -611,9 +611,11 @@ var $date_format = "Y/m/d H:i";
 			$d['subject']['object'] = $div;
 		}
 
-		$d['description']['label'] = $this->lang['description'];
 		if($mode === 'insert') {
-			$d['description']['required'] = true;
+			$d['description']['label'] = $this->lang['description'];
+			if(isset($settings['settings']['description'])) {
+				$d['description']['required'] = true;
+			}
 			$d['description']['object']['type']            = 'htmlobject_textarea';
 			$d['description']['object']['attrib']['name']  = 'description';
 			$d['description']['object']['attrib']['id']    = 'description';
@@ -624,10 +626,11 @@ var $date_format = "Y/m/d H:i";
 			}
 		}	
 		else if($mode === 'update') {
-			$div = $this->response->html->div();
-			$div->name  = 'description';
-			$div->id    = 'description';
 			if(isset($ini['description'])) {
+				$div = $this->response->html->div();
+				$div->name  = 'description';
+				$div->id    = 'description';
+
 				$ini['description'] = htmlentities($ini['description'], ENT_COMPAT, 'UTF-8');
 				$ini['description'] = str_replace("\n", '<br>', $ini['description']);
 				$ini['description'] = str_replace("[[b]]", '<b>', $ini['description']);
@@ -651,8 +654,11 @@ var $date_format = "Y/m/d H:i";
 				}
 				*/
 				$div->add($ini['description']);
+				$d['description']['label'] = $this->lang['description'];
+				$d['description']['object'] = $div;
+			} else {
+				$d['description'] = '';
 			}
-			$d['description']['object'] = $div;
 		}
 
 ### TODO attachment upload from class?

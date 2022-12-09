@@ -39,6 +39,7 @@ var $lang = array(
 	'label_anonymous' => 'Anonymous',
 	'label_settings' => 'Settings',
 	'label_attachments' => 'Attachments',
+	'label_description_required' => 'Require Description',
 	'group' => 'Group',
 	'supporter' => 'Supporter',
 	'reporter' => 'Reporter',
@@ -199,6 +200,15 @@ var $tpldir = '';
 			$d['attachments']['object']['attrib']['name']  = 'settings[attachment]';
 			if(isset($ini['settings']['attachment'])) {
 				$d['attachments']['object']['attrib']['checked'] = true;
+			}
+			
+			// DESCRIPTION
+			$d['description']['label']                     = $this->lang['label_description_required'];
+			$d['description']['object']['type']            = 'htmlobject_input';
+			$d['description']['object']['attrib']['type']  = 'checkbox';
+			$d['description']['object']['attrib']['name']  = 'settings[description]';
+			if(isset($ini['settings']['description'])) {
+				$d['description']['object']['attrib']['checked'] = true;
 			}
 
 			// USER
