@@ -40,6 +40,7 @@ var $lang = array(
 	'label_delete' => 'Delete Option(s)',
 	'label_insert' => 'New Option',
 	'label_update' => 'Update Option',
+	'label_subject' => 'Subject',
 	'table_rank' => 'Rank',
 	'table_id' => 'id',
 	'table_name' => 'Option',
@@ -100,6 +101,10 @@ var $tpldir;
 		else if(isset($action)) {
 			$this->action = $action;
 		}
+		if($this->action === '') {
+			$this->action = 'subject';
+		}
+
 		$this->response->add($this->actions_name, $this->action);
 		$c = array();
 		$s = $this->settings;
@@ -122,20 +127,21 @@ var $tpldir;
 			}
 		}
 
-		// handle empty settings form
-		if(count($c) === 0) {
-			$content['label']   = $this->lang['groups'];
+		if($this->action === 'subject') {
+			$content = $this->element('subject', false, $this->lang['label_subject']);
+			array_unshift($c, $content);
+		} else {
+			$content['label']   = $this->lang['label_subject'];
 			$content['value']   = '';
 			$content['target']  = $this->response->html->thisfile;
-			$content['request'] = $this->response->get_array($this->actions_name, 'group' );
+			$content['request'] = $this->response->get_array($this->actions_name, 'subject' );
 			$content['onclick'] = false;
-			$c[] = $content;
+			array_unshift($c, $content);
 		}
 
 		$tab = $this->response->html->tabmenu('tasks_elements');
 		$tab->message_param = $this->message_param;
 		$tab->css = 'htmlobject_tabs';
-		#$tab->floatbreaker = false;
 		$tab->add($c);
 		return $tab;
 	}
@@ -148,7 +154,7 @@ var $tpldir;
 	 * @return array htmlobject_tabs
 	 */
 	//--------------------------------------------
-	function element( $element, $hidden = true) {
+	function element( $element, $hidden = true, $label = null) {
 		$data = '';
 		if( $hidden === false ) {
 			require_once(CLASSDIR.'plugins/tasks/class/tasks.config.element.class.php');
@@ -160,7 +166,9 @@ var $tpldir;
 			$controller->lang = $this->lang;
 			$data = $controller->action();
 		}
-		$label = $element;
+		if(!isset($label)) {
+			$label = $element;
+		}
 		if(isset($this->settings['labels'][$element])) {
 			$label = $this->settings['labels'][$element];
 		}

@@ -64,8 +64,8 @@ var $lang = array();
 			} else {
 				$this->response->redirect(
 					$this->response->get_url(
-						$this->actions_name, 'insert', $this->message_param, $response->msg
-					)
+						$this->actions_name, 'update', $this->message_param, $response->msg
+					).'&id='.$response->id
 				);
 			}
 		}

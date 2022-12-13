@@ -679,11 +679,15 @@ phppublisher = {
 		submit : false,
 		width  : '80%',
 		height : '358',
+		target : '',
 		element : '',
 		content: '',
-		init : function(element, label) {
+		init : function(element, label, targetid) {
 			if(typeof(label) == 'undefined') {
 				label = '';
+			}
+			if(typeof targetid !== 'undefined') {
+				this.target = document.getElementById(targetid);
 			}
 			
 			this.element = element;
@@ -709,7 +713,7 @@ phppublisher = {
 			wait.style.textAlign = 'center';
 			wait.style.zIndex = '1500';
 			wait.style.height = (this.height-30)+'px';
-			wait.innerHTML = 'Loading ..';
+			//wait.innerHTML = 'Loading ..';
 
 			var box = document.createElement("div");
 			box.className = 'list-group';
@@ -789,7 +793,7 @@ phppublisher = {
 					(function(element,x) { 
 						opt.addEventListener('click', function(e) { 
 							element.options[x].selected = 'selected';
-							phppublisher.select.commit(); 
+							phppublisher.select.commit(x); 
 						}) 
 					})(this.element,i);
 				}
@@ -849,7 +853,7 @@ phppublisher = {
 								(function(element,x) { 
 									opt.addEventListener('click', function(e) { 
 										element.options[x].selected = 'selected';
-										phppublisher.select.commit(); 
+										phppublisher.select.commit(x); 
 									}) 
 								})(this.element,i);
 							}
@@ -895,12 +899,14 @@ phppublisher = {
 		},
 
 		commit : function(index) {
-			//this.element.options[index].selected = 'selected';
 			$('#'+this.modalid).modal('hide');
 			try {
 				this.element.onchange();
 			} 
 			catch(e) {}
+			if(typeof index !== '' && this.target !== '') {
+				this.target.value = this.element.options[index].value;
+			}
 			if(this.submit == true) {
 				phppublisher.wait();
 				this.element.form.submit();

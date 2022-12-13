@@ -367,6 +367,7 @@ var $date_format = "Y/m/d H:i";
 		$response = $this->response;
 		$form     = $response->get_form($this->actions_name, $mode);
 		$form->css = 'form-horizontal';
+		$form->display_errors = false;
 
 		// handle db field length
 		$columns = $this->db->handler()->columns($this->db->db, 'tasks_tasks');
@@ -584,12 +585,14 @@ var $date_format = "Y/m/d H:i";
 			$d['reporter'] = '';
 		}
 
-		$d['subject']['label'] = $this->lang['subject'];
+		// Subject
 		if($mode === 'insert') {
+			$d['subject']['label'] = $this->lang['subject'];
 			if($mode === 'insert') {
 				$d['subject']['required'] = true;
 			}
 			$d['subject']['object']['type']            = 'htmlobject_input';
+			$d['subject']['object']['css']             = 'form-control';
 			$d['subject']['object']['attrib']['type']  = 'text';
 			$d['subject']['object']['attrib']['name']  = 'subject';
 			$d['subject']['object']['attrib']['id']    = 'subject';
@@ -600,6 +603,37 @@ var $date_format = "Y/m/d H:i";
 			if(isset($ini['subject'])) {
 				$d['subject']['object']['attrib']['value'] = $ini['subject'];
 			}
+
+			$result = $this->db->select('tasks_form', array('option'), array('element', 'subject'), array('`rank`'));
+			if(is_array($result)) {
+				$form->add(array('subject' => $d['subject']));
+
+				#$option = array('', '&#160;');
+				$select = $response->html->select();
+				$select->name = 'dummy';
+				$select->id = 'subject_select';
+				$select->css = 'form-control';
+				$select->style = 'display:none;';
+				$select->disabled = true;
+				#$select->add($option, array(0,1));
+				$select->add($result, array('option','option'));
+
+				$btn = $response->html->button();
+				$btn->type = 'button';
+				$btn->css = 'btn btn-default btn-sm';
+				$btn->label = '&#9660;';
+				$btn->handler = 'onclick="phppublisher.select.init(document.getElementById(\'subject_select\'),\''.$this->lang['subject'].'\',\'subject\');"';
+
+				$div = $response->html->customtag('span');
+				$div->css = 'input-group-append';
+				$div->add($btn);
+
+				$subject = $form->get_elements('subject');
+				$subject->css_right = 'right input-group';
+				$subject->add($div);
+				$subject->add($select);
+				$d['subject'] = $subject;
+			}
 		}
 		if($mode === 'update') {
 			$div = $this->response->html->div();
@@ -608,6 +642,7 @@ var $date_format = "Y/m/d H:i";
 			if(isset($ini['subject'])) {
 				$div->add(htmlentities($ini['subject'], ENT_COMPAT, 'UTF-8'));
 			}
+			$d['subject']['label'] = $this->lang['subject'];
 			$d['subject']['object'] = $div;
 		}
 
@@ -728,7 +763,6 @@ var $date_format = "Y/m/d H:i";
 			$response->created = date($this->date_format, $ini['created']);
 		}
 
-
 		// plugin INFOS
 		$elements = array(
 			'callback',
@@ -777,8 +811,6 @@ var $date_format = "Y/m/d H:i";
 		}
 
 		$form->add($d);
-		$form->display_errors = false;
-
 		$response->form = $form;
 		return $response;
 	}
