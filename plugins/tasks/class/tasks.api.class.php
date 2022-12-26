@@ -20,10 +20,7 @@ var $actions_name = 'tasks_action';
 
 var $lang = array(
 	'supporter' => 'Supporter',
-	'ticket_id' => 'Ticket #%s',
-	'select_reporter' => 'Please select a user',
-	'error_insert_email' => 'Email must not be empty or select a name from the list above',
-	'button_new' => 'New Task',
+	'new_task' => 'New Task',
 );
 
 	//--------------------------------------------
@@ -219,7 +216,7 @@ var $lang = array(
 
 					$a = $this->response->html->a();
 					$a->css = 'btn btn-default';
-					$a->label = $this->lang['button_new'];
+					$a->label = $this->lang['new_task'];
 					$a->target = '_blank';
 					$a->href = '?index_action=plugin&index_action_plugin=tasks&tasks_action=insert'.$params;
 
@@ -233,7 +230,7 @@ var $lang = array(
 				} else {
 					$a = $this->response->html->a();
 					$a->css = 'btn btn-default';
-					$a->label = $this->lang['button_new'];
+					$a->label = $this->lang['new_task'];
 					$a->target = '_blank';
 					$a->href = '?index_action=plugin&index_action_plugin=tasks&tasks_action=insert'.$params;
 
