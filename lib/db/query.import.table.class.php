@@ -342,22 +342,22 @@ var $lang = array();
 								#$tmp[$column['column']] = '&#160;';
 							} else {
 								if(isset($fields[$k])) {
+									// remove enclosure
+									$value = $fields[$k];
+									if(isset($this->enclosure) && $this->enclosure !== 'empty') {
+										$enclosure = $this->enclosure;
+										if( $enclosure === 'quot') {
+											$enclosure = '"';
+										}
+										$value = preg_replace('~^['.$enclosure.'](.*)['.$enclosure.']$~i', '$1', $value);
+									}
 									$length = $column['length'];
-									$value  = $fields[$k];
 									if (preg_match('!\S!u', $value)) {
 										$value = utf8_decode($value);
 									}
 									if(strlen($value) > $length) {
-										$error .= 'Error: Wrong length ('.strlen($value).' > '.$column['length'].') in column '.($i+1).' for '.$column['column'].' on line '.($i+1).'<br>';
+										$error .= 'Error: Wrong length ('.strlen($value).' > '.$length.') in column '.($i+1).' for '.$column['column'].' on line '.($i+1).'<br>';
 									} else {
-										$value = $fields[$k];
-										if(isset($this->enclosure) && $this->enclosure !== 'empty') {
-											$enclosure = $this->enclosure;
-											if( $enclosure === 'quot') {
-												$enclosure = '"';
-											}
-											$value = preg_replace('~^['.$enclosure.'](.*)['.$enclosure.']$~i', '$1', $value);
-										}
 										$tmp[$column['column']] = $value;
 									}
 								} else {

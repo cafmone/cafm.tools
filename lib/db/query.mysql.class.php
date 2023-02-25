@@ -190,7 +190,8 @@ var $debug = false;
 							$tmp['length'] = NULL;
 						break;
 						case 'int':
-							$tmp['length'] = 9;
+							### TODO length should be max
+							$tmp['length'] = 10;
 						break;
 						default: 
 							$tmp['length'] = intval(preg_replace('~(.*)\((.*)\)(.*)~i', '$2', $column['Type']));
