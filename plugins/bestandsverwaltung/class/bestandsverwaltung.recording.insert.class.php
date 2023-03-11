@@ -579,22 +579,26 @@ var $__delimiter = '[~]';
 
 									// handle string length
 									$tmp = $this->db->handler()->columns($this->db->db, 'changelog');
+									if(is_array($tmp)) {
+										$old = substr($fields[$k]['wert'], 0, ($tmp['old']['length']) -3 );
+										strlen($old) < strlen($fields[$k]['wert']) ? $old = $old.'...' : null;
 
-									$old = substr($fields[$k]['wert'], 0, ($tmp['old']['length']) -3 );
-									strlen($old) < strlen($fields[$k]['wert']) ? $old = $old.'...' : null;
+										$new = substr($v, 0, ($tmp['new']['length']) -3 );
+										strlen($new) < strlen($v) ? $new = $new.'...' : null;
 
-									$new = substr($v, 0, ($tmp['new']['length']) -3 );
-									strlen($new) < strlen($v) ? $new = $new.'...' : null;
+										$d = array();
+										$d['id']           = $this->id;
+										$d['merkmal_kurz'] = $k;
+										$d['old']          = $old;
+										$d['new']          = $new;
+										$d['user']         = $user['login'];
+										$d['date']         = time();
 
-									$d = array();
-									$d['id']           = $this->id;
-									$d['merkmal_kurz'] = $k;
-									$d['old']          = $old;
-									$d['new']          = $new;
-									$d['user']         = $user['login'];
-									$d['date']         = time();
+										$error = $this->db->insert('changelog',$d);
 
-									$error = $this->db->insert('changelog',$d);
+									} else {
+										$error = $tmp;
+									}
 								}
 							} else {
 								// unchanged
@@ -619,17 +623,23 @@ var $__delimiter = '[~]';
 
 									// handle string length
 									$tmp = $this->db->handler()->columns($this->db->db, 'changelog');
-									$new = substr($v, 0, ($tmp['new']['length']) -3 );
-									strlen($new) < strlen($v) ? $new = $new.'...' : null;
+									if(is_array($tmp)) {
 
-									$d = array();
-									$d['id']           = $this->id;
-									$d['merkmal_kurz'] = $k;
-									$d['new']          = $new;
-									$d['user']         = $user['login'];
-									$d['date']         = time();
+										$new = substr($v, 0, ($tmp['new']['length']) -3 );
+										strlen($new) < strlen($v) ? $new = $new.'...' : null;
 
-									$error = $this->db->insert('changelog',$d);
+										$d = array();
+										$d['id']           = $this->id;
+										$d['merkmal_kurz'] = $k;
+										$d['new']          = $new;
+										$d['user']         = $user['login'];
+										$d['date']         = time();
+
+										$error = $this->db->insert('changelog',$d);
+
+									} else {
+										$error = $tmp;
+									}
 								}
 							}
 						}
