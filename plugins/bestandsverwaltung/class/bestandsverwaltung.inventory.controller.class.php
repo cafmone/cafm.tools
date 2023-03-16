@@ -231,8 +231,8 @@ var $lang = array(
 			$controller->tpldir = $this->tpldir;
 			$controller->hide_empty = $hide_empty;
 			$data = $controller->action();
-
 			if(
+				isset($this->settings['settings']['changeid']) &&
 				isset($data->__data[0]) &&
 				isset($data->__data[0]['value']) &&
 				isset($data->__data[0]['value']->__elements[1]) &&
@@ -283,13 +283,13 @@ var $lang = array(
 	//--------------------------------------------
 	function changeid( $visible = false ) {
 		if($visible === true) {
-			if($this->user->is_admin()) {
-
+			if(
+				$this->user->is_admin() &&
+				isset($this->settings['settings']['changeid'])
+			) {
 				$id = $this->response->html->request()->get('id');
 				if($id !== '') {
 					$this->response->add('id',$id);
-				
-				
 					require_once($this->classdir.'bestandsverwaltung.inventory.changeid.class.php');
 					$controller = new bestandsverwaltung_inventory_changeid($this);
 					$controller->message_param = $this->message_param;
