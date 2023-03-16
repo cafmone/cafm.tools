@@ -190,6 +190,15 @@ var $lang = array(
 			$d['supervisor']['object']['attrib']['selected'] = array($ini['settings']['supervisor']);
 		}
 
+		$d['changeid']['label']                       = 'Admin group can change ID';
+		$d['changeid']['object']['type']              = 'htmlobject_input';
+		$d['changeid']['object']['attrib']['type']   = 'checkbox';
+		$d['changeid']['object']['attrib']['options'] = $groups;
+		$d['changeid']['object']['attrib']['name']    = 'settings[changeid]';
+		if(isset($ini['settings']['changeid'])) {
+			$d['changeid']['object']['attrib']['checked'] = true;
+		}
+
 		// Export
 
 		$d['bom']['label']                    = 'BOM';
@@ -197,6 +206,8 @@ var $lang = array(
 		$d['bom']['object']['attrib']['type'] = 'checkbox';
 		$d['bom']['object']['attrib']['name'] = 'export[bom]';
 		if(isset($ini['export']['bom'])) {
+			$d['bom']['object']['attrib']['checked'] = true;
+		} else {
 			$d['bom']['object']['attrib']['checked'] = true;
 		}
 
@@ -211,6 +222,8 @@ var $lang = array(
 		$d['linefeed']['object']['attrib']['name']    = 'export[linefeed]';
 		if(isset($ini['export']['linefeed'])) {
 			$d['linefeed']['object']['attrib']['selected'] = array($ini['export']['linefeed']);
+		} else {
+			$d['linefeed']['object']['attrib']['selected'] = array('\r\n');
 		}
 
 		$o = array();
@@ -225,6 +238,8 @@ var $lang = array(
 		$d['delimiter']['object']['attrib']['name']    = 'export[delimiter]';
 		if(isset($ini['export']['delimiter'])) {
 			$d['delimiter']['object']['attrib']['selected'] = array($ini['export']['delimiter']);
+		} else {
+			$d['delimiter']['object']['attrib']['selected'] = array(';');
 		}
 
 		$o = array();
@@ -239,20 +254,9 @@ var $lang = array(
 		$d['enclosure']['object']['attrib']['name']    = 'export[enclosure]';
 		if(isset($ini['export']['enclosure'])) {
 			$d['enclosure']['object']['attrib']['selected'] = array($ini['export']['enclosure']);
+		} else {
+			$d['enclosure']['object']['attrib']['selected'] = array('quot');
 		}
-
-
-		// Filters
-
-		#for($i=0;$i<10;$i++) {
-		#	$d['filter_f_'.$i]['label']                    = 'merkmal_kurz';
-		#	$d['filter_f_'.$i]['object']['type']           = 'htmlobject_input';
-		#	$d['filter_f_'.$i]['object']['attrib']['type'] = 'text';
-		#	$d['filter_f_'.$i]['object']['attrib']['name'] = 'filter['.$i.']';
-		#	if(isset($ini['filter'][$i])) {
-		#		$d['filter_f_'.$i]['object']['attrib']['value'] = $ini['filter'][$i];
-		#	}
-		#}
 
 		$form->display_errors = false;
 		$form->add($d);

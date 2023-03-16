@@ -96,7 +96,10 @@ var $lang = array(
 		'title_export_bom' => 'Add utf-8 Byte Order Mark',
 		'title_export_linefeed' => 'Linfeed',
 		'title_export_delimiter' => 'Column separator',
-	)	
+	),
+	'changeid' => array(
+		'update_sucess' => 'Changed %s to %s'
+	)
 );
 
 	//--------------------------------------------
@@ -167,6 +170,9 @@ var $lang = array(
 				case 'copy':
 					$data = $this->copy( true );
 				break;
+				case 'changeid':
+					$data = $this->changeid( true );
+				break;
 				case 'download':
 					$data = $this->download();
 				break;
@@ -225,6 +231,22 @@ var $lang = array(
 			$controller->tpldir = $this->tpldir;
 			$controller->hide_empty = $hide_empty;
 			$data = $controller->action();
+
+			if(
+				isset($data->__data[0]) &&
+				isset($data->__data[0]['value']) &&
+				isset($data->__data[0]['value']->__elements[1]) &&
+				$this->user->is_admin()
+			) {
+				$content['label']   = 'Admin';
+				$content['hidden']  = false;
+				$content['value']   = $this->changeid(true);
+				$content['target']  = '#recording_insert_tabchangeid';
+				$content['request'] = null;
+				$content['onclick'] = true;
+				$data->__data[0]['value']->__elements[1]->add(array('changeid' => $content));
+			}
+
 			return $data;
 		}
 	}
@@ -248,6 +270,41 @@ var $lang = array(
 			#$controller->identifier_name = $this->identifier_name;
 			$data = $controller->action();
 			return $data;
+		}
+	}
+
+	//--------------------------------------------
+	/**
+	 * Change ID
+	 *
+	 * @access public
+	 * @return htmlobject_template
+	 */
+	//--------------------------------------------
+	function changeid( $visible = false ) {
+		if($visible === true) {
+			if($this->user->is_admin()) {
+
+				$id = $this->response->html->request()->get('id');
+				if($id !== '') {
+					$this->response->add('id',$id);
+				
+				
+					require_once($this->classdir.'bestandsverwaltung.inventory.changeid.class.php');
+					$controller = new bestandsverwaltung_inventory_changeid($this);
+					$controller->message_param = $this->message_param;
+					$controller->actions_name = $this->actions_name;
+					$controller->tpldir = $this->tpldir;
+					$controller->lang = $this->lang['changeid'];
+					$controller->identifier_name = $this->identifier_name;
+					$data = $controller->action();
+					return $data;
+				} else {
+					return $this->select(true);
+				}
+			} else {
+				return $this->select(true);
+			}
 		}
 	}
 
