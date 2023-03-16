@@ -10,28 +10,30 @@ function toggle_colums(element) {
 </script>
 
 <div id="query">
-	<div id="descrition_box" class="col-xs-7">
-		{description}
-	</div>
-	<div id="upload_box" class="col-xs-2">
-		{upload}
-	</div>
-	<div  class="col-xs-3">
-		<div id="settings_box">
-			<form action="{thisfile}" method="GET" enctype="multipart/form-data" class="form-horizontal">
-				{form}
-				<div>{delimiter}</div>
-				<div style="clear:both;">{enclosure}</div>
-				<div class="floatbreaker">&#160;></div>
-				<div class="buttons" style="text-align:right; margin: 0 0 0 0;">{submit}</div>
-			</form>
+
+
+	<div class="clearfix">
+		<div id="descrition_box" class="float-left">
+			{description}
 		</div>
 
-		<div class="floatbreaker">&#160;></div>
-
-
-		<div class="floatbreaker">&#160;></div>
+		<div class="float-right" style="border:1px solid #ddd;padding: 15px;">
+			<div id="upload_box" class="htmlobject_box">
+				{upload}
+			</div>
+			<div id="settings_box">
+				<form action="{thisfile}" method="GET" enctype="multipart/form-data" class="form-horizontal">
+					{form}
+					<div>{delimiter}</div>
+					<div style="clear:both;">{enclosure}</div>
+					<div class="floatbreaker">&#160;></div>
+					<div class="buttons" style="text-align:right; margin: 0 0 0 0;">{submit}</div>
+				</form>
+			</div>
+			<div class="floatbreaker">&#160;></div>
+		</div>
 	</div>
+
 	<div class="floatbreaker">&#160;></div>
 	<div style="padding: 15px 0;">
 		{content}

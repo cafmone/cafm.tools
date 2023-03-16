@@ -315,6 +315,25 @@ var $message_css = array(
 
 	//------------------------------------------------
 	/**
+	* Get elements
+	*
+	* @access public
+	* @return array | null
+	*/
+	//------------------------------------------------
+	function get_elements($name = null) {
+		if(isset($this->__data)) {
+			if(!isset($name)) {
+				return $this->__data[$name];
+			}
+			else if(isset($name) && isset($this->__data[$name])) {
+				return $this->__data[$name];
+			}
+		}
+	}
+
+	//------------------------------------------------
+	/**
 	* Get array key of current element
 	*
 	* @access private
