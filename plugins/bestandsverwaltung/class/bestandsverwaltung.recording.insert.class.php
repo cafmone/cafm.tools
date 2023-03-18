@@ -313,7 +313,6 @@ var $__delimiter = '[~]';
 				$content[0]['target']  = '#recording_insert_tab0';
 				$content[0]['request'] = null;
 				$content[0]['onclick'] = true;
-				$content[0]['active']  = true;
 				$content[0]['id']  = 'Id1';
 
 				// handle files

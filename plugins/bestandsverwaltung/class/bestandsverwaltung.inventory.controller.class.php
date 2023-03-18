@@ -165,13 +165,11 @@ var $lang = array(
 					$data = $this->select(true);
 				break;
 				case 'update':
+				case 'changeid':
 					$data = $this->update(true);
 				break;
 				case 'copy':
 					$data = $this->copy( true );
-				break;
-				case 'changeid':
-					$data = $this->changeid( true );
 				break;
 				case 'download':
 					$data = $this->download();
@@ -240,13 +238,15 @@ var $lang = array(
 			) {
 				$content['label']   = 'Admin';
 				$content['hidden']  = false;
-				$content['value']   = $this->changeid(true);
+				$content['value']   = $this->__changeid(true);
 				$content['target']  = '#recording_insert_tabchangeid';
 				$content['request'] = null;
 				$content['onclick'] = true;
+				if($this->action === 'changeid') {
+					$content['active'] = true;
+				}
 				$data->__data[0]['value']->__elements[1]->add(array('changeid' => $content));
 			}
-
 			return $data;
 		}
 	}
@@ -281,7 +281,7 @@ var $lang = array(
 	 * @return htmlobject_template
 	 */
 	//--------------------------------------------
-	function changeid( $visible = false ) {
+	function __changeid( $visible = false ) {
 		if($visible === true) {
 			if(
 				$this->user->is_admin() &&
@@ -292,7 +292,7 @@ var $lang = array(
 					$this->response->add('id',$id);
 					require_once($this->classdir.'bestandsverwaltung.inventory.changeid.class.php');
 					$controller = new bestandsverwaltung_inventory_changeid($this);
-					$controller->message_param = $this->message_param;
+					$controller->message_param = 'bestand_recording_insert_msg';
 					$controller->actions_name = $this->actions_name;
 					$controller->tpldir = $this->tpldir;
 					$controller->lang = $this->lang['changeid'];

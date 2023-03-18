@@ -48,6 +48,7 @@ class bestandsverwaltung_inventory_changeid
 		$this->settings    = $controller->settings;
 		$this->classdir    = $controller->classdir;
 		$this->profilesdir = $controller->profilesdir;
+
 	}
 
 	//--------------------------------------------
@@ -60,6 +61,10 @@ class bestandsverwaltung_inventory_changeid
 	 */
 	//--------------------------------------------
 	function action($action = null) {
+		$this->response = $this->response->response();
+		$this->response->id = 'changeid';
+		$this->response->remove($this->actions_name);
+	
 		$form = $this->update();
 		$vars = array('thisfile' => $this->response->html->thisfile);
 		$t = $this->response->html->template($this->tpldir.'bestandsverwaltung.inventory.changeid.html');
@@ -136,6 +141,9 @@ class bestandsverwaltung_inventory_changeid
 			} else {
 				$error = 'Error: No Old ID.';
 			}
+
+var_dump($error);
+exit();
 
 			if( $error === '' ) {
 				$this->response->add('id', $newid);
