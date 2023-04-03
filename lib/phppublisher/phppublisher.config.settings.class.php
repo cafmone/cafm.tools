@@ -278,8 +278,8 @@ var $lang = array(
 					}
 					// handle static custom.css
 					if($k === 'css') {
-						if(! $this->file->exists($target.'custom.css')) {
-							$error = $this->file->mkfile($target.'custom.css', '');
+						if(! $this->file->exists($target.'/custom.css')) {
+							$error = $this->file->mkfile($target.'/custom.css', '');
 						}
 					}
 
