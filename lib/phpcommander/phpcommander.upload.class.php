@@ -52,6 +52,7 @@ var $lang = array(
 	'uploaded_files' => 'File(s) successfully uploaded',
 	'error_max_files' => 'An error has occurred. The server can upload %s files at the same time only. Proceed anyway?',
 	'error_max_filesize' => 'File exceeds maximum filesize %s ',
+	'error_upload_failed' => 'Failed to upload file(s). Please check filename or filesize %s.',
 	'title_upload' => 'Maximum filesize %s',
 	'title_upload_multiple' => 'Maximum %s files, filesize %s',
 );
@@ -111,8 +112,8 @@ var $tpldir;
 				'',
 				'',
 				$this->message_param.'[error]',
-				sprintf($this->lang['error_max_filesize'], ini_get('upload_max_filesize'))
-			).'&'.$this->__pc->id.'['.$this->__pc->actions_name.']'.'=select';
+				sprintf($this->lang['error_upload_failed'], ini_get('upload_max_filesize'))
+			);
 			$response->redirect($url);
 		}
 
@@ -124,7 +125,7 @@ var $tpldir;
 			}
 		}
 		else if($form->get_errors()) {
-			$_REQUEST[$this->message_param] = join('<br>', $form->get_errors());
+			$_REQUEST[$this->message_param]['error'] = join('<br>', $form->get_errors());
 		}
 
 		$elementid = uniqid('up');

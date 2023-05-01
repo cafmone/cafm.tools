@@ -80,6 +80,7 @@ var $lang = array();
 		if(is_array($this->columns)) {
 			require_once(CLASSDIR.'/lib/phpcommander/phpcommander.upload.class.php');
 			$xresponse = $this->response->response();
+			$xresponse->id = 'xresponse';
 			$xresponse->add($this->actions_name,'table');
 			$commander = new phpcommander_upload(PROFILESDIR.'/import', $xresponse, $this->file);
 			$commander->actions_name = $this->dbtable.'_upload';

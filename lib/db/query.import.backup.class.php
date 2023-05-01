@@ -71,7 +71,7 @@ var $lang = array();
 			$xresponse->add($this->actions_name,'backup');
 			$commander = new phpcommander_upload(PROFILESDIR.'/import', $xresponse, $this->file);
 			$commander->actions_name = $this->dbtable.'_upload';
-			$commander->message_param = 'upload_message';
+			$commander->message_param = $this->message_param;
 			$commander->tpldir = CLASSDIR.'/lib/phpcommander/templates';
 			$commander->allow_replace = true;
 			$commander->allow_create = true;
