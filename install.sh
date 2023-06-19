@@ -1,7 +1,7 @@
 #!/bin/bash
 DEFAULT_PROFILES="/var/www/profiles"
 DEFAULT_HTTPDOCS="/var/www/html"
-DEFAULT_PASSWORD="admin"
+DEFAULT_PASSWORD=$(openssl rand -base64 10)
 
 if [ ! -z $1 ]; then
 	DEFAULT_FOLDER="$1"
@@ -218,6 +218,7 @@ phppublishersetup() {
 						usersetup
 						echo ''
 						echo 'Finished installation'
+						echo "Login admin:$DEFAULT_PASSWORD"
 						echo ''
 						exit 0
 					else
