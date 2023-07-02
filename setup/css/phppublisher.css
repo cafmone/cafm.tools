@@ -225,9 +225,9 @@ fieldset[disabled] .btn-default.focus {
 	background-color: #fff;
 	border-color: #ccc;
 }
-.btn-default .badge {
-	color: #fff;
-	background-color: #333;
+.btn .badge {
+	margin-left: 5px;
+	padding: 0.15em 0.4em 0.35em 0.4em;
 }
 
 .btn-xs,
