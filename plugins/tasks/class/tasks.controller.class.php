@@ -187,6 +187,22 @@ var $date_format = "Y/m/d H:i";
 
 	//--------------------------------------------
 	/**
+	 * Helper
+	 *
+	 * @access public
+	 * @return controller
+	 */
+	//--------------------------------------------
+	function helper($visible = false) {
+		if($visible === true) {
+			require_once(CLASSDIR.'plugins/tasks/class/tasks.helper.class.php');
+			$controller = new tasks_helper($this);
+			return $controller;
+		}
+	}
+
+	//--------------------------------------------
+	/**
 	 * Insert
 	 *
 	 * @access public

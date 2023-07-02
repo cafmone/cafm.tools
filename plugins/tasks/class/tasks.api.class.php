@@ -149,6 +149,7 @@ var $lang = array(
 				}
 				$values[] = 'id';
 				$values[] = 'subject';
+				$values[] = 'updater';
 
 				$result = $this->db->select(
 					'tasks_tasks',
@@ -180,7 +181,7 @@ var $lang = array(
 					foreach($result as $r) {
 						$str = $r['subject'].'<br>';
 						foreach($r as $k => $v) {
-							if(isset($v) && $k !== 'id' && $k !== 'subject') {
+							if(isset($v) && $k !== 'id' && $k !== 'subject' && $k !== 'updater') {
 								$tmp = (isset($options[$v])) ? $options[$v] : $v;
 								$label = (isset($this->settings['labels'][$k])) ? $this->settings['labels'][$k] : $k;
 								$str .= $label.': '.$tmp.'<br>';
@@ -190,6 +191,10 @@ var $lang = array(
 						$a->href    = '?index_action=tasks&index_action_plugin=tasks&tasks_action=update&id='.$r['id'];
 						$a->css     = 'btn btn-default btn-sm';
 						$a->label   = '<span class="icon icon-edit"></span>';
+						if(isset($r['updater']) && $r['updater'] === 'closed') {
+							$a->css   = 'btn btn-secondary btn-sm';
+							$a->title = 'closed';
+						}
 						//$a->handler = 'onclick="phppublisher.wait();"';
 						$a->target  = '_blank"';
 						$body[] = array(
@@ -202,7 +207,7 @@ var $lang = array(
 					$table = $this->response->html->tablebuilder( 'tasks_select', $this->response->get_array() );
 					$table->sort  = 'updatet';
 					$table->order = 'ASC';
-					$table->limit           = 50;
+					$table->limit           = 0;
 					$table->offset          = 0;
 					$table->max             = count($result);
 					$table->css             = 'htmlobject_table table table-bordered';
@@ -212,6 +217,7 @@ var $lang = array(
 					$table->autosort        = true;
 					$table->head            = $head;
 					$table->body            = $body;
+					$table->handler_tr      = null;
 					echo $table->get_string();
 
 					$a = $this->response->html->a();
