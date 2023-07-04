@@ -87,63 +87,39 @@ class bestandsverwaltung_inventory_changeid
 		if(!$form->get_errors() && $this->response->submit()) {
 			$error = '';
 			$newid = $form->get_request('newid');
+			$mode  = $form->get_request('mode');
 			$oldid = $form->get_static('id');
-			if(isset($oldid) && $oldid !== '') {
-				if($oldid !== $newid) {
-					$check = $this->db->select('bestand', array('id'), array('id', $newid), 'id', 1);
-					if($check === '') {
 
-						// Changelog
-						$check = $this->db->handler()->columns($this->db->db, 'changelog');
-						if(is_array($check)) {
-							$error = $this->db->update(
-								'changelog',
-								array('id' => $newid),
-								array('id', $oldid)
-							);
-							if($error === '') {
-								$user = $this->controller->user->get();
-								$d = array();
-								$d['id']           = $newid;
-								$d['merkmal_kurz'] = 'ID';
-								$d['old']          = $oldid;
-								$d['new']          = $newid;
-								$d['user']         = $user['login'];
-								$d['date']         = time();
-								$error = $this->db->insert('changelog',$d);
+			if($mode !== '') {
+				if(isset($oldid) && $oldid !== '') {
+					if($oldid !== $newid) {
+						$check = $this->db->select('bestand', array('id'), array('id', $newid), 'id', 1);
+						if($mode === 'rename') {
+							if($check === '') {
+								$error = $this->__rename($newid, $oldid); 
+							} else {
+								$error = 'Error: ID '.$newid.' already in use. Nothing to rename.';
 							}
 						}
-
-						// Files
-						if($error === '') {
-							$path = $this->profilesdir.'webdav/bestand/devices/';
-							var_dump($path);
-							if($this->file->exists($path.$oldid)) {
-								$error = $this->file->rename($path.$oldid, $path.$newid);
+						elseif($mode === 'replace') {
+							if($check !== '') {
+								$error = $this->__remove($newid);
+								if($error === '') {
+									$error = $this->__rename($newid, $oldid);
+								}
+							} else {
+								$error = 'Error: ID '.$newid.' not found. Nothing to replace.';
 							}
 						}
-
-						// Bestand
-						if($error === '') {
-							$error = $this->db->update(
-								'bestand',
-								array('id' => $newid),
-								array('id', $oldid)
-							);
-						}
-
 					} else {
-						$error = 'Error: New ID already in use. Nothing to do.';
+						$error = 'Error: New ID is equivalent to current ID. Nothing to do.';
 					}
 				} else {
-					$error = 'Error: New ID is equivalent to Old ID. Nothing to do.';
+					$error = 'Error: No current ID.';
 				}
 			} else {
-				$error = 'Error: No Old ID.';
+				$error = 'Error: Missing mode.';
 			}
-
-var_dump($error);
-exit();
 
 			if( $error === '' ) {
 				$this->response->add('id', $newid);
@@ -172,15 +148,124 @@ exit();
 
 		$form = $this->response->get_form($this->actions_name, 'changeid');
 
-		$d['newid']['label']                     = 'New Id';
+		$d['currentid']['label']                        = 'Old ID';
+		$d['currentid']['static']                       = true;
+		$d['currentid']['css']                          = 'autosize';
+		$d['currentid']['style']                        = 'margin-bottom: 30px;';
+		$d['currentid']['object']['type']               = 'htmlobject_input';
+		$d['currentid']['object']['attrib']['name']     = 'oldid';
+		$d['currentid']['object']['attrib']['type']     = 'text';
+		$d['currentid']['object']['attrib']['disabled'] = true;
+		$d['currentid']['object']['attrib']['value']    = $form->get_static('id');
+
+		$d['newid']['label']                     = 'New ID';
+		$d['newid']['css']                       = 'autosize';
 		$d['newid']['required']                  = true;
 		$d['newid']['object']['type']            = 'htmlobject_input';
 		$d['newid']['object']['attrib']['name']  = 'newid';
 		$d['newid']['object']['attrib']['type']  = 'text';
+		
+		$d['rename']['label']                       = 'Rename old ID to new ID';
+		$d['rename']['css']                         = 'autosize inverted checkbox';
+		$d['rename']['object']['type']              = 'htmlobject_input';
+		$d['rename']['object']['attrib']['name']    = 'mode';
+		$d['rename']['object']['attrib']['type']    = 'radio';
+		$d['rename']['object']['attrib']['value']   = 'rename';
+		$d['rename']['object']['attrib']['checked'] = true;
+		
+		$d['replace']['label']                     = 'Remove new ID and rename old ID to new ID';
+		$d['replace']['css']                       = 'autosize inverted checkbox';
+		$d['replace']['object']['type']            = 'htmlobject_input';
+		$d['replace']['object']['attrib']['name']  = 'mode';
+		$d['replace']['object']['attrib']['value'] = 'replace';
+		$d['replace']['object']['attrib']['type']  = 'radio';
 
 		$form->display_errors = false;
 		$form->add($d);
 		return $form;
+	}
+
+	//--------------------------------------------
+	/**
+	 * Rename
+	 *
+	 * @access public
+	 * @return string
+	 */
+	//--------------------------------------------
+	function __rename($newid, $oldid) {
+		$error = '';
+		// Changelog
+		$check = $this->db->handler()->columns($this->db->db, 'changelog');
+		if(is_array($check)) {
+			$error = $this->db->update(
+				'changelog',
+				array('id' => $newid),
+				array('id', $oldid)
+			);
+			if($error === '') {
+				$user = $this->controller->user->get();
+				$d = array();
+				$d['id']           = $newid;
+				$d['merkmal_kurz'] = 'ID';
+				$d['old']          = $oldid;
+				$d['new']          = $newid;
+				$d['user']         = $user['login'];
+				$d['date']         = time();
+				$error = $this->db->insert('changelog',$d);
+			}
+		}
+		// Files
+		if($error === '') {
+			$path = $this->profilesdir.'webdav/bestand/devices/';
+			if($this->file->exists($path.$oldid)) {
+				$error = $this->file->rename($path.$oldid, $path.$newid);
+			}
+		}
+		// Bestand
+		if($error === '') {
+			$error = $this->db->update(
+				'bestand',
+				array('id' => $newid),
+				array('id', $oldid)
+			);
+		}
+		return $error;
+	}
+	
+	//--------------------------------------------
+	/**
+	 * Remove
+	 *
+	 * @access public
+	 * @return string
+	 */
+	//--------------------------------------------
+	function __remove($id) {
+		$error = '';
+		// Changelog
+		$check = $this->db->handler()->columns($this->db->db, 'changelog');
+		if(is_array($check)) {
+			$error = $this->db->delete(
+				'changelog',
+				array('id' => $id)
+			);
+		}
+		// Files
+		if($error === '') {
+			$path = $this->profilesdir.'webdav/bestand/devices/';
+			if($this->file->exists($path.$id)) {
+				$error = $this->file->remove($path.$id, true);
+			}
+		}
+		// Bestand
+		if($error === '') {
+			$error = $this->db->delete(
+				'bestand',
+				array('id' => $id)
+			);
+		}
+		return $error;
 	}
 }
 ?>

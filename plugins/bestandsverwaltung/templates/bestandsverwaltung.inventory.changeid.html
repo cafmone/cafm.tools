@@ -1,7 +1,16 @@
 <div class="form" style="margin-top:40px;">
-<form action="{thisfile}" method="POST" class="form-horizontal">
+<form action="{thisfile}" method="GET" class="form-horizontal">
 {form}
-{newid}
+<div style="width:100%;height:100%;">
+	<div style="width:400px; margin: 0 auto; display:block;">
+		<div class="clearfix" style="margin-bottom: 20px;">
+			{currentid}
+			{newid}
+		</div>
+		{rename}
+		{replace}
+	</div>
+</div>
 <div class="buttons">{submit}</div>
 </form>
 </div>
