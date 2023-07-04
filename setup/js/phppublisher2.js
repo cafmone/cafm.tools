@@ -493,6 +493,19 @@ phppublisher = {
 		inner.className = 'modal-box lead';
 		var p = document.createElement("p");
 		p.innerHTML = msg;
+		
+		var close = document.createElement("button");
+		close.innerHTML = '&times;';
+		close.className = 'btn btn-sm';
+		close.style.position = 'absolute';
+		close.style.top = '-5px';
+		close.style.right = '-3px';
+		close.onclick = function() {
+			body.removeChild(outer);
+			body.removeChild(inner);
+		};
+		
+		inner.appendChild(close);
 		inner.appendChild(p);
 		body.appendChild(outer);
 		body.appendChild(inner);
