@@ -109,9 +109,16 @@ var $date_format = "Y/m/d H:i";
 		$this->lang = $this->user->translate($this->lang, CLASSDIR.'plugins/tasks/lang/', 'tasks.ini');
 		$this->classdir = CLASSDIR.'plugins/tasks/class/';
 
-		$this->db = $db;
 		if(isset($this->settings['settings']['db'])) {
-			$this->db->db = $this->settings['settings']['db'];
+			require_once(CLASSDIR.'lib/db/query.class.php');
+			$this->db = new query(CLASSDIR.'lib/db');
+			$this->db->host = $db->host;
+			$this->db->type = $db->type;
+			$this->db->user = $db->user;
+			$this->db->pass = $db->pass;
+			$this->db->db   = $this->settings['settings']['db'];
+		} else {
+			$this->db = $db;
 		}
 	}
 

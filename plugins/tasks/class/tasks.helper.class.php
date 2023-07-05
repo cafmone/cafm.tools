@@ -26,13 +26,13 @@ class tasks_helper
 		$this->response = $controller->response;
 		$this->db = $controller->db;
 		
-		require_once(CLASSDIR.'lib/db/query.class.php');
-		$this->db = new query(CLASSDIR.'lib/db');
-		$this->db->host = $controller->db->host;
-		$this->db->type = $controller->db->type;
-		$this->db->user = $controller->db->user;
-		$this->db->pass = $controller->db->pass;
-		$this->db->db   = $controller->db->db;
+		#require_once(CLASSDIR.'lib/db/query.class.php');
+		#$this->db = new query(CLASSDIR.'lib/db');
+		#$this->db->host = $controller->db->host;
+		#$this->db->type = $controller->db->type;
+		#$this->db->user = $controller->db->user;
+		#$this->db->pass = $controller->db->pass;
+		#$this->db->db   = $controller->db->db;
 	}
 
 	//--------------------------------------------

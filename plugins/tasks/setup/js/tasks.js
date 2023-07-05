@@ -116,32 +116,68 @@ Tasks.confirm = function( element, id ) {
 // Plugin Picker
 //---------------------------------
 var pluginpicker = {
-	init : function( callback, referer, tag, value ) {
-
-		phppublisher.modal.width = '600px';
+	formid : '',
+	modalid : '',
+	callback : '',
+	referer : '',
+	tag : '',
+	val : '',
+	init : function( callback, referer, tag, val ) {
+		phppublisher.modal.width = '650px';
 		phppublisher.modal.label = callback;
-		var modalid = phppublisher.modal.init();
-
+		this.modalid = phppublisher.modal.init();
+		this.callback = callback;
 		params = "&plugin="+callback+"&"+callback+"_action=tasks";
 		if(typeof referer != "undefined") {
+			this.referer = referer;
 			params += "&referer="+referer;
 		}
 		if(typeof tag != "undefined") {
+			this.tag = tag;
 			params += "&tag="+tag;
 		}
-		if(typeof value != "undefined") {
-			params += "&value="+value;
+		if(typeof val != "undefined") {
+			this.val = val;
+			params += "&value="+val;
 		}
 		ajax(params, 'pluginpickerCallback');
-
-		$('#'+modalid).modal('show');
+		$('#'+this.modalid).modal('show');
 		phppublisher.modal.print('');
-
 	},
 	print : function(response) {
-		phppublisher.modal.print(response);
+		if(response == 'ok') {
+			str  = '<div class="alert alert-success">Success</div>';
+			str += '<br><center><a class="btn btn-default" href="javascript:pluginpicker.reload();">reload</a></center>';
+			phppublisher.modal.print(str);
+		} else {
+			phppublisher.modal.print(response);
+			form = document.getElementById(this.modalid).getElementsByTagName('form')[0];
+			if(typeof form != "undefined") {
+				this.formid = form.getAttribute("id");
+				if(typeof this.formid != "undefined" && this.formid != '') {
+					gf = document.getElementById(this.formid);
+					gf.onsubmit = function() {
+						pluginpicker.submit(this);
+						return false;
+					};
+				}
+			}
+		}
+
+	},
+	reload : function() {
+		$('#'+this.modalid).modal('hide');
+		pluginpicker.init(this.callback, this.referer, this.tag, this.val);
+	},
+	submit : function(form, mode) {
+		if(form) {
+			//this.formid = form.getAttribute("id");
+			params = serialize(form);
+			ajax(params, 'pluginpickerCallback');
+		}
 	}
 }
+
 function pluginpickerCallback(response) {
 	pluginpicker.print(response);
 }
@@ -159,13 +195,6 @@ function ajax(params, callback){
 		}
 	});
 }
-
-
-
-
-
-
-
 
 
 
