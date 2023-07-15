@@ -55,9 +55,17 @@ var $tpldir;
 		$this->profilesdir = PROFILESDIR;
 		$this->settings = $this->file->get_ini($this->profilesdir.'/standort.ini', true, true);
 		$this->classdir = CLASSDIR.'plugins/standort/class/';
-		$this->db = $db;
-		if(isset($this->settings['query']['db'])) {
-			$this->db->db = $this->settings['query']['db'];
+
+		if(isset($this->settings['settings']['db'])) {
+			require_once(CLASSDIR.'lib/db/query.class.php');
+			$this->db = new query(CLASSDIR.'lib/db');
+			$this->db->host = $db->host;
+			$this->db->type = $db->type;
+			$this->db->user = $db->user;
+			$this->db->pass = $db->pass;
+			$this->db->db   = $this->settings['settings']['db'];
+		} else {
+			$this->db = $db;
 		}
 	}
 

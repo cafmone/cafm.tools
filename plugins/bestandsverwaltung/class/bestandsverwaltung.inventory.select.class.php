@@ -101,8 +101,11 @@ var $__attribs;
 		#$this->response->html->help($this->filter);
 		#$this->response->html->help($_REQUEST);
 		
+
+		
 		// Custom Filters
 		if(isset($this->settings['filter']) && is_array($this->settings['filter'])) {
+			$opts = array();
 			$this->filters = array();
 			foreach($this->settings['filter'] as $k => $f) {
 				$tmp = explode('::', $f);
@@ -110,12 +113,33 @@ var $__attribs;
 					$this->filters[$tmp[1]]['table'] = $tmp[0];
 					$this->filters[$tmp[1]]['key']   = $tmp[1];
 					$this->filters[$tmp[1]]['label'] = $tmp[1];
-					
 					$lang = $this->db->select('bestand_'.$tmp[0],'*',array('merkmal_kurz'=>$tmp[1]));
 					if(is_array($lang)) {
 						$this->filters[$tmp[1]]['label'] = $lang[0]['merkmal_lang'];
+						$this->filters[$tmp[1]]['type']  = $lang[0]['datentyp'];
+						if($lang[0]['datentyp'] === 'select') {
+							$sql  = 'SELECT ';
+							$sql .= '`o`.`row`, ';
+							$sql .= '`o`.`value` ';
+							$sql .= 'FROM `bestand_option2attrib` AS o2a ';
+							$sql .= 'RIGHT JOIN `bestand_options` AS o ON(o2a.option=o.option) ';
+							$sql .= 'WHERE `o2a`.`attrib`=\''.$tmp[1].'\' ';
+							$options = $this->db->handler()->query($sql);
+							if(!is_array($options)) {
+								$options = array();
+							}
+							$this->filters[$tmp[1]]['options'] = $options;
+							$opts = array_merge($opts, $options);
+						}
 					}
 				}
+			}
+			if(is_array($opts)) {
+				$this->options = array();
+				foreach($opts as $option) {
+					$this->options[$option['row']] = $option['value'];
+				}
+				unset($opts);
 			}
 		}
 
@@ -150,7 +174,7 @@ var $__attribs;
 			$this->bezeichner = $lb;
 		}
 
-		// handle CAFM.ONE connected 
+		// handle standort
 		if(in_array('standort', $this->plugins)) {
 			require_once(CLASSDIR.'plugins/standort/class/standort.class.php');
 			$this->raumbuch = new standort($this->db, $this->file);
@@ -268,12 +292,14 @@ var $__attribs;
 			&& !isset($custom_empty)
 		) {
 			foreach($this->filters as $f) {
-				$key = $f['key'];
-				$box = $t->get_elements('cfilter_'.$key);
-				$not = $t->get_elements('cfilter_not_'.$key);
-				$box->add($not);
-				$box->add('<div class="floatbreaker">&#160;</div>');
-				$t->remove('cfilter_not_'.$key);
+				if($f['table'] !== 'prozess') {
+					$key = $f['key'];
+					$box = $t->get_elements('cfilter_'.$key);
+					$not = $t->get_elements('cfilter_not_'.$key);
+					$box->add($not);
+					$box->add('<div class="floatbreaker">&#160;</div>');
+					$t->remove('cfilter_not_'.$key);
+				}
 			}
 			$t->add('block','css_tab_filter_custom');
 		} else {
@@ -470,7 +496,6 @@ var $__attribs;
 			}
 		}
 
-
 		if(is_array($ids)) {
 			// performance
 			$href_update    = $response->get_url($this->actions_name, 'update');
@@ -551,10 +576,18 @@ var $__attribs;
 							foreach($this->filters as $f) {
 								$key = $f['key'];
 								if(isset($id[$key]) && $id[$key] !== '') {
-									$data .= $f['label'].': '.$id[$key].'<br>';
+									$label = $f['label'];
+									$value = $id[$key];
+									if($f['type'] === 'select') {
+										if(is_numeric($value) && isset($this->options[$value])) {
+											$value = $this->options[$value];
+										}
+									}
+									$data .= $label.': '.$value.'<br>';
 								}
 							}
 						}
+
 						// handle files
 						$data .= '<br>';
 
@@ -887,29 +920,42 @@ var $__attribs;
 		$d['filter_order_date']['object']['attrib']['css']     = 'form-control-sm date included';
 		$d['filter_order_date']['object']['attrib']['name']    = 'filter[order][date]';
 
+### TODO
+		// custom filters
 		if(isset($this->filters) && is_array($this->filters)) {
 			foreach($this->filters as $f) {
-				$key = $f['key'];
-				$d['cfilter_'.$key]['label']                     = $f['label'];
-				$d['cfilter_'.$key]['object']['type']            = 'htmlobject_input';
-				$d['cfilter_'.$key]['object']['attrib']['name']  = 'filter['.$key.']';
-				$d['cfilter_'.$key]['object']['attrib']['style'] = '';
-				if(isset($this->filter[$key]) && $this->filter[$key] !== '') {
-					$not = '';
-					if(isset($this->filter['not'][$key])) {
-						$not = ' [not]';
+				// disable custom process filter
+				if($f['table'] !== 'prozess') {
+					$key = $f['key'];
+					$d['cfilter_'.$key]['label'] = $f['label'];
+					if($f['type'] === 'select') {
+						array_unshift($f['options'], array('value' => '', 'row' => ''));
+						$d['cfilter_'.$key]['object']['type'] = 'htmlobject_select';
+						$d['cfilter_'.$key]['object']['attrib']['index'] = array('row','value');
+						$d['cfilter_'.$key]['object']['attrib']['options'] = $f['options'];
+					
+					} else {
+						$d['cfilter_'.$key]['object']['type'] = 'htmlobject_input';
 					}
-					$this->__filters[$key] = $f['label'].': '.$this->filter[$key].$not;
-				} else {
-					if(isset($this->filter['not'][$key])) {
-						$this->__filters[] = $key.': <i>NULL</i>';
+					$d['cfilter_'.$key]['object']['attrib']['name']  = 'filter['.$key.']';
+					$d['cfilter_'.$key]['object']['attrib']['style'] = '';
+					if(isset($this->filter[$key]) && $this->filter[$key] !== '') {
+						$not = '';
+						if(isset($this->filter['not'][$key])) {
+							$not = ' [not]';
+						}
+						$this->__filters[$key] = $f['label'].': '.$this->filter[$key].$not;
+					} else {
+						if(isset($this->filter['not'][$key])) {
+							$this->__filters[] = $key.': <i>NULL</i>';
+						}
 					}
+					$d['cfilter_not_'.$key]['object']['type']            = 'htmlobject_input';
+					$d['cfilter_not_'.$key]['object']['attrib']['type']  = 'checkbox';
+					$d['cfilter_not_'.$key]['object']['attrib']['title'] = 'Not';
+					$d['cfilter_not_'.$key]['object']['attrib']['css']   = 'included';
+					$d['cfilter_not_'.$key]['object']['attrib']['name']  = 'filter[not]['.$key.']';
 				}
-				$d['cfilter_not_'.$key]['object']['type']            = 'htmlobject_input';
-				$d['cfilter_not_'.$key]['object']['attrib']['type']  = 'checkbox';
-				$d['cfilter_not_'.$key]['object']['attrib']['title'] = 'Not';
-				$d['cfilter_not_'.$key]['object']['attrib']['css']   = 'included';
-				$d['cfilter_not_'.$key]['object']['attrib']['name']  = 'filter[not]['.$key.']';
 			}
 		} else {
 			$d['cfilter_0'] = '';
@@ -1342,6 +1388,7 @@ var $__attribs;
 
 		// handle export
 		$this->exports = array();
+		$this->selects = array();
 		if($this->response->html->request()->get('doexport') !== '') {
 
 			// handle grouping
@@ -1382,7 +1429,7 @@ var $__attribs;
 					if(!isset($this->filter['group']) || $this->filter['group'] === 'single') {
 						if($t !== 'raumbuch' && $t !== 'gewerk' && $t !== 'todos') {
 							$t = $this->db->handler()->escape($t);
-							$sql = 'SELECT merkmal_kurz, merkmal_lang FROM bestand_'.$t.' '.$mb;
+							$sql = 'SELECT merkmal_kurz, merkmal_lang, datentyp FROM bestand_'.$t.' '.$mb;
 							$tmp = $this->db->handler()->query($sql);
 							if(is_array($tmp)) {
 								foreach($tmp as $v) {
@@ -1390,6 +1437,9 @@ var $__attribs;
 									$filter .= '`merkmal_kurz`=\''.$v['merkmal_kurz'].'\' AND `tabelle`=\''.$t.'\', ';
 									$filter .= 'wert, NULL ) ) AS \''.$v['merkmal_kurz'].'\' ';
 									$this->exports[$v['merkmal_kurz']] = $v['merkmal_lang'];
+									if($v['datentyp'] === 'select') {
+										$this->selects[$v['merkmal_kurz']] = true;
+									}
 								}
 							}
 						}
@@ -1646,32 +1696,6 @@ var $__attribs;
 
 		$name = 'bestand.'.implode('.',$settings['table']).'.'.date('Y-m-d',time()).'.csv';
 
-/*
-		### TODO export entkoppeln
-		# settings
-		# $this->exports
-		# $data
-		# $this->__todos
-
-		#var_dump($this->__todos);
-
-		$dump = array();
-		$dump['settings'] = $settings;
-		$dump['exports']  = $this->exports;
-		$dump['data']     = $data;
-		#$dump['todos']   = $this->__todos;
-
-		$path = $this->controller->profilesdir.'/export/bestand.export.tmp';
-
-		require_once(CLASSDIR.'lib/file/file.config.class.php');
-		$error = make_configfile($path, $dump);
-		var_dump($error);
-		unset($data);
-		require_once($path);
-		$this->response->html->help($data);
-		exit();
-*/
-
 		if(isset($settings['inline'])) {
 			echo '<!DOCTYPE html>';
 			echo '<html>';
@@ -1743,9 +1767,16 @@ var $__attribs;
 
 			// handle attribs
 			$m = 0;
-			foreach($v as $value) {
+			foreach($v as $key => $value) {
 				// remove linefeed from $v
 				$value = str_replace("\n", ', ', $value);
+
+				// handle options
+				if(isset($this->selects[$key])) {
+					if(is_numeric($value) && isset($this->options[$value])) {
+						$value = $this->options[$value];
+					}
+				}
 				if($m === 1) {
 					echo $settings['delimiter'];
 				}

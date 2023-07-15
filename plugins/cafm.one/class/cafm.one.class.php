@@ -544,7 +544,7 @@ var $date_format = "Y-m-d H:i";
 				if(isset($http->info['http_code'])) {
 					if($http->info['http_code'] === 200) {
 						$content = $http->get('body', null);
-						if($decode === true) {
+						if($decode === true && is_string($data)) {
 							$data = json_decode($content, true);
 						} else {
 							$data = $content;
@@ -566,13 +566,15 @@ var $date_format = "Y-m-d H:i";
 			$response = $this->response->response('todos');
 			$controller = new todos_controller($this->file, $response, $this->db, $this->user);
 			$data = $controller->json(true);
-			if($decode === true) {
+			if($decode === true && is_string($data)) {
 				$data = json_decode($data, true);
 			}
 			// restore
 			$_REQUEST = $tmp;
 		}
-
+		if(!isset($data)) {
+			$data = '';
+		}
 		return $data;
 	}
 

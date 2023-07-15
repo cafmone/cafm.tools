@@ -276,7 +276,7 @@ var $lang = array();
 
 				// handle attribs - only available
 				foreach($this->tables as $k => $t) {
-					$sql  = 'SELECT `merkmal_kurz`,`merkmal_lang` ';
+					$sql  = 'SELECT `merkmal_kurz`,`merkmal_lang`, `datentyp` ';
 					$sql .= 'FROM `bestand_'.$k.'` ';
 					$sql .= 'WHERE (';
 					$sql .= '`bezeichner_kurz` = \'*\' ';
@@ -288,12 +288,23 @@ var $lang = array();
 					if(is_array($res)) {
 						foreach($res as $r) {
 							if(isset($r['merkmal_lang']) && $r['merkmal_lang'] !== ''){ 
-								$table[$k][$r['merkmal_kurz']] = $r['merkmal_lang'];
+								$table[$k][$r['merkmal_kurz']]['label'] = $r['merkmal_lang'];
 							} else {
-								$table[$k][$r['merkmal_kurz']] = $r['merkmal_kurz'];
+								$table[$k][$r['merkmal_kurz']]['label'] = $r['merkmal_kurz'];
 							}
+							$table[$k][$r['merkmal_kurz']]['type'] = $r['datentyp'];
 						}
 					}
+				}
+
+				// handle options
+				$opts = $this->db->select('bestand_options',array('row','value'));
+				if(is_array($opts)) {
+					$options = array();
+					foreach($opts as $option) {
+						$options[$option['row']] = $option['value'];
+					}
+					unset($opts);
 				}
 
 				foreach($attribs as $key => $value) {
@@ -315,8 +326,16 @@ var $lang = array();
 									$v = implode(', ', $v);
 								}
 								if( isset($table[$key]) && isset($table[$key][$k]) ) {
-									$label = $table[$key][$k];
-									$pdf->Write(5, $label.': '.$v."\n");
+									$label = $table[$key][$k]['label'];
+									$value = $v;
+									if(isset($options)) {
+										if($table[$key][$k]['type'] === 'select') {
+											if(is_numeric($value) && isset($options[$value])) {
+												$value = $options[$value];
+											}
+										}
+									}
+									$pdf->Write(5, $label.': '.$value."\n");
 								}
 								else if($key === 'TODO') {
 									$pdf->Write(5, $k.': '.$v."\n");

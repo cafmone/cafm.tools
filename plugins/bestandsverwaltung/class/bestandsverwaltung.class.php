@@ -201,6 +201,7 @@ class bestandsverwaltung {
 			break;
 			case 'select':
 				$sql  = 'SELECT ';
+				$sql .= '`o`.`row`, ';
 				$sql .= '`o`.`value` ';
 				$sql .= 'FROM `'.$tableprefix.'option2attrib` AS o2a ';
 				$sql .= 'RIGHT JOIN '.$tableprefix.'options AS o ON(o2a.option=o.option) ';
@@ -212,15 +213,25 @@ class bestandsverwaltung {
 				}
 				// add empty option
 				else if(is_array($options) && $addempty === true) {
-					array_unshift($options, array('value' => ''));
+					array_unshift($options, array('value' => '', 'row' => ''));
 				}
 				$d[$prefix.'_'.$mark]['object']['type']            = 'htmlobject_select';
-				$d[$prefix.'_'.$mark]['object']['attrib']['index'] = array('value','value');
+				$d[$prefix.'_'.$mark]['object']['attrib']['index'] = array('row','value');
 				$d[$prefix.'_'.$mark]['object']['attrib']['name']  = $name.'['.$r['merkmal_kurz'].']';
 				$d[$prefix.'_'.$mark]['object']['attrib']['options'] = $options;
 				$d[$prefix.'_'.$mark]['object']['attrib']['title'] = $r['merkmal_kurz'];
 				if(array_key_exists($r['merkmal_kurz'], $fields)) {
-					$d[$prefix.'_'.$mark]['object']['attrib']['selected'] = array($fields[$r['merkmal_kurz']]['wert']);
+					if(is_numeric($fields[$r['merkmal_kurz']]['wert']) === true) {
+						$d[$prefix.'_'.$mark]['object']['attrib']['selected'] = array($fields[$r['merkmal_kurz']]['wert']);
+					} else {
+						// handle 
+						foreach($options as $o) {
+							if($o['value'] === $fields[$r['merkmal_kurz']]['wert']) {
+								$d[$prefix.'_'.$mark]['object']['attrib']['selected'] = array($o['row']);
+								break;
+							}
+						}
+					}
 				}
 			break;
 			case 'multiple':
@@ -234,10 +245,6 @@ class bestandsverwaltung {
 				if(!is_array($options)) {
 					$options = array();
 				}
-				// add empty option
-				#else if(is_array($options) && $addempty === true) {
-				#	array_unshift($options, array('value' => ''));
-				#}
 				$d[$prefix.'_'.$mark]['object']['type']            = 'htmlobject_select';
 				$d[$prefix.'_'.$mark]['object']['attrib']['index'] = array('value','value');
 				$d[$prefix.'_'.$mark]['object']['attrib']['name']  = $name.'['.$r['merkmal_kurz'].'][]';

@@ -92,7 +92,7 @@ var $lang = array();
 		$tables = $this->db->select('bestand_index','*',null,'`pos`');
 		if(is_array($tables)) {
 			foreach($tables as $t) {
-				if($t['tabelle_kurz'] !== 'prozess') {
+				#if($t['tabelle_kurz'] !== 'prozess') {
 					$result = $this->db->select('bestand_'.$t['tabelle_kurz'],'*');
 					if(is_array($result)) {
 						$str .= '<h4>'.$t['tabelle_lang'].'</h4>';
@@ -102,7 +102,7 @@ var $lang = array();
 						}
 						$str .= '</div>';
 					}
-				}
+				#}
 			}
 		}
 

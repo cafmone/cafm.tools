@@ -263,6 +263,8 @@ $result = array();
 					$str .= $gewerke.'';
 				}
 
+#### TODO
+
 				// handle attribs only available
 				foreach($this->tables as $k => $t) {
 					$sql  = 'SELECT `merkmal_kurz`,`merkmal_lang` ';
@@ -572,27 +574,9 @@ $result = array();
 				// Id
 				$pdf->Write(5, $strid);
 
-				// handle attribs - only available
-				foreach($this->tables as $k => $t) {
-					$sql  = 'SELECT `merkmal_kurz`,`merkmal_lang` ';
-					$sql .= 'FROM `bestand_'.$k.'` ';
-					$sql .= 'WHERE (';
-					$sql .= '`bezeichner_kurz` = \'*\' ';
-					$sql .= 'OR `bezeichner_kurz` = \''.$bezeichner.'\' ';
-					$sql .= 'OR `bezeichner_kurz` LIKE \'%,'.$bezeichner.'\' ';
-					$sql .= 'OR `bezeichner_kurz` LIKE \'%,'.$bezeichner.',%\' ';
-					$sql .= 'OR `bezeichner_kurz` LIKE \''.$bezeichner.',%\') ';
-					$res = $this->db->handler->query($sql);
-					if(is_array($res)) {
-						foreach($res as $r) {
-							if(isset($r['merkmal_lang']) && $r['merkmal_lang'] !== ''){ 
-								$table[$k][$r['merkmal_kurz']] = $r['merkmal_lang'];
-							} else {
-								$table[$k][$r['merkmal_kurz']] = $r['merkmal_kurz'];
-							}
-						}
-					}
-				}
+#### TODO
+				$tables = $this->__attribs($bezeichner);
+
 
 				foreach($attribs as $key => $value) {
 					if(is_array($value)) {
@@ -1186,7 +1170,45 @@ $result = array();
 		}
 	}
 
+	//--------------------------------------------
+	/**
+	 * Get attributes
+	 *
+	 * @access public
+	 * @return array
+	 */
+	//--------------------------------------------
+	function __attribs($bezeichner) {
+		$tables = array();
+		// handle attribs - only available
+		foreach($this->tables as $k => $t) {
+			$sql  = 'SELECT `merkmal_kurz`,`merkmal_lang` ';
+			$sql .= 'FROM `bestand_'.$k.'` ';
+			$sql .= 'WHERE (';
+			$sql .= '`bezeichner_kurz` = \'*\' ';
+			$sql .= 'OR `bezeichner_kurz` = \''.$bezeichner.'\' ';
+			$sql .= 'OR `bezeichner_kurz` LIKE \'%,'.$bezeichner.'\' ';
+			$sql .= 'OR `bezeichner_kurz` LIKE \'%,'.$bezeichner.',%\' ';
+			$sql .= 'OR `bezeichner_kurz` LIKE \''.$bezeichner.',%\') ';
+			$res = $this->db->handler->query($sql);
+			if(is_array($res)) {
+				foreach($res as $r) {
+					if(isset($r['merkmal_lang']) && $r['merkmal_lang'] !== ''){ 
+						$table[$k][$r['merkmal_kurz']] = $r['merkmal_lang'];
+					} else {
+						$table[$k][$r['merkmal_kurz']] = $r['merkmal_kurz'];
+					}
+				}
+			}
+		}
+		return $tables;
+	}
+
 }
+
+
+
+
 
 class PDF extends Fpdi\TcpdfFpdi
 {

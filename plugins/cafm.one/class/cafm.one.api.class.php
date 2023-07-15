@@ -161,7 +161,6 @@ var $lang = array(
 
 			$result = $this->db->select('bestand', '*', array('id' => $id));
 			if(is_array($result)) {
-
 				$bezeichner = $result[0]['bezeichner_kurz'];
 				$device = array();
 				foreach($result as $v) {
@@ -227,10 +226,13 @@ var $lang = array(
 					}
 				}
 
+
+### TODO derive from bestand.api.class
+
 				if(is_array($device)) {
 					$tables = $this->db->select('bestand_index', 'tabelle_kurz,tabelle_lang',null,'`pos`');
 					foreach($tables as $t) {
-						$sql  = 'SELECT `merkmal_kurz`,`merkmal_lang` ';
+						$sql  = 'SELECT `merkmal_kurz`,`merkmal_lang`,`datentyp` ';
 						$sql .= 'FROM `bestand_'.$t['tabelle_kurz'].'` ';
 						$sql .= 'WHERE (';
 						$sql .= '`bezeichner_kurz` = \'*\' ';
@@ -242,23 +244,43 @@ var $lang = array(
 						if(is_array($res)) {
 							foreach($res as $r) {
 								if(isset($r['merkmal_lang']) && $r['merkmal_lang'] !== ''){ 
-									$table[$t['tabelle_kurz']][$r['merkmal_kurz']] = $r['merkmal_lang'];
+									$table[$t['tabelle_kurz']][$r['merkmal_kurz']]['label'] = $r['merkmal_lang'];
 								} else {
-									$table[$t['tabelle_kurz']][$r['merkmal_kurz']] = $r['merkmal_kurz'];
+									$table[$t['tabelle_kurz']][$r['merkmal_kurz']]['label'] = $r['merkmal_kurz'];
 								}
+								$table[$t['tabelle_kurz']][$r['merkmal_kurz']]['type'] = $r['datentyp'];
 							}
 						}
+					}
+
+					// handle options
+					$opts = $this->db->select('bestand_options',array('row','value'));
+					if(is_array($opts)) {
+						$options = array();
+						foreach($opts as $option) {
+							$options[$option['row']] = $option['value'];
+						}
+						unset($opts);
 					}
 
 					// handle $result
 					foreach($result as $v) {
 						if( isset($table[$v['tabelle']]) && isset($table[$v['tabelle']][$v['merkmal_kurz']]) ) {
-							$tmp[$v['tabelle']][] = '<div>'.$table[$v['tabelle']][$v['merkmal_kurz']].': '.$v['wert'].'</div>';
+							$value = $v['wert'];
+							if(isset($options)) {
+								if($table[$v['tabelle']][$v['merkmal_kurz']]['type'] === 'select') {
+									if(is_numeric($value) && isset($options[$value])) {
+										$value = $options[$value];
+									}
+								}
+							}
+							$tmp[$v['tabelle']][] = '<div>'.$table[$v['tabelle']][$v['merkmal_kurz']]['label'].': '.$value.'</div>';
 						}
 						else if($v['tabelle'] === 'TODO') {
 							$tmp[$v['tabelle']][] = '<div>'.$v['merkmal_kurz'].': '.$v['wert'].'</div>';
 						}
 					}
+
 					// handle headline
 					if(isset($tmp) && is_array($tmp)) {
 						if(is_array($tables)) {

@@ -70,15 +70,15 @@ var $table_bezeichner;
 	//--------------------------------------------
 	function action() {
 
-		$sql  = 'SELECT `option` ';
+		$sql  = 'SELECT `option`, `attrib` ';
 		$sql .= 'FROM '.$this->table_prefix.'option2attrib ';
-		$sql .= 'GROUP BY `option`';
+		$sql .= 'GROUP BY `option`, `attrib`';
 		$used = $this->db->handler()->query($sql);
 
 		$this->used = array();
 		if(is_array($used)) {
 			foreach($used as $u) {
-				$this->used[] = $u['option'];
+				$this->used[$u['option']][] = $u['attrib'];
 			}
 		}
 
@@ -121,8 +121,8 @@ var $table_bezeichner;
 				$t->add($this->response->html->thisfile,'thisfile');
 				$t->add($options[0]['option'],'id');
 
-				if(!in_array($options[0]['option'], $this->used)) {
-					$t->add('(unused)','unused');
+				if(!isset($this->used[$options[0]['option']])) {
+					$t->add('&#x271D;','unused');
 				} else {
 					$t->add('','unused');
 				}
@@ -159,6 +159,7 @@ var $table_bezeichner;
 			$d['kat_'.$i]['object']['attrib']['name']      = 'options['.$kat['row'].']';
 			$d['kat_'.$i]['object']['attrib']['value']     = $kat['value'];
 			$d['kat_'.$i]['object']['attrib']['maxlength'] = 255;
+			$d['kat_'.$i]['object']['attrib']['title']     = 'ID: '.$kat['row'];
 			$i++;
 		}
 

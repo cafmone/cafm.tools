@@ -516,11 +516,9 @@ var $lang = array(
 							}
 						}
 
-						$tmp = array();
-
 						$tables = $this->db->select('bestand_index', 'tabelle_kurz,tabelle_lang',null,'`pos`');
 						foreach($tables as $t) {
-							$sql  = 'SELECT `merkmal_kurz`,`merkmal_lang` ';
+							$sql  = 'SELECT `merkmal_kurz`,`merkmal_lang`,`datentyp` ';
 							$sql .= 'FROM `bestand_'.$t['tabelle_kurz'].'` ';
 							$sql .= 'WHERE (';
 							$sql .= '`bezeichner_kurz` = \'*\' ';
@@ -533,34 +531,45 @@ var $lang = array(
 							if(is_array($res)) {
 								foreach($res as $r) {
 									if(isset($r['merkmal_lang']) && $r['merkmal_lang'] !== ''){ 
-										$table[$t['tabelle_kurz']][$r['merkmal_kurz']] = $r['merkmal_lang'];
+										$table[$t['tabelle_kurz']][$r['merkmal_kurz']]['label'] = $r['merkmal_lang'];
 									} else {
-										$table[$t['tabelle_kurz']][$r['merkmal_kurz']] = $r['merkmal_kurz'];
+										$table[$t['tabelle_kurz']][$r['merkmal_kurz']]['label'] = $r['merkmal_kurz'];
 									}
+									$table[$t['tabelle_kurz']][$r['merkmal_kurz']]['type'] = $r['datentyp'];
 								}
 							}
 						}
+
+						// handle options
+						$opts = $this->db->select('bestand_options',array('row','value'));
+						if(is_array($opts)) {
+							$options = array();
+							foreach($opts as $option) {
+								$options[$option['row']] = $option['value'];
+							}
+							unset($opts);
+						}
+
+						$tmp = array();
 						// handle $result
 						foreach($table as $x => $t) {
 							foreach($t as $key => $label) {
 								foreach($result as $v) {
 									if( isset($v['tabelle']) && $v['tabelle'] === $x && $v['merkmal_kurz'] === $key) {
-										$tmp[$x][] = '<div>'.$label.': '.$v['wert'].'</div>';
+										$value = $v['wert'];
+										if(isset($options)) {
+											if($label['type'] === 'select') {
+												if(is_numeric($value) && isset($options[$value])) {
+													$value = $options[$value];
+												}
+											}
+										}
+										$tmp[$x][] = '<div>'.$label['label'].': '.$value.'</div>';
 									}
 								}
 							}
 						}
-						
-						/*
-						foreach($result as $v) {
-							if( isset($table[$v['tabelle']]) && isset($table[$v['tabelle']][$v['merkmal_kurz']]) ) {
-								$tmp[$v['tabelle']][] = '<div>'.$table[$v['tabelle']][$v['merkmal_kurz']].': '.$v['wert'].'</div>';
-							}
-							else if($v['tabelle'] === 'TODO') {
-								$tmp[$v['tabelle']][] = '<div>'.$v['merkmal_kurz'].': '.$v['wert'].'</div>';
-							}
-						}
-						*/
+
 						// handle headline
 						if(is_array($tmp)) {
 							if(is_array($tables)) {
@@ -693,8 +702,7 @@ var $lang = array(
 				$_REQUEST['id'] = $value;
 				$_REQUEST['mode'] = 'text';
 				$this->details(true);
-				
-				
+
 				// overview
 				$str  = '<div style="text-align:right;">';
 				$str .= '<a class="btn btn-default icon icon-edit" ';
@@ -706,24 +714,9 @@ var $lang = array(
 				$str .= '&filter[id]='.$value.'"></a>';
 				$str .= '</div>';
 
-				/*
-				// edit
-				$str .= '<div style="text-align:right;">';
-				$str .= '<a class="btn btn-default icon icon-edit" ';
-				$str .= 'target="_blank" ';
-				$str .= 'href="?index_action=plugin';
-				$str .= '&index_action_plugin=bestandsverwaltung';
-				$str .= '&bestandsverwaltung_action=inventory';
-				$str .= '&inventory_action=update';
-				$str .= '&id='.$value.'"></a>';
-				$str .= '</div>';
-				*/
-				
 				echo $str;
 				
 			}
-
-
 		}
 	}
 
