@@ -34,10 +34,16 @@ private $__tablemaster;
 		if(isset($this->settings)) {
 			if(isset($this->settings['query'])) {
 				// handle db
-				if(isset($this->settings['query']['db'])) {
-					$this->db->db = $this->settings['query']['db'];
+				if(isset($this->settings['settings']['db'])) {
+					require_once(CLASSDIR.'lib/db/query.class.php');
+					$this->db = new query(CLASSDIR.'lib/db');
+					$this->db->host = $db->host;
+					$this->db->type = $db->type;
+					$this->db->user = $db->user;
+					$this->db->pass = $db->pass;
+					$this->db->db   = $this->settings['settings']['db'];
 				} else {
-					#throw new Exception('Standort setting db is missing. Please check settings.');
+					$this->db = $db;
 				}
 				// handle tablemaster
 				if(isset($this->settings['query']['content'])) {

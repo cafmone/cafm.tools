@@ -50,7 +50,6 @@ var $tpldir;
 	function __construct($file, $response, $db, $user) {
 		$this->file = $file;
 		$this->response = $response;
-		$this->db = $db;
 		$this->user = $user;
 		$this->profilesdir = PROFILESDIR;
 		$this->settings = $this->file->get_ini($this->profilesdir.'/standort.ini', true, true);

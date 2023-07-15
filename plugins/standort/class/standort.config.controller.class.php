@@ -64,16 +64,22 @@ var $lang = array(
 	function __construct( $file, $response, $db, $user ) {
 		$this->classdir = CLASSDIR.'/plugins/standort/class/';
 		$this->file     = $file;
-		$this->settings = PROFILESDIR.'standort.ini';
-		$this->ini      = $this->file->get_ini($this->settings);
+		$this->settings = $this->file->get_ini(PROFILESDIR.'standort.ini');
 		$this->response = $response;
 		$this->langdir  = CLASSDIR.'/plugins/standort/lang';
 		$this->tpldir   = CLASSDIR.'/plugins/standort/templates';
 		$this->user     = $user;
-		$this->db = $db;
-
-		if(isset($this->ini['query']['db'])) {
-			$this->db->db = $this->ini['query']['db'];
+		
+		if(isset($this->settings['settings']['db'])) {
+			require_once(CLASSDIR.'lib/db/query.class.php');
+			$this->db = new query(CLASSDIR.'lib/db');
+			$this->db->host = $db->host;
+			$this->db->type = $db->type;
+			$this->db->user = $db->user;
+			$this->db->pass = $db->pass;
+			$this->db->db   = $this->settings['settings']['db'];
+		} else {
+			$this->db = $db;
 		}
 	}
 
@@ -104,12 +110,12 @@ var $lang = array(
 			default:
 			case 'settings':
 				$content[] = $this->settings(true);
-			#	$content[] = $this->database();
+				$content[] = $this->database();
 			break;
-			#case 'database':
-			#	$content[] = $this->settings();
-			#	$content[] = $this->database(true);
-			#break;
+			case 'database':
+				$content[] = $this->settings();
+				$content[] = $this->database(true);
+			break;
 		}
 
 		$tab = $this->response->html->tabmenu($this->prefix_tab);
@@ -159,8 +165,7 @@ var $lang = array(
 	function database($visible = false) {
 		$data = '';
 		if( $visible === true ) {
-
-			if(isset($this->ini['query']['db'])) {
+			if(isset($this->settings['settings']['db'])) {
 				require_once(CLASSDIR.'lib/db/query.controller.class.php');
 				$controller = new query_controller($this->file, $this->response, $this->db, $this->user);
 				$controller->tpldir = CLASSDIR.'lib/db/templates/';

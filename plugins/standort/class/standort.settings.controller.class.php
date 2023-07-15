@@ -147,7 +147,7 @@ var $tpldir;
 		// Settings Error
 		if(!isset($this->settings) || 
 			!isset($this->settings['query']['prefix']) || 
-			!isset($this->settings['query']['db'])
+			!isset($this->settings['settings']['db'])
 		) {
 			$_REQUEST[$this->message_param]['error'] = 'Error: Please check plugin settings';
 		}
@@ -365,7 +365,7 @@ var $tpldir;
 		$data = '';
 		if( $visible === true ) {
 
-			if(isset($this->settings['query']['db'])) {
+			if(isset($this->settings['settings']['db'])) {
 				require_once(CLASSDIR.'lib/db/query.controller.class.php');
 				$controller = new query_controller($this->file, $this->response, $this->db, $this->user);
 				$controller->tpldir = CLASSDIR.'lib/db/templates/';

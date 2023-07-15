@@ -136,10 +136,10 @@ var $lang = array(
 		$d['db']['label']                     = 'DB';
 		$d['db']['required']                  = true;
 		$d['db']['object']['type']            = 'htmlobject_input';
-		$d['db']['object']['attrib']['name']  = 'query[db]';
+		$d['db']['object']['attrib']['name']  = 'settings[db]';
 		$d['db']['object']['attrib']['type']  = 'text';
-		if(isset($ini['query']['db'])) {
-			$d['db']['object']['attrib']['value'] = $ini['query']['db'];
+		if(isset($ini['settings']['db'])) {
+			$d['db']['object']['attrib']['value'] = $ini['settings']['db'];
 		}
 
 		$d['prefix']['label']                     = 'Prefix';
