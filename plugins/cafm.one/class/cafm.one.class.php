@@ -544,7 +544,7 @@ var $date_format = "Y-m-d H:i";
 				if(isset($http->info['http_code'])) {
 					if($http->info['http_code'] === 200) {
 						$content = $http->get('body', null);
-						if($decode === true && is_string($data)) {
+						if($decode === true && !isset($data)) {
 							$data = json_decode($content, true);
 						} else {
 							$data = $content;
