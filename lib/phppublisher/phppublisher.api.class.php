@@ -45,7 +45,6 @@ class phppublisher_api
 			echo 'not athorized';
 			exit(0);
 		}
-
 		if($this->plugin !== '') {
 			$ini      = $this->pp->file->get_ini( PROFILESDIR.'/plugins.ini' );
 			$return   = array();
@@ -53,11 +52,8 @@ class phppublisher_api
 				if(file_exists(CLASSDIR.'/plugins/'.$this->plugin.'/class/'.$this->plugin.'.api.class.php')) {
 					require_once(CLASSDIR.'/plugins/'.$this->plugin.'/class/'.$this->plugin.'.api.class.php');
 					#$class = $this->plugin.'_api';
-
-						// handle folder name - allow .
-						$class = str_replace('.','_',$this->plugin).'_api';
-
-
+					// handle folder name - allow .
+					$class = str_replace('.','_',$this->plugin).'_api';
 					$controller = new $class($this->pp->file, $this->pp->response, $this->pp->db, $this->pp->user);
 					if($this->pp->file->exists(PROFILESDIR.'/lang/')) {
 						$controller->lang = $this->pp->user->translate($controller->lang, PROFILESDIR.'/lang/', $this->plugin.'.api.ini');
@@ -66,6 +62,9 @@ class phppublisher_api
 					}
 					$controller->action();
 				}
+			} else {
+				// Send message if plugin called not in active plugins
+				echo 'ERROR: Plugin '.$this->plugin.' not enabled?';
 			}
 		}
 		else if($this->addon !== '') {
