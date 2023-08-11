@@ -110,11 +110,12 @@ var $__attribs;
 			foreach($this->settings['filter'] as $k => $f) {
 				$tmp = explode('::', $f);
 				if(isset($tmp[1])) {
-					$this->filters[$tmp[1]]['table'] = $tmp[0];
-					$this->filters[$tmp[1]]['key']   = $tmp[1];
-					$this->filters[$tmp[1]]['label'] = $tmp[1];
+					// ignore filters not found in db
 					$lang = $this->db->select('bestand_'.$tmp[0],'*',array('merkmal_kurz'=>$tmp[1]));
 					if(is_array($lang)) {
+						$this->filters[$tmp[1]]['table'] = $tmp[0];
+						$this->filters[$tmp[1]]['key']   = $tmp[1];
+						$this->filters[$tmp[1]]['label'] = $tmp[1];
 						$this->filters[$tmp[1]]['label'] = $lang[0]['merkmal_lang'];
 						$this->filters[$tmp[1]]['type']  = $lang[0]['datentyp'];
 						if($lang[0]['datentyp'] === 'select') {
