@@ -1424,7 +1424,10 @@ var $__attribs;
 					foreach($bezeichner as $b) {
 						$mb .= 'OR `bezeichner_kurz` LIKE \''.$b.'\' OR `bezeichner_kurz` LIKE \''.$b.',%\' OR `bezeichner_kurz` LIKE \'%,'.$b.'\' OR `bezeichner_kurz` LIKE \'%,'.$b.',%\' ';
 					}
+				} else {
+					$mb = 'WHERE `bezeichner_kurz` IS NOT NULL';
 				}
+				
 				foreach($table as $t) {
 					// handle grouping
 					if(!isset($this->filter['group']) || $this->filter['group'] === 'single') {
