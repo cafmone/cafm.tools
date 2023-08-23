@@ -1657,6 +1657,20 @@ var $__attribs;
 	//--------------------------------------------
 	function __export($data) {
 
+		// for export get all options
+		$sql  = 'SELECT ';
+		$sql .= '`row`, ';
+		$sql .= '`value` ';
+		$sql .= 'FROM `bestand_options`';
+		$opts = $this->db->handler()->query($sql);
+		if(is_array($opts)) {
+			$this->options = array();
+			foreach($opts as $option) {
+				$this->options[$option['row']] = $option['value'];
+			}
+			unset($opts);
+		}
+
 		$settings = array();
 		$settings['delimiter'] = $this->response->html->request()->get('export[delimiter]');
 		$settings['enclosure'] = $this->response->html->request()->get('export[enclosure]');
