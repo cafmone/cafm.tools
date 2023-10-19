@@ -105,35 +105,35 @@ var $lang = array();
 			switch( $this->action ) {
 				default:
 				case 'identifiers':
-					#$data[] = $this->process();
+					$data[] = $this->import();
 					$data[] = $this->qrcode();
 					$data[] = $this->filters();
 					$data[] = $this->form();
 					$data[] = $this->identifiers(true);
 				break;
 				case 'form':
-					#$data[] = $this->process();
+					$data[] = $this->import();
 					$data[] = $this->qrcode();
 					$data[] = $this->filters();
 					$data[] = $this->form(true);
 					$data[] = $this->identifiers();
 				break;
 				case 'filters':
-					#$data[] = $this->process();
+					$data[] = $this->import();
 					$data[] = $this->qrcode();
 					$data[] = $this->filters(true);
 					$data[] = $this->form();
 					$data[] = $this->identifiers();
 				break;
 				case 'qrcode':
-					#$data[] = $this->process();
+					$data[] = $this->import();
 					$data[] = $this->qrcode(true);
 					$data[] = $this->filters();
 					$data[] = $this->form();
 					$data[] = $this->identifiers();
 				break;
-				case 'process':
-					#$data[] = $this->process(true);
+				case 'import':
+					$data[] = $this->import( true );
 					$data[] = $this->qrcode();
 					$data[] = $this->filters();
 					$data[] = $this->form();
@@ -236,6 +236,34 @@ var $lang = array();
 		$content['onclick'] = false;
 		$content['css'] = 'noborder';
 		if($this->action === 'qrcode') {
+			$content['active']  = true;
+		}
+		return $content;
+	}
+
+	//--------------------------------------------
+	/**
+	 * import
+	 *
+	 * @access public
+	 * @return htmlobject_template
+	 */
+	//--------------------------------------------
+	function import($visible = false) {
+		$data = '';
+		if($visible === true) {
+			require_once($this->classdir.'bestandsverwaltung.settings.inventory.import.controller.class.php');
+			$controller = new bestandsverwaltung_settings_inventory_import_controller($this);
+			$controller->tpldir = $this->tpldir;
+			$controller->lang  = $this->lang;
+			$data = $controller->action();
+		}
+		$content['label']   = $this->lang['tab_import'];
+		$content['value']   = $data;
+		$content['target']  = $this->response->html->thisfile;
+		$content['request'] = $this->response->get_array($this->actions_name, 'import' );
+		$content['onclick'] = false;
+		if($this->action === 'import'){
 			$content['active']  = true;
 		}
 		return $content;

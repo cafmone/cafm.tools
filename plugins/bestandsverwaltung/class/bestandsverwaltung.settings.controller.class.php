@@ -58,6 +58,8 @@ var $lang = array(
 		'tab_filters' => 'Filters',
 		'tab_custom' => 'Custom',
 		'tab_settings' => 'Settings',
+		'tab_import' => 'Import',
+		'tab_folders' => 'Folders',
 		'label_process' => 'Process',
 		'label_state' => 'State',
 		'label_short' => 'Short',
@@ -71,6 +73,7 @@ var $lang = array(
 		'label_id_only' => 'ID only',
 		'label_id_auto' => 'Auto',
 		'label_id_custom' => 'Custom',
+		'label_identifier' => 'Identifier',
 		'legend_type' => 'Type',
 		'legend_size' => 'Size',
 		'legend_url' => 'Url',
@@ -79,6 +82,8 @@ var $lang = array(
 		'headline_update_state' => 'Change state',
 		'headline_add_identifier' => 'New Identifier',
 		'button_sync' => 'Synchronize',
+		'button_import' => 'Import',
+		'button_remove' => 'Remove',
 		'button_title_add_identifier' => 'Add new identifier',
 		'button_title_sync_identifiers' => 'Sync identifiers',
 		'button_title_sync_identifier' => 'Sync identifier %s',
@@ -174,7 +179,6 @@ var $lang = array(
 					break;
 					case 'export':
 						$content[] = $this->inventory();
-						#$content[] = $this->raumbuch();
 						$content[] = $this->gewerke();
 						#$content[] = $this->export( true );
 					break;
