@@ -4,7 +4,8 @@ html,body {
 body {
 	overflow-y: scroll;
 	padding-left: 0;
-	font: 1.0em "Verdana",Helvetica,Arial,sans-serif;
+	font-size: 1.0em;
+	font-family: sans-serif;
 }
 h2 {
 	font-size: 1.5em;
