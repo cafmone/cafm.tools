@@ -535,7 +535,7 @@ var $lang = array();
 							}
 							
 							// timestamp
-							if(isset($todos['time'])){
+							if(isset($todos['time']) && $todos['time'] !== '' && $todos['time'] !== 0){
 								$pdf->SetFont('', '', 8);
 								$pdf->Write(4, 'Last Update '.date($this->date_format, $todos['time'])."\n\n");
 							}
@@ -632,8 +632,10 @@ var $lang = array();
 															$pdf->AddPage();
 															$pdf->useTemplate($pdf->importPage(2));
 														}
-
-														$interval = '('.$value['interval'].' / '.$value['period'].' / '.$value['person'].')';
+														$interval = '';
+														if($value['interval'] !== '0' && $value['period'] !== '0' && $value['person'] !== '0') {
+															$interval = '('.$value['interval'].' / '.$value['period'].' / '.$value['person'].')';
+														}
 														// replace \n by <br>
 														$text = str_replace("\n", '<br>', $value['label']).' '.$interval;
 														// check disabled
