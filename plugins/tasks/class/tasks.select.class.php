@@ -128,10 +128,15 @@ var $substr = 200;
 		$head['id']['hidden'] = true;
 		$head['created']['title'] = $this->lang['select_created'];
 		$head['created']['hidden'] = true;
-		if(isset($settings['form']['flag_01'])) {
-			$head['flag_01']['title'] = $this->settings['labels']['flag_01'];
-			$head['flag_01']['hidden'] = true;
+		
+		foreach($this->elements as $e) {
+			if(isset($settings['form'][$e])) {
+				$head[$e]['title'] = $this->settings['labels'][$e];
+				$head[$e]['hidden'] = true;
+			}
 		}
+		
+		/*
 		if(isset($settings['form']['flag_02'])) {
 			$head['flag_02']['title'] = $this->settings['labels']['flag_02'];
 			$head['flag_02']['hidden'] = true;
@@ -148,10 +153,8 @@ var $substr = 200;
 			$head['flag_05']['title'] = $this->settings['labels']['flag_05'];
 			$head['flag_05']['hidden'] = true;
 		}
-		#if(isset($settings['form']['category'])) {
-		#	$head['category']['title'] = $this->lang['category'];
-		#	$head['category']['hidden'] = true;
-		#}
+		*/
+
 		$head['subject']['title'] = $this->lang['subject'];
 		$head['subject']['hidden'] = true;
 		$head['updated']['title'] = $this->lang['select_updated'];
@@ -206,34 +209,24 @@ var $substr = 200;
 					}
 					$t['group'] = $this->lang['group'].': '.$f['group'];
 				}
-				
 
-				if(isset($settings['form']['flag_01'])) {
-					$d['flag_01'] = '';
-					if(isset($f['flag_01'])) {
-						$res = $this->db->select('tasks_form', array('option'), array('id',$f['flag_01'] ));
-						if(is_array($res)) {
-							$status = $res[0]['option'];
-						} else {
-							$status = $f['flag_01'];
+### TODO show all flags
+				foreach($this->elements as $e) {
+					if(isset($settings['form'][$e])) {
+						$d[$e] = '';
+						if(isset($f[$e])) {
+							$res = $this->db->select('tasks_form', array('option'), array('id',$f[$e] ));
+							if(is_array($res)) {
+								$status = $res[0]['option'];
+							} else {
+								$status = $f[$e];
+							}
+							$d[$e] = $status;
 						}
-						$d['flag_01'] = $status;
-					}
-					$t['flag_01'] = $this->settings['labels']['flag_01'].': '.$d['flag_01'];
-				}
-
-				if(isset($settings['form']['flag_02'])) {
-					$d['flag_02'] = '';
-					if(isset($f['flag_02'])) {
-						$res = $this->db->select('tasks_form', array('option'), array('id',$f['flag_02'] ));
-						if(is_array($res)) {
-							$status = $res[0]['option'];
-						} else {
-							$status = $f['flag_02'];
+						if($d[$e] !== '') {
+							$t[$e] = $this->settings['labels'][$e].': '.$d[$e];
 						}
-						$d['flag_02'] = $status;
 					}
-					$t['flag_02'] = $this->settings['labels']['flag_02'].': '.$d['flag_02'];
 				}
 
 				if($table->sort !== '' && isset($t[$table->sort])) {
@@ -531,14 +524,51 @@ var $substr = 200;
 			}
 		}
 
-		$d['subject']['label']                     = $this->lang['subject'];
+		$d['subject']['label'] = $this->lang['subject'];
 		$d['subject']['css']                       = 'autosize';
 		$d['subject']['object']['type']            = 'htmlobject_input';
+		$d['subject']['object']['css']             = 'form-control';
 		$d['subject']['object']['attrib']['type']  = 'text';
-		$d['subject']['object']['attrib']['name']  = 'filter[subject]';
+		$d['subject']['object']['attrib']['name']  = 'subject';
 		$d['subject']['object']['attrib']['id']    = 'subject';
 		$d['subject']['object']['attrib']['value'] = '';
-		$d['subject']['object']['attrib']['style'] = 'width: 310px;';
+		if(isset($columns['subject']['length'])) {
+			$d['subject']['object']['attrib']['maxlength'] = $columns['subject']['length'];
+		}
+		if(isset($ini['subject'])) {
+			$d['subject']['object']['attrib']['value'] = $ini['subject'];
+		}
+
+		$result = $this->db->select('tasks_form', array('option'), array('element', 'subject'), array('`rank`'));
+		if(is_array($result)) {
+			$form->add(array('subject' => $d['subject']));
+
+			#$option = array('', '&#160;');
+			$select = $response->html->select();
+			$select->name = 'dummy';
+			$select->id = 'subject_select';
+			$select->css = 'form-control';
+			$select->style = 'display:none;';
+			$select->disabled = true;
+			#$select->add($option, array(0,1));
+			$select->add($result, array('option','option'));
+
+			$btn = $response->html->button();
+			$btn->type = 'button';
+			$btn->css = 'btn btn-default btn-sm';
+			$btn->label = '&#9660;';
+			$btn->handler = 'onclick="phppublisher.select.init(document.getElementById(\'subject_select\'),\''.$this->lang['subject'].'\',\'subject\');"';
+
+			$div = $response->html->customtag('span');
+			$div->css = 'input-group-append';
+			$div->add($btn);
+
+			$subject = $form->get_elements('subject');
+			$subject->css_right = 'right input-group';
+			$subject->add($div);
+			$subject->add($select);
+			$d['subject'] = $subject;
+		}
 
 		$d['show_closed']['label']                     = $this->lang['label_show_closed'];
 		$d['show_closed']['css']                       = 'autosize';
