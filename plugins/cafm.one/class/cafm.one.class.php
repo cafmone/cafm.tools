@@ -32,6 +32,8 @@ var $date_format = "Y-m-d H:i";
 		$this->db       = $db;
 		$this->user     = $user;
 		$this->ini      = $this->file->get_ini(PROFILESDIR.'cafm.one.ini');
+		
+		// handle db diffrent from original
 
 		if(isset($this->ini['login']['url']) && $this->ini['login']['url'] === 'localhost') {
 			$this->local = true;

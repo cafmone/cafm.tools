@@ -51,6 +51,7 @@ var $lang = array(
 		'update_sucess' => 'Settings updated successfully',
 		'config' => array(
 			'title' => 'Title',
+			'index' => 'Index',
 			'query' => 'Database',
 			'smtp' => 'Smtp',
 			'users' => 'Users',
@@ -180,7 +181,7 @@ var $lang = array(
 				$t->add($users, 'link_users');
 				$t->add($vars);
 				$t->add($form);
-				$t->group_elements(array('param_' => 'form', 'folder_' => 'folders'));
+				$t->group_elements(array('param_' => 'form', 'folder_' => 'folders', 'config_' => 'config'));
 				return $t;
 			break;
 			case 'smtp':
@@ -479,15 +480,6 @@ var $lang = array(
 			$d['config_url']['object']['attrib']['value'] = $ini['config']['baseurl'];
 		}
 
-		$d['config_title']['label'] = $this->lang['config']['title'];
-		$d['config_title']['object']['type']            = 'htmlobject_input';
-		$d['config_title']['object']['attrib']['name']  = 'config[title]';
-		$d['config_title']['object']['attrib']['type']  = 'text';
-		$d['config_title']['object']['attrib']['maxlength']  = 50;
-		if(isset($ini['config']['title'])) {
-			$d['config_title']['object']['attrib']['value'] = $ini['config']['title'];
-		}
-
 		$d['config_dir']['label'] = $this->lang['config']['basedir'];
 		if(isset($ini['folders']['login'])) {
 			$d['config_dir']['required'] = true;
@@ -499,37 +491,46 @@ var $lang = array(
 			$d['config_dir']['object']['attrib']['value'] = $ini['config']['basedir'];
 		}
 
-		$d['config_users']['label']                    = $this->lang['config']['users'];
-		$d['config_users']['object']['type']           = 'htmlobject_input';
-		$d['config_users']['object']['attrib']['type'] = 'checkbox';
-		$d['config_users']['object']['attrib']['name'] = 'config[users]';
+		$d['config_title']['label'] = $this->lang['config']['title'];
+		$d['config_title']['object']['type']            = 'htmlobject_input';
+		$d['config_title']['object']['attrib']['name']  = 'config[title]';
+		$d['config_title']['object']['attrib']['type']  = 'text';
+		$d['config_title']['object']['attrib']['maxlength']  = 50;
+		if(isset($ini['config']['title'])) {
+			$d['config_title']['object']['attrib']['value'] = $ini['config']['title'];
+		}
+
+		$d['module_users']['label']                    = $this->lang['config']['users'];
+		$d['module_users']['object']['type']           = 'htmlobject_input';
+		$d['module_users']['object']['attrib']['type'] = 'checkbox';
+		$d['module_users']['object']['attrib']['name'] = 'config[users]';
 		if(isset($ini['config']['users'])){
-			$d['config_users']['object']['attrib']['checked'] = true;
+			$d['module_users']['object']['attrib']['checked'] = true;
 		}
 
-		$d['config_query']['label']                    = $this->lang['config']['query'];
-		$d['config_query']['object']['type']           = 'htmlobject_input';
-		$d['config_query']['object']['attrib']['type'] = 'checkbox';
-		$d['config_query']['object']['attrib']['name'] = 'config[query]';
+		$d['module_query']['label']                    = $this->lang['config']['query'];
+		$d['module_query']['object']['type']           = 'htmlobject_input';
+		$d['module_query']['object']['attrib']['type'] = 'checkbox';
+		$d['module_query']['object']['attrib']['name'] = 'config[query]';
 		if(isset($ini['config']['query'])){
-			$d['config_query']['object']['attrib']['checked'] = true;
+			$d['module_query']['object']['attrib']['checked'] = true;
 		}
 
-		$d['config_smtp']['label']                    = $this->lang['config']['smtp'];
-		$d['config_smtp']['object']['type']           = 'htmlobject_input';
-		$d['config_smtp']['object']['attrib']['type'] = 'checkbox';
-		$d['config_smtp']['object']['attrib']['name'] = 'config[smtp]';
+		$d['module_smtp']['label']                    = $this->lang['config']['smtp'];
+		$d['module_smtp']['object']['type']           = 'htmlobject_input';
+		$d['module_smtp']['object']['attrib']['type'] = 'checkbox';
+		$d['module_smtp']['object']['attrib']['name'] = 'config[smtp]';
 		if(isset($ini['config']['smtp'])){
-			$d['config_smtp']['object']['attrib']['checked'] = true;
+			$d['module_smtp']['object']['attrib']['checked'] = true;
 		}
 
 		// PERMISSIONS
-		$d['permission_config_admin_only']['label']                    = $this->lang['permission']['config_admin_only'];
-		$d['permission_config_admin_only']['object']['type']           = 'input';
-		$d['permission_config_admin_only']['object']['attrib']['type'] = 'checkbox';
-		$d['permission_config_admin_only']['object']['attrib']['name'] = 'permissions[config_admin_only]';
+		$d['permission_settings_admin_only']['label']                    = $this->lang['permission']['config_admin_only'];
+		$d['permission_settings_admin_only']['object']['type']           = 'input';
+		$d['permission_settings_admin_only']['object']['attrib']['type'] = 'checkbox';
+		$d['permission_settings_admin_only']['object']['attrib']['name'] = 'permissions[config_admin_only]';
 		if(isset($ini['permissions']['config_admin_only'])) {
-			$d['permission_config_admin_only']['object']['attrib']['checked'] = true;
+			$d['permission_settings_admin_only']['object']['attrib']['checked'] = true;
 		}
 
 		$d['permission_plugins_admin_only']['label']                    = $this->lang['permission']['plugins_admin_only'];
@@ -571,7 +572,7 @@ var $lang = array(
 		}
 		// Handle Windows
 		if($this->file->is_win()) {
-			$d['link_virtual']['object']['attrib']['disabled'] = true;			
+			$d['link_virtual']['object']['attrib']['disabled'] = true;
 		}
 
 		// FOLDERS 
@@ -607,6 +608,25 @@ var $lang = array(
 			$d['folder_'.$v]['object']['attrib']['name']  = 'folders['.$v.']';
 			$d['folder_'.$v]['object']['attrib']['type']  = 'hidden';
 			$d['folder_'.$v]['object']['attrib']['value'] = $v.'/';
+		}
+
+		// index file
+		if(isset($ini['config']['index'])) {
+			$d['config_index_dummy_'.$v]['label'] = $this->lang['config']['index'];
+			$d['config_index_dummy_'.$v]['static'] = true;
+			$d['config_index_dummy_'.$v]['object']['type']            = 'htmlobject_input';
+			$d['config_index_dummy_'.$v]['object']['attrib']['name']  = 'dummy[index]';
+			$d['config_index_dummy_'.$v]['object']['attrib']['type']  = 'text';
+			$d['config_index_dummy_'.$v]['object']['attrib']['disabled'] = true;
+			$d['config_index_dummy_'.$v]['object']['attrib']['value'] = $ini['config']['index'];
+		
+			#$d['config_index']['label'] = sprintf($this->lang['config']['index'],$ini['config']['index']);
+			$d['config_index']['object']['type']            = 'htmlobject_input';
+			$d['config_index']['object']['attrib']['name']  = 'config[index]';
+			$d['config_index']['object']['attrib']['type']  = 'hidden';
+			$d['config_index']['object']['attrib']['value'] = $ini['config']['index'];
+		} else {
+			#$d['config_index'] = '';
 		}
 
 		if($this->file->exists($this->PROFILESDIR.'templates')) {

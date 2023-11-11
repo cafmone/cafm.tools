@@ -3,12 +3,9 @@
 {form}
 
 <div class="buttons" style="text-align:right;">{submit}</div>
-
 <fieldset>
-	<legend>{label_basics}</legend>	
-		{config_dir}
-		{config_url}
-		{config_title}
+	<legend>{label_basics}</legend>
+	{config}
 </fieldset>
 
 <fieldset>
@@ -21,25 +18,25 @@
 	<legend>{label_permissions}</legend>
 		{permission_dir}
 		{permission_file}
-		{permission_config_admin_only}
+		{permission_settings_admin_only}
 		{permission_plugins_admin_only}
 </fieldset>
 
 <fieldset>
 	<legend>{label_modules}</legend>
 	<div>
-		<div style="padding: 0 0 0 0;">{config_users}</div>
-		<div style="margin: -36px 0 0 0; padding: 0 0 0 45%;">{link_users}</div>
+		<div style="padding: 0 0 0 0;">{module_users}</div>
+		<div style="margin: -36px 0 0 0; padding: 0 0 0 40%;">{link_users}</div>
 		<div class="floatbreaker">&#160;></div>
 	</div>
 	<div>
-		<div style="padding: 0 0 0 0;">{config_query}</div>
-		<div style="margin: -36px 0 0 0; padding: 0 0 0 45%;">{link_query}</div>
+		<div style="padding: 0 0 0 0;">{module_query}</div>
+		<div style="margin: -36px 0 0 0; padding: 0 0 0 40%;">{link_query}</div>
 		<div class="floatbreaker">&#160;></div>
 	</div>
 	<div>
-		<div style="padding: 0 0 0 0;">{config_smtp}</div>
-		<div style="margin: -36px 0 0 0; padding: 0 0 0 45%;">{link_smtp}</div>
+		<div style="padding: 0 0 0 0;">{module_smtp}</div>
+		<div style="margin: -36px 0 0 0; padding: 0 0 0 40%;">{link_smtp}</div>
 		<div class="floatbreaker">&#160;></div>
 	</div>
 </fieldset>

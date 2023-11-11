@@ -419,7 +419,12 @@ var $lang = array(
 				!in_array('cms', $this->plugins) &&
 				$base.$login !== $this->response->html->thisdir
 			) {
-				$this->response->redirect($s['config']['baseurl'].$login);
+				// change index file
+				if(isset($s['config']['index'])) {
+					$this->response->redirect($s['config']['baseurl'].$login.$s['config']['index']);
+				} else {
+					$this->response->redirect($s['config']['baseurl'].$login);
+				}
 			} 
 			else if ($base.$login === $this->response->html->thisdir) {
 				$t = $this->__logedin($t, $s);
@@ -439,7 +444,14 @@ var $lang = array(
 						$cssurl = '<link rel="stylesheet" type="text/css" href="'.$cssurl.'cms.css">';
 						$t->add($t->get_elements('style').$cssurl, 'style');
 						$t->add($page->get_template()->get_elements('title'), 'title');
-						$params  = 'index.php?index_action=plugin&amp;index_action_plugin=cms&amp;cms_action=editor&amp;dir='.$page->dir;
+						// change index file
+						$index = 'index.php';
+						if(isset($s['config']['index'])) {
+							$index = $s['config']['index'];
+						}
+						
+						
+						$params  = $index.'?index_action=plugin&amp;index_action_plugin=cms&amp;cms_action=editor&amp;dir='.$page->dir;
 						$params .= '&amp;id='.$page->id;
 						$params .= '&amp;lang='.$page->lang;
 						$content = '<a href="'.$params.'" id="CmsEdit" class="edit" title="'.$this->lang['edit_page'].'">&#160;</a><div id="previewpanel">'.$content.'</div>';

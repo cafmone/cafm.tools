@@ -177,7 +177,11 @@ var $lang = array(
 				}
 
 				if(is_array($device) && count($device) > 0 && $mode === '') {
-					echo '<form action="index.php" method="POST">';
+					$index = 'index.php';
+					if(isset($GLOBALS['settings']['config']['index'])) {
+						$index = $GLOBALS['settings']['config']['index'];
+					}
+					echo '<form action="'.$index.'" method="POST">';
 					echo '<input type="hidden" name="index_action" value="plugin">';
 					echo '<input type="hidden" name="index_action_plugin" value="bestandsverwaltung">';
 					echo '<input type="hidden" name="bestandsverwaltung_action" value="recording">';
@@ -305,7 +309,11 @@ var $lang = array(
 				if($result !== '') {
 					echo $result;
 				} else {
-					echo '<form action="index.php" method="POST">';
+					$index = 'index.php';
+					if(isset($GLOBALS['settings']['config']['index'])) {
+						$index = $GLOBALS['settings']['config']['index'];
+					}
+					echo '<form action="'.$index.'" method="POST">';
 					echo '<input type="hidden" name="index_action" value="plugin">';
 					echo '<input type="hidden" name="index_action_plugin" value="bestandsverwaltung">';
 					echo '<input type="hidden" name="bestandsverwaltung_action" value="recording">';
