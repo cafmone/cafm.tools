@@ -268,11 +268,16 @@ var $lang = array(
 					if($error === '') {
 						$files = $this->file->get_files(CLASSDIR.'setup/'.$k);
 						foreach($files as $file) {
-							if($error === '' && !$this->file->exists($target.'/'.$file['name'])) {
+							// change index file
+							$name = $file['name'];
+							if(isset($GLOBALS['settings']['config']['index']) && $name === 'index.php') {
+								$name = $GLOBALS['settings']['config']['index'];
+							}
+							if($error === '' && !$this->file->exists($target.'/'.$name)) {
 								if(isset($request['config']['link_virtual'])) {
-									$error = $this->file->symlink( $file['path'], $target.'/'.$file['name']);
+									$error = $this->file->symlink( $file['path'], $target.'/'.$name);
 								} else {
-									$error = $this->file->copy($file['path'], $target.'/'.$file['name']);
+									$error = $this->file->copy($file['path'], $target.'/'.$name);
 								}
 							}
 						}
