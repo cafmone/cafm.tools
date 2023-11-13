@@ -93,7 +93,10 @@ var $thisdir;
 			($dir !== '') ? $dir = $dir.'/' : null;
 			$this->thisurl = dirname($_SERVER['SCRIPT_NAME']);
 		}
-		if(isset($_SERVER['SCRIPT_FILENAME'])) {
+		if(function_exists('getcwd')) {
+			$this->thisdir = getcwd().'/';
+		}
+		else if(isset($_SERVER['SCRIPT_FILENAME'])) {
 			$dir = dirname($_SERVER['SCRIPT_FILENAME']);
 			// windows drive letter hack
 			($dir !== '') ? $dir = preg_replace('~^[A-Z]:(.+)~i','$1',$dir).'/' : null;
