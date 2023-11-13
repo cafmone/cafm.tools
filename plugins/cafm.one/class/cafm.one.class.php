@@ -29,12 +29,9 @@ var $date_format = "Y-m-d H:i";
 	function __construct($file, $response, $db = null, $user = null) {
 		$this->file     = $file;
 		$this->response = $response;
-		$this->db       = $db;
+		#$this->db       = $db;
 		$this->user     = $user;
 		$this->ini      = $this->file->get_ini(PROFILESDIR.'cafm.one.ini');
-		
-		// handle db diffrent from original
-
 		if(isset($this->ini['login']['url']) && $this->ini['login']['url'] === 'localhost') {
 			$this->local = true;
 		}
@@ -561,12 +558,21 @@ var $date_format = "Y-m-d H:i";
 				$data = 'ERROR: No data from '.$url;
 			}
 		} else {
-			// localhost
+			// handle db diffrent from original
+			$s = $this->file->get_ini(PROFILESDIR.'settings.ini');
+			require_once(CLASSDIR.'lib/db/query.class.php');
+			$query = new query(CLASSDIR.'lib/db');
+			$query->host = isset($s['query']['host']) ? $s['query']['host'] : null ;
+			$query->db   = isset($s['query']['db'])   ? $s['query']['db']   : null ;
+			$query->user = isset($s['query']['user']) ? $s['query']['user'] : null ;
+			$query->pass = isset($s['query']['pass']) ? $s['query']['pass'] : null ;
+			$query->type = isset($s['query']['type']) ? $s['query']['type'] : null ;
+
 			$tmp = $_REQUEST;
 			$_REQUEST = $params;
 			require_once(CLASSDIR.'addons/todos/class/todos.controller.class.php');
 			$response = $this->response->response('todos');
-			$controller = new todos_controller($this->file, $response, $this->db, $this->user);
+			$controller = new todos_controller($this->file, $response, $query, $this->user);
 			$data = $controller->json(true);
 			if($decode === true && is_string($data)) {
 				$data = json_decode($data, true);
