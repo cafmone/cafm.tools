@@ -162,15 +162,17 @@ var $__attribs;
 		$sql  = 'SELECT ';
 		$sql .= '`b`.`bezeichner_kurz` as bezeichner, ';
 		$sql .= '`b`.`bezeichner_lang` as label, ';
+		$sql .= '`b`.`din_276` as din, ';
 		$sql .= '`bs`.`type` as type ';
 		$sql .= 'FROM bezeichner AS b ';
 		$sql .= 'LEFT JOIN bezeichner_settings AS bs ON (b.bezeichner_kurz=bs.bezeichner_kurz) ';
-		$sql .= 'GROUP BY bezeichner, label, type ';
+		$sql .= 'GROUP BY bezeichner, label, type, din ';
 		$bezeichner = $this->db->handler()->query($sql);
 		if(is_array($bezeichner)) {
 			foreach($bezeichner as $v) {
 				$lb[$v['bezeichner']]['label'] = $v['label'];
 				$lb[$v['bezeichner']]['type']  = $v['type'];
+				$lb[$v['bezeichner']]['din']   = $v['din'];
 			}
 			$this->bezeichner = $lb;
 		}
@@ -1398,6 +1400,8 @@ var $__attribs;
 			}
 
 			$this->exports['bezeichner'] = $this->lang['label_identifier'];
+### TODO translation
+			$this->exports['din'] = 'Din 276';
 
 			// handle grouping
 			if(isset($this->filter['group']) && $this->filter['group'] === 'bezeichner') {
@@ -1777,12 +1781,19 @@ var $__attribs;
 				echo $settings['linefeed'];
 				$i = 1;
 			}
+
+			// handle din
+			if(isset($this->bezeichner[$v['bezeichner']]['din'])) {
+				$v['din'] = $this->bezeichner[$v['bezeichner']]['din'];
+			} else {
+				$v['din'] = '';
+			}
+
 			// translate bezeichner
 			$bezeichner = $v['bezeichner'];
 			if(isset($this->bezeichner[$v['bezeichner']]['label'])) {
 				$v['bezeichner'] = $this->bezeichner[$v['bezeichner']]['label'].' ('.$v['bezeichner'].')';
 			}
-
 			// handle attribs
 			$m = 0;
 			foreach($v as $key => $value) {

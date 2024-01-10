@@ -58,8 +58,7 @@ var $lang = array(
 		'tab_filters' => 'Filters',
 		'tab_custom' => 'Custom',
 		'tab_settings' => 'Settings',
-		'tab_import' => 'Import',
-		'tab_folders' => 'Folders',
+		#'tab_folders' => 'Folders',
 		'label_process' => 'Process',
 		'label_state' => 'State',
 		'label_short' => 'Short',
@@ -82,7 +81,7 @@ var $lang = array(
 		'headline_update_state' => 'Change state',
 		'headline_add_identifier' => 'New Identifier',
 		'button_sync' => 'Synchronize',
-		'button_import' => 'Import',
+		#'button_import' => 'Import',
 		'button_remove' => 'Remove',
 		'button_title_add_identifier' => 'Add new identifier',
 		'button_title_sync_identifiers' => 'Sync identifiers',
@@ -93,6 +92,13 @@ var $lang = array(
 		'msg_update_sucess' => 'Updated successfully',
 		'msg_insert_sucess' => 'Added successfully',
 		'error_no_url' => 'Error: No url',
+	),
+	'import' => array(
+		'tab' => 'Import',
+		'tab_folders' => 'Folders',
+		'label_identifier' => 'Identifier',
+		'button_import' => 'Import',
+		'button_remove' => 'Remove',
 	),
 	'gewerke' => array(
 		'tab' => 'Trades',
@@ -169,18 +175,18 @@ var $lang = array(
 					default:
 					case 'inventory':
 						$content[] = $this->inventory( true );
+						$content[] = $this->import();
 						$content[] = $this->gewerke();
-						#$content[] = $this->export();
+					break;
+					case 'import':
+						$content[] = $this->inventory();
+						$content[] = $this->import( true );
+						$content[] = $this->gewerke();
 					break;
 					case 'gewerke':
 						$content[] = $this->inventory();
+						$content[] = $this->import();
 						$content[] = $this->gewerke( true );
-						#$content[] = $this->export();
-					break;
-					case 'export':
-						$content[] = $this->inventory();
-						$content[] = $this->gewerke();
-						#$content[] = $this->export( true );
 					break;
 				}
 			}
@@ -239,6 +245,34 @@ var $lang = array(
 
 	//--------------------------------------------
 	/**
+	 * import
+	 *
+	 * @access public
+	 * @return htmlobject_template
+	 */
+	//--------------------------------------------
+	function import($visible = false) {
+		$data = '';
+		if($visible === true) {
+			require_once($this->classdir.'bestandsverwaltung.settings.import.controller.class.php');
+			$controller = new bestandsverwaltung_settings_import_controller($this);
+			$controller->tpldir = $this->tpldir;
+			$controller->lang  = $this->lang['import'];
+			$data = $controller->action();
+		}
+		$content['label']   = $this->lang['import']['tab'];
+		$content['value']   = $data;
+		$content['target']  = $this->response->html->thisfile;
+		$content['request'] = $this->response->get_array($this->actions_name, 'import' );
+		$content['onclick'] = false;
+		if($this->action === 'import'){
+			$content['active']  = true;
+		}
+		return $content;
+	}
+
+	//--------------------------------------------
+	/**
 	 * Gewerke
 	 *
 	 * @access public
@@ -274,6 +308,7 @@ var $lang = array(
 	 * @return htmlobject_template
 	 */
 	//--------------------------------------------
+/*
 	function export($visible = false) {
 		$data = '';
 		if($visible === true) {
@@ -293,7 +328,7 @@ var $lang = array(
 		}
 		return $content;
 	}
-
+*/
 
 }
 ?>

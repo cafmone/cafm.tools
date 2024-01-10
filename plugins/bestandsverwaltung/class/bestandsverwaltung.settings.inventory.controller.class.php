@@ -105,35 +105,35 @@ var $lang = array();
 			switch( $this->action ) {
 				default:
 				case 'identifiers':
-					$data[] = $this->import();
+					#$data[] = $this->import();
 					$data[] = $this->qrcode();
 					$data[] = $this->filters();
 					$data[] = $this->form();
 					$data[] = $this->identifiers(true);
 				break;
 				case 'form':
-					$data[] = $this->import();
+					#$data[] = $this->import();
 					$data[] = $this->qrcode();
 					$data[] = $this->filters();
 					$data[] = $this->form(true);
 					$data[] = $this->identifiers();
 				break;
 				case 'filters':
-					$data[] = $this->import();
+					#$data[] = $this->import();
 					$data[] = $this->qrcode();
 					$data[] = $this->filters(true);
 					$data[] = $this->form();
 					$data[] = $this->identifiers();
 				break;
 				case 'qrcode':
-					$data[] = $this->import();
+					#$data[] = $this->import();
 					$data[] = $this->qrcode(true);
 					$data[] = $this->filters();
 					$data[] = $this->form();
 					$data[] = $this->identifiers();
 				break;
 				case 'import':
-					$data[] = $this->import( true );
+					#$data[] = $this->import( true );
 					$data[] = $this->qrcode();
 					$data[] = $this->filters();
 					$data[] = $this->form();
