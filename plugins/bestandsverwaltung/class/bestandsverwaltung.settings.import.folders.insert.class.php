@@ -1,6 +1,6 @@
 <?php
 /**
- * bestandsverwaltung_settings_inventory_import_folders_insert
+ * bestandsverwaltung_settings_import_folders_insert
  *
  * This file is part of plugin bestandsverwaltung
  *
@@ -27,7 +27,7 @@
  * @version 1.0
  */
 
-class bestandsverwaltung_settings_inventory_import_folders_insert
+class bestandsverwaltung_settings_import_folders_insert
 {
 
 var $lang = array();

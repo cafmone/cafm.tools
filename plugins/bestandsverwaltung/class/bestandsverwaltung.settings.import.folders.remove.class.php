@@ -1,6 +1,6 @@
 <?php
 /**
- * bestandsverwaltung_settings_inventory_import_folders_remove
+ * bestandsverwaltung_settings_import_folders_remove
  *
  * This file is part of plugin bestandsverwaltung
  *
@@ -27,7 +27,7 @@
  * @version 1.0
  */
 
-class bestandsverwaltung_settings_inventory_import_folders_remove
+class bestandsverwaltung_settings_import_folders_remove
 {
 
 var $lang = array();

@@ -1,6 +1,6 @@
 <?php
 /**
- * bestandsverwaltung_settings_inventory_import_folders_select
+ * bestandsverwaltung_settings_import_folders_select
  *
  * This file is part of plugin bestandsverwaltung
  *
@@ -27,7 +27,7 @@
  * @version 1.0
  */
 
-class bestandsverwaltung_settings_inventory_import_folders_select
+class bestandsverwaltung_settings_import_folders_select
 {
 /**
 * name of action buttons
@@ -118,7 +118,7 @@ var $lang = array();
 		$url  = $this->response->html->thisfile;
 		$url .= '?index_action=plugin';
 		$url .= '&index_action_plugin=bestandsverwaltung';
-		$url .= '&'.$this->controller->controller->controller->controller->actions_name.'=download';
+		$url .= '&'.$this->controller->controller->controller->actions_name.'=download';
 		$url .= '&path=/devices/';
 		$href_download  = $url;
 

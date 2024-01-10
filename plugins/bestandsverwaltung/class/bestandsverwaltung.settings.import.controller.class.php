@@ -1,6 +1,6 @@
 <?php
 /**
- * bestandsverwaltung_settings_inventory_import_controller
+ * bestandsverwaltung_settings_import_controller
  *
  * This file is part of plugin bestandsverwaltung
  *
@@ -27,7 +27,7 @@
  * @version 1.0
  */
 
-class bestandsverwaltung_settings_inventory_import_controller
+class bestandsverwaltung_settings_import_controller
 {
 /**
 * name of action buttons
@@ -112,7 +112,7 @@ var $lang = array();
 
 		$tab = $this->response->html->tabmenu('settings_import_tab');
 		$tab->message_param = 'some_param';
-		$tab->css = 'htmlobject_tabs noprint';
+		$tab->css = 'htmlobject_tabs right noprint';
 		$tab->auto_tab = false;
 		$tab->add($data);
 
@@ -131,8 +131,8 @@ var $lang = array();
 	function folders($visible = false) {
 		$data = '';
 		if($visible === true) {
-			require_once($this->classdir.'bestandsverwaltung.settings.inventory.import.folders.controller.class.php');
-			$controller = new bestandsverwaltung_settings_inventory_import_folders_controller($this);
+			require_once($this->classdir.'bestandsverwaltung.settings.import.folders.controller.class.php');
+			$controller = new bestandsverwaltung_settings_import_folders_controller($this);
 			$controller->message_param = $this->message_param;
 			$controller->tpldir = $this->tpldir;
 			$controller->lang = $this->lang;

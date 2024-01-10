@@ -1,6 +1,6 @@
 <?php
 /**
- * bestandsverwaltung_settings_inventory_folders_import_controller
+ * bestandsverwaltung_settings_folders_import_controller
  *
  * This file is part of plugin bestandsverwaltung
  *
@@ -27,7 +27,7 @@
  * @version 1.0
  */
 
-class bestandsverwaltung_settings_inventory_import_folders_controller
+class bestandsverwaltung_settings_import_folders_controller
 {
 /**
 * name of action buttons
@@ -150,8 +150,8 @@ var $lang = array();
 	function select($visible = false) {
 		$data = '';
 		if($visible === true) {
-			require_once($this->classdir.'bestandsverwaltung.settings.inventory.import.folders.select.class.php');
-			$controller = new bestandsverwaltung_settings_inventory_import_folders_select($this);
+			require_once($this->classdir.'bestandsverwaltung.settings.import.folders.select.class.php');
+			$controller = new bestandsverwaltung_settings_import_folders_select($this);
 			$controller->message_param = $this->message_param;
 			$controller->actions_name = $this->actions_name;
 			$controller->identifier_name = $this->identifier_name;
@@ -183,8 +183,8 @@ var $lang = array();
 	function insert($visible = false) {
 		$data = '';
 		if($visible === true) {
-			require_once($this->classdir.'bestandsverwaltung.settings.inventory.import.folders.insert.class.php');
-			$controller = new bestandsverwaltung_settings_inventory_import_folders_insert($this);
+			require_once($this->classdir.'bestandsverwaltung.settings.import.folders.insert.class.php');
+			$controller = new bestandsverwaltung_settings_import_folders_insert($this);
 			$controller->message_param = $this->message_param;
 			$controller->actions_name = $this->actions_name;
 			$controller->tpldir = $this->tpldir;
@@ -216,8 +216,8 @@ var $lang = array();
 	function remove($visible = false) {
 		$data = '';
 		if($visible === true) {
-			require_once($this->classdir.'bestandsverwaltung.settings.inventory.import.folders.remove.class.php');
-			$controller = new bestandsverwaltung_settings_inventory_import_folders_remove($this);
+			require_once($this->classdir.'bestandsverwaltung.settings.import.folders.remove.class.php');
+			$controller = new bestandsverwaltung_settings_import_folders_remove($this);
 			$controller->message_param = $this->message_param;
 			$controller->actions_name = $this->actions_name;
 			$controller->tpldir = $this->tpldir;
