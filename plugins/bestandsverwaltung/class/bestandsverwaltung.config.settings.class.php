@@ -131,7 +131,7 @@ var $lang = array(
 			$old = $this->file->get_ini( $this->settings );
 			if(is_array($old)) {
 				unset($old['settings']);
-				unset($old['export']);
+				#unset($old['export']);
 				#unset($old['filter']);
 				$request = array_merge($old, $request);
 			}
@@ -175,7 +175,6 @@ var $lang = array(
 		}
 
 		// Permissions
-
 		$groups = $this->user->list_groups();
 		if(!isset($groups)) {
 			$groups = array();
@@ -197,65 +196,6 @@ var $lang = array(
 		$d['changeid']['object']['attrib']['name']    = 'settings[changeid]';
 		if(isset($ini['settings']['changeid'])) {
 			$d['changeid']['object']['attrib']['checked'] = true;
-		}
-
-		// Export
-
-		$d['bom']['label']                    = 'BOM';
-		$d['bom']['object']['type']           = 'htmlobject_input';
-		$d['bom']['object']['attrib']['type'] = 'checkbox';
-		$d['bom']['object']['attrib']['name'] = 'export[bom]';
-		if(isset($ini['export']['bom'])) {
-			$d['bom']['object']['attrib']['checked'] = true;
-		} else {
-			$d['bom']['object']['attrib']['checked'] = true;
-		}
-
-		$o = array();
-		$o[] = array('\n');
-		$o[] = array('\r\n');
-
-		$d['linefeed']['label']                       = 'Linefeed';
-		$d['linefeed']['object']['type']              = 'htmlobject_select';
-		$d['linefeed']['object']['attrib']['index']   = array(0,0);
-		$d['linefeed']['object']['attrib']['options'] = $o;
-		$d['linefeed']['object']['attrib']['name']    = 'export[linefeed]';
-		if(isset($ini['export']['linefeed'])) {
-			$d['linefeed']['object']['attrib']['selected'] = array($ini['export']['linefeed']);
-		} else {
-			$d['linefeed']['object']['attrib']['selected'] = array('\r\n');
-		}
-
-		$o = array();
-		$o[] = array(',');
-		$o[] = array(';');
-		$o[] = array('\t');
-
-		$d['delimiter']['label']                       = 'Delimiter';
-		$d['delimiter']['object']['type']              = 'htmlobject_select';
-		$d['delimiter']['object']['attrib']['index']   = array(0,0);
-		$d['delimiter']['object']['attrib']['options'] = $o;
-		$d['delimiter']['object']['attrib']['name']    = 'export[delimiter]';
-		if(isset($ini['export']['delimiter'])) {
-			$d['delimiter']['object']['attrib']['selected'] = array($ini['export']['delimiter']);
-		} else {
-			$d['delimiter']['object']['attrib']['selected'] = array(';');
-		}
-
-		$o = array();
-		$o[] = array('','');
-		$o[] = array("'","'");
-		$o[] = array('quot','&#34;');
-
-		$d['enclosure']['label']                       = 'Enclosure';
-		$d['enclosure']['object']['type']              = 'htmlobject_select';
-		$d['enclosure']['object']['attrib']['index']   = array(0,1);
-		$d['enclosure']['object']['attrib']['options'] = $o;
-		$d['enclosure']['object']['attrib']['name']    = 'export[enclosure]';
-		if(isset($ini['export']['enclosure'])) {
-			$d['enclosure']['object']['attrib']['selected'] = array($ini['export']['enclosure']);
-		} else {
-			$d['enclosure']['object']['attrib']['selected'] = array('quot');
 		}
 
 		$form->display_errors = false;

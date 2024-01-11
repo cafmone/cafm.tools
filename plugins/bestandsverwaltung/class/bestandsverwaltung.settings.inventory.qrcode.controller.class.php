@@ -154,7 +154,7 @@ var $lang = array();
 			$controller->message_param = $this->message_param;
 			$data = $controller->action();
 		}
-		$content['label']   = $this->lang['tab_settings'];
+		$content['label']   = $this->lang['tab_qrcode_settings'];
 		$content['value']   = $data;
 		$content['target']  = $this->response->html->thisfile;
 		$content['request'] = $this->response->get_array($this->actions_name, 'settings' );

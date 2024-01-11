@@ -157,7 +157,7 @@ var $lang = array();
 			$controller->lang = $this->lang;
 			$data = $controller->action();
 		}
-		$content['label']   = $this->lang['tab_custom'];
+		$content['label']   = $this->lang['tab_filters_custom'];
 		$content['value']   = $data;
 		$content['target']  = $this->response->html->thisfile;
 		$content['request'] = $this->response->get_array($this->actions_name, 'custom' );

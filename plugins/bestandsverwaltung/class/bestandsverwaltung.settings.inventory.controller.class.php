@@ -105,37 +105,37 @@ var $lang = array();
 			switch( $this->action ) {
 				default:
 				case 'identifiers':
-					#$data[] = $this->import();
 					$data[] = $this->qrcode();
 					$data[] = $this->filters();
+					$data[] = $this->export();
 					$data[] = $this->form();
 					$data[] = $this->identifiers(true);
 				break;
 				case 'form':
-					#$data[] = $this->import();
 					$data[] = $this->qrcode();
 					$data[] = $this->filters();
+					$data[] = $this->export();
 					$data[] = $this->form(true);
 					$data[] = $this->identifiers();
 				break;
 				case 'filters':
-					#$data[] = $this->import();
 					$data[] = $this->qrcode();
 					$data[] = $this->filters(true);
+					$data[] = $this->export();
 					$data[] = $this->form();
 					$data[] = $this->identifiers();
 				break;
 				case 'qrcode':
-					#$data[] = $this->import();
 					$data[] = $this->qrcode(true);
 					$data[] = $this->filters();
+					$data[] = $this->export();
 					$data[] = $this->form();
 					$data[] = $this->identifiers();
 				break;
-				case 'import':
-					#$data[] = $this->import( true );
+				case 'export':
 					$data[] = $this->qrcode();
 					$data[] = $this->filters();
+					$data[] = $this->export( true );
 					$data[] = $this->form();
 					$data[] = $this->identifiers();
 				break;
@@ -243,27 +243,27 @@ var $lang = array();
 
 	//--------------------------------------------
 	/**
-	 * import
+	 * export
 	 *
 	 * @access public
 	 * @return htmlobject_template
 	 */
 	//--------------------------------------------
-	function import($visible = false) {
+	function export($visible = false) {
 		$data = '';
 		if($visible === true) {
-			require_once($this->classdir.'bestandsverwaltung.settings.inventory.import.controller.class.php');
-			$controller = new bestandsverwaltung_settings_inventory_import_controller($this);
+			require_once($this->classdir.'bestandsverwaltung.settings.inventory.export.controller.class.php');
+			$controller = new bestandsverwaltung_settings_inventory_export_controller($this);
 			$controller->tpldir = $this->tpldir;
 			$controller->lang  = $this->lang;
 			$data = $controller->action();
 		}
-		$content['label']   = $this->lang['tab_import'];
+		$content['label']   = $this->lang['tab_export'];
 		$content['value']   = $data;
 		$content['target']  = $this->response->html->thisfile;
-		$content['request'] = $this->response->get_array($this->actions_name, 'import' );
+		$content['request'] = $this->response->get_array($this->actions_name, 'export' );
 		$content['onclick'] = false;
-		if($this->action === 'import'){
+		if($this->action === 'export'){
 			$content['active']  = true;
 		}
 		return $content;
