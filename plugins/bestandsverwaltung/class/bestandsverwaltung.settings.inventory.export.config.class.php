@@ -143,6 +143,7 @@ var $lang = array();
 			$old = $this->file->get_ini( $this->settings );
 			if(is_array($old)) {
 				unset($old['export']);
+				unset($old['headrow']);
 				$request = array_merge($old, $request);
 			}
 			if( $error === '' ) {
@@ -173,9 +174,8 @@ var $lang = array();
 	//--------------------------------------------
 	function get_form() {
 		$ini  = $this->file->get_ini( $this->settings, true, true );
-		$form = $this->response->get_form($this->actions_name, 'custom');
+		$form = $this->response->get_form($this->actions_name, 'config');
 
-		// Filters
 		// Export
 
 		$d['bom']['label']                    = 'BOM';
@@ -183,8 +183,6 @@ var $lang = array();
 		$d['bom']['object']['attrib']['type'] = 'checkbox';
 		$d['bom']['object']['attrib']['name'] = 'export[bom]';
 		if(isset($ini['export']['bom'])) {
-			$d['bom']['object']['attrib']['checked'] = true;
-		} else {
 			$d['bom']['object']['attrib']['checked'] = true;
 		}
 
@@ -236,6 +234,35 @@ var $lang = array();
 			$d['enclosure']['object']['attrib']['selected'] = array($ini['export']['enclosure']);
 		} else {
 			$d['enclosure']['object']['attrib']['selected'] = array('quot');
+		}
+
+		// headrow
+		$d['headrow_id']['label']                       = 'ID';
+		$d['headrow_id']['object']['type']              = 'htmlobject_input';
+		$d['headrow_id']['object']['attrib']['name']    = 'headrow[id]';
+		if(isset($ini['headrow']['id'])) {
+			$d['headrow_id']['object']['attrib']['value'] = $ini['headrow']['id'];
+		}
+
+		$d['headrow_kurz']['label']                       = 'bezeichner_kurz';
+		$d['headrow_kurz']['object']['type']              = 'htmlobject_input';
+		$d['headrow_kurz']['object']['attrib']['name']    = 'headrow[kurz]';
+		if(isset($ini['headrow']['kurz'])) {
+			$d['headrow_kurz']['object']['attrib']['value'] = $ini['headrow']['kurz'];
+		}
+
+		$d['headrow_lang']['label']                       = 'bezeichner_lang';
+		$d['headrow_lang']['object']['type']              = 'htmlobject_input';
+		$d['headrow_lang']['object']['attrib']['name']    = 'headrow[lang]';
+		if(isset($ini['headrow']['lang'])) {
+			$d['headrow_lang']['object']['attrib']['value'] = $ini['headrow']['lang'];
+		}
+
+		$d['headrow_din']['label']                       = 'din_276';
+		$d['headrow_din']['object']['type']              = 'htmlobject_input';
+		$d['headrow_din']['object']['attrib']['name']    = 'headrow[din]';
+		if(isset($ini['headrow']['din'])) {
+			$d['headrow_din']['object']['attrib']['value'] = $ini['headrow']['din'];
 		}
 
 		$form->display_errors = false;

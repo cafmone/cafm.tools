@@ -1399,9 +1399,23 @@ var $__attribs;
 				$this->exports['id'] = 'ID';
 			}
 
-			$this->exports['bezeichner'] = $this->lang['label_identifier'];
-### TODO translation
-			$this->exports['din'] = 'Din 276';
+			$this->exports['kurz'] = 'CAFM.ONE';
+			$this->exports['bezeichner'] = 'Musteranlage';
+			$this->exports['din'] = 'IFC4';
+			if(isset($this->settings['headrow'])) {
+				if(isset($this->settings['headrow']['id'])) {
+					$this->exports['id'] = $this->settings['headrow']['id'];
+				}
+				if(isset($this->settings['headrow']['kurz'])) {
+					$this->exports['kurz'] = $this->settings['headrow']['kurz'];
+				}
+				if(isset($this->settings['headrow']['lang'])) {
+					$this->exports['bezeichner'] = $this->settings['headrow']['lang'];
+				}
+				if(isset($this->settings['headrow']['din'])) {
+					$this->exports['din'] = $this->settings['headrow']['din'];
+				}
+			}
 
 			// handle grouping
 			if(isset($this->filter['group']) && $this->filter['group'] === 'bezeichner') {
@@ -1789,10 +1803,13 @@ var $__attribs;
 				$v['din'] = '';
 			}
 
+			// handle kurz
+			$v['kurz'] = $v['bezeichner'];
+
 			// translate bezeichner
 			$bezeichner = $v['bezeichner'];
 			if(isset($this->bezeichner[$v['bezeichner']]['label'])) {
-				$v['bezeichner'] = $this->bezeichner[$v['bezeichner']]['label'].' ('.$v['bezeichner'].')';
+				$v['bezeichner'] = $this->bezeichner[$v['bezeichner']]['label'];
 			}
 			// handle attribs
 			$m = 0;

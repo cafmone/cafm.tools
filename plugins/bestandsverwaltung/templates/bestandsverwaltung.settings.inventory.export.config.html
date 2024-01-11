@@ -2,10 +2,21 @@
 <form action="{thisfile}" method="POST" class="form-horizontal">
 {form}
 
-	{linefeed}
-	{delimiter}
-	{enclosure}
-	{bom}
+	<fieldset>
+	<legend>CSV</legend>
+		{linefeed}
+		{delimiter}
+		{enclosure}
+		{bom}
+	</fieldset>
+	
+	<fieldset>
+	<legend>Headrow</legend>
+		{headrow_id}
+		{headrow_kurz}
+		{headrow_lang}
+		{headrow_din}
+	</fieldset>
 
 <div class="buttons">{submit}</div>
 </form>
