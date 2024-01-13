@@ -208,8 +208,8 @@ var $__attribs;
 		$url .= '&path=/devices/';
 		$this->href_download  = $url;
 
-		require_once(CLASSDIR.'plugins/bestandsverwaltung/class/bestandsverwaltung.class.php');
-		$this->bestandsverwaltung = new bestandsverwaltung($this->db);
+		require_once(CLASSDIR.'lib/formbuilder/formbuilder.class.php');
+		$this->formbuilder = new formbuilder($this->db);
 	}
 
 	//--------------------------------------------
@@ -1018,7 +1018,7 @@ var $__attribs;
 		// Process
  		if(is_array($this->prozesses)) {
 			foreach( $this->prozesses as $k => $r ) {
-				$d = array_merge($d, $this->bestandsverwaltung->element($r, 'prozess', 'filter', array(), 'bestand_'));
+				$d = array_merge($d, $this->formbuilder->element($r, 'prozess', 'filter', array(), 'bestand_'));
 				if(isset($this->filter[$r['merkmal_kurz']]) && $this->filter[$r['merkmal_kurz']] !== '') {
 					$not = '';
 					if(isset($this->filter['not'][$r['merkmal_kurz']])) {

@@ -1,6 +1,6 @@
 <?php
 /**
- * bestandsverwaltung_recording_form_identifiers
+ *formbuilder_identifiers
  *
  * This file is part of plugin bestandsverwaltung
  *
@@ -14,20 +14,19 @@
  *  GNU General Public License for more details.
  *
  *  You should have received a copy of the GNU General Public License
- *  along with this file (see ../LICENSE.TXT) If not, see 
+ *  along with this file (see ../../LICENSE.TXT) If not, see 
  *  <http://www.gnu.org/licenses/>.
  *
- *  Copyright (c) 2015-2022, Alexander Kuballa
+ *  Copyright (c) 2015-2024, Alexander Kuballa
  *
  * @package phppublisher
  * @author Alexander Kuballa [akuballa@users.sourceforge.net]
- * @author Uwe Pochadt
- * @copyright Copyright (c) 2008 - 2022, Alexander Kuballa
- * @license GNU GENERAL PUBLIC LICENSE Version 2 (see ../LICENSE.TXT)
+ * @copyright Copyright (c) 2008 - 2024, Alexander Kuballa
+ * @license GNU GENERAL PUBLIC LICENSE Version 2 (see ../../LICENSE.TXT)
  * @version 1.0
  */
 
-class bestandsverwaltung_recording_form_identifiers
+class formbuilder_identifiers
 {
 
 var $lang = array();
@@ -61,8 +60,8 @@ var $table_bezeichner;
 		$this->user       = $controller->user;
 		$this->settings   = $controller->settings;
 
-		require_once(CLASSDIR.'plugins/bestandsverwaltung/class/bestandsverwaltung.class.php');
-		$this->bestandsverwaltung = new bestandsverwaltung($this->db);
+		require_once(CLASSDIR.'lib/formbuilder/formbuilder.class.php');
+		$this->bestandsverwaltung = new formbuilder($this->db);
 
 		$filter = $this->response->html->request()->get('filter');
 		if($filter !== '') {
@@ -125,7 +124,7 @@ var $table_bezeichner;
 
 		$response = $this->identifiers();
 
-		$t = $this->response->html->template($this->tpldir.'/bestandsverwaltung.recording.form.identifiers.html');
+		$t = $this->response->html->template($this->tpldir.'/formbuilder.identifiers.html');
 		$t->add($this->response->html->thisfile, 'thisfile');
 		$t->add($response->form);
 		$t->add($response->dataform);

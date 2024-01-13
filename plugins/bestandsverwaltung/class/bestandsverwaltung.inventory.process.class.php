@@ -55,8 +55,8 @@ var $lang = array();
 		}
 		$this->is_valid = $this->controller->user->is_valid($groups);
 
-		require_once(CLASSDIR.'plugins/bestandsverwaltung/class/bestandsverwaltung.class.php');
-		$this->bestandsverwaltung = new bestandsverwaltung($this->db);
+		require_once(CLASSDIR.'lib/formbuilder/formbuilder.class.php');
+		$this->formbuilder = new formbuilder($this->db);
 	}
 
 	//--------------------------------------------
@@ -221,7 +221,7 @@ var $lang = array();
 			}
 			if(is_array($this->prozesses)) {
 				foreach( $this->prozesses as $k => $r ) {
-					$d = array_merge($d, $this->bestandsverwaltung->element($r, 'process', 'prozess'));
+					$d = array_merge($d, $this->formbuilder->element($r, 'process', 'prozess'));
 				}
 			}
 

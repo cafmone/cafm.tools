@@ -1,6 +1,6 @@
 <?php
 /**
- * bestandsverwaltung_recording_form_index_edit
+ * formbuilder_index_sort
  *
  * This file is part of plugin bestandsverwaltung
  *
@@ -14,20 +14,19 @@
  *  GNU General Public License for more details.
  *
  *  You should have received a copy of the GNU General Public License
- *  along with this file (see ../LICENSE.TXT) If not, see 
+ *  along with this file (see ../../LICENSE.TXT) If not, see 
  *  <http://www.gnu.org/licenses/>.
  *
- *  Copyright (c) 2015-2022, Alexander Kuballa
+ *  Copyright (c) 2015-2024, Alexander Kuballa
  *
  * @package phppublisher
  * @author Alexander Kuballa [akuballa@users.sourceforge.net]
- * @author Uwe Pochadt
- * @copyright Copyright (c) 2008 - 2022, Alexander Kuballa
- * @license GNU GENERAL PUBLIC LICENSE Version 2 (see ../LICENSE.TXT)
+ * @copyright Copyright (c) 2008 - 2024, Alexander Kuballa
+ * @license GNU GENERAL PUBLIC LICENSE Version 2 (see ../../LICENSE.TXT)
  * @version 1.0
  */
 
-class bestandsverwaltung_recording_form_index_edit
+class formbuilder_index_sort
 {
 
 var $lang = array();
@@ -71,57 +70,54 @@ var $table_bezeichner;
 	 */
 	//--------------------------------------------
 	function action($action = null) {
-	
-		$this->table = $this->table_prefix.'index';
 
-		$tabellen = $this->db->select($this->table, '*',null,'`pos`');
+		$tabellen = $this->db->select($this->table_prefix.'index', '*',null,'`pos`');
 		if(is_array($tabellen)) {
 			$this->tables = $tabellen;
 		}
-		$response = $this->update();
+		$response = $this->sort();
 		return $response;
 		
 	}
 
 	//--------------------------------------------
 	/**
-	 * Update
+	 * Sort
 	 *
 	 * @access public
 	 * @return htmlobject_response
 	 */
 	//--------------------------------------------
-	function update( ) {
+	function sort( ) {
 		$response = $this->response;
-		$form     = $response->get_form($this->actions_name, 'edit');
-		$form->display_errors = false;
+		$form     = $response->get_form($this->actions_name, 'index');
+
+		$form->add('','cancel');
 
 		if(isset($this->tables)) {
-		
-			$i = 0;
-			foreach($this->tables as $table) {
-			
-				$d['data_f_'.$i]['label']                     = $table['tabelle_kurz'];
-				$d['data_f_'.$i]['css']                       = 'autosize float-right clearfix';
-				$d['data_f_'.$i]['style']                     = 'float:right;clear:both;';
-				$d['data_f_'.$i]['required']                  = true;
-				$d['data_f_'.$i]['object']['type']            = 'htmlobject_input';
-				$d['data_f_'.$i]['object']['attrib']['type']  = 'text';
-				$d['data_f_'.$i]['object']['attrib']['name']  = 'data['.$table['tabelle_kurz'].']';
-				$d['data_f_'.$i]['object']['attrib']['value'] = $table['tabelle_lang'];
-				$i++;
-			
+			$options = array();
+			foreach($this->tables as $v){
+				$options[] = array($v['row'], $v['tabelle_lang']);
 			}
+			#$d['select']['label']                        = '';
+			$d['select']['object']['type']               = 'htmlobject_select';
+			$d['select']['object']['attrib']['index']    = array(0, 1);
+			$d['select']['object']['attrib']['id']       = 'plugin_select';
+			$d['select']['object']['attrib']['name']     = 'index[]';
+			$d['select']['object']['attrib']['options']  = $options;
+			$d['select']['object']['attrib']['multiple'] = true;
+			$d['select']['object']['attrib']['style']    = 'width:250px;height: 200px;';
+			$d['select']['object']['attrib']['css']      = 'picklist';
+	
 			$form->add($d);
-
-			$request = $form->get_request('data');
+			$request = $form->get_request('index');
 			if(!$form->get_errors() && $response->submit()) {
 				if(is_array($request)) {
 					foreach($request as $k => $v) {
 						$error = $this->db->update(
-							$this->table, 
-							array('tabelle_lang' => $v), 
-							array('tabelle_kurz' => $k));
+							$this->table_prefix.'index', 
+							array('pos' => ($k+1)), 
+							array('row' => $v));
 						if($error !== '') {
 							$errors[] = $error;
 							break;
@@ -130,7 +126,7 @@ var $table_bezeichner;
 
 					if(!isset($errors)) {
 						$msg = $this->lang['msg_success'];
-						$this->response->redirect($this->response->get_url($this->actions_name, 'sort', $this->message_param, $msg));
+						$this->response->redirect($this->response->get_url($this->actions_name, 'index', $this->message_param, $msg));
 					} else {
 						$_REQUEST[$this->message_param]['error'] = implode('<br>', $errors);
 					}
@@ -140,12 +136,21 @@ var $table_bezeichner;
 				$_REQUEST[$this->message_param]['error'] = join('<br>', $form->get_errors());
 			}
 		}
+		
+		$a = $this->response->html->a();
+		$a->title = $this->lang['button_title_edit_index'];
+		$a->css = 'icon icon-edit btn btn-sm btn-default noprint';
+		$a->handler = 'onclick="phppublisher.wait(\'Loading ...\');"';
+		#$a->style = 'margin: 5px 10px 0 0;';
+		$a->href = $this->response->get_url($this->actions_name,'edit');
 
-		$t = $response->html->template($this->tpldir.'/bestandsverwaltung.recording.form.index.edit.html');
+
+		$t = $response->html->template($this->tpldir.'/formbuilder.index.sort.html');
 		$t->add($response->html->thisfile,'thisfile');
 		$t->add($form);
+		$t->add($a, 'edit');
+		$t->add('plugin_select', 'id');
 		$t->group_elements(array('param_' => 'form'));
-		$t->group_elements(array('data_' => 'data'));
 		return $t;
 	}
 

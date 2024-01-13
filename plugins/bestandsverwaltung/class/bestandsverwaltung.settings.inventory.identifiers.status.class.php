@@ -47,18 +47,6 @@ var $lang = array();
 		$this->response   = $controller->response;
 		$this->controller = $controller;
 		$this->prozesses  = $this->db->select('bestand_prozess', array('merkmal_lang','merkmal_kurz','datentyp'));
-
-/*
-		// Validate user
-		$groups = array();
-		if(isset($this->controller->settings['settings']['supervisor'])) {
-			$groups[] = $this->controller->settings['settings']['supervisor']; 
-		}
-		$this->is_valid = $this->controller->user->is_valid($groups);
-
-		require_once(CLASSDIR.'plugins/bestandsverwaltung/class/bestandsverwaltung.class.php');
-		$this->bestandsverwaltung = new bestandsverwaltung($this->db);
-*/
 	}
 
 	//--------------------------------------------

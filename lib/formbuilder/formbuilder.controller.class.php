@@ -1,6 +1,6 @@
 <?php
 /**
- * bestandsverwaltung_recording_form_controller
+ * formbuilder_controller
  *
  * This file is part of plugin bestandsverwaltung
  *
@@ -14,39 +14,38 @@
  *  GNU General Public License for more details.
  *
  *  You should have received a copy of the GNU General Public License
- *  along with this file (see ../LICENSE.TXT) If not, see 
+ *  along with this file (see ../../LICENSE.TXT) If not, see 
  *  <http://www.gnu.org/licenses/>.
  *
- *  Copyright (c) 2015-2022, Alexander Kuballa
+ *  Copyright (c) 2015-2024, Alexander Kuballa
  *
  * @package phppublisher
  * @author Alexander Kuballa [akuballa@users.sourceforge.net]
- * @author Uwe Pochadt
- * @copyright Copyright (c) 2008 - 2022, Alexander Kuballa
- * @license GNU GENERAL PUBLIC LICENSE Version 2 (see ../LICENSE.TXT)
+ * @copyright Copyright (c) 2008 - 2024, Alexander Kuballa
+ * @license GNU GENERAL PUBLIC LICENSE Version 2 (see ../../LICENSE.TXT)
  * @version 1.0
  */
 
-class bestandsverwaltung_recording_form_controller
+class formbuilder_controller
 {
 /**
 * name of action buttons
 * @access public
 * @var string
 */
-var $actions_name = 'bestand_form_action';
+var $actions_name = 'formbuilder_action';
 /**
 * message param
 * @access public
 * @var string
 */
-var $message_param = 'bestand_form_msg';
+var $message_param = 'formbuilder_msg';
 /**
 * path to tpldir
 * @access public
 * @var string
 */
-var $tpldir;
+protected $tpldir;
 /**
 * translation
 * @access public
@@ -86,13 +85,13 @@ var $lang = array(
 * @access public
 * @var string
 */
-var $table_prefix = 'bestand_';
+var $table_prefix;
 /**
 * identifier table
 * @access public
 * @var string
 */
-var $table_bezeichner = 'bezeichner';
+var $table_bezeichner;
 
 	//--------------------------------------------
 	/**
@@ -132,8 +131,7 @@ var $table_bezeichner = 'bezeichner';
 	 */
 	//--------------------------------------------
 	function action($action = null) {
-
-		if($this->is_valid) {
+		#if($this->is_valid) {
 			$this->action = '';
 			$ar = $this->response->html->request()->get($this->actions_name);
 			if($ar !== '') {
@@ -187,19 +185,19 @@ var $table_bezeichner = 'bezeichner';
 					break;
 				}
 			}
-		} else {
-			$data['label']   = '';
-			$data['value']   = 'Permission denied';
-			$data['target']  = '';
-			$data['request'] = '';
-			$data['onclick'] = false;
-			$data['hidden']  = true;
-			$data['css']     = 'noborder';
+		#} else {
+		#	$data['label']   = '';
+		#	$data['value']   = 'Permission denied';
+		#	$data['target']  = '';
+		#	$data['request'] = '';
+		#	$data['onclick'] = false;
+		#	$data['hidden']  = true;
+		#	$data['css']     = 'noborder';
+		#
+		#	$content[] = $data;
+		#}
 
-			$content[] = $data;
-		}
-
-		$tab = $this->response->html->tabmenu('bestand_recording_form_tab');
+		$tab = $this->response->html->tabmenu('formbuilder_form_tab');
 		$tab->message_param = $this->message_param;
 		$tab->css = 'htmlobject_tabs noprint';
 		$tab->auto_tab = false;
@@ -219,8 +217,8 @@ var $table_bezeichner = 'bezeichner';
 	function attribs($visible = false) {
 		$data = '';
 		if($visible === true) {
-			require_once($this->classdir.'bestandsverwaltung.recording.form.attribs.controller.class.php');
-			$controller = new bestandsverwaltung_recording_form_attribs_controller($this);
+			require_once($this->classdir.'formbuilder.attribs.controller.class.php');
+			$controller = new formbuilder_attribs_controller($this);
 			#$controller->actions_name = $this->actions_name;
 			#$controller->message_param = $this->message_param;
 			$controller->tpldir = $this->tpldir;
@@ -251,8 +249,8 @@ var $table_bezeichner = 'bezeichner';
 	function options($visible = false) {
 		$data = '';
 		if($visible === true) {
-			require_once($this->classdir.'bestandsverwaltung.recording.form.options.class.php');
-			$controller = new bestandsverwaltung_recording_form_options($this);
+			require_once($this->classdir.'formbuilder.options.class.php');
+			$controller = new formbuilder_options($this);
 			$controller->actions_name = $this->actions_name;
 			$controller->message_param = $this->message_param;
 			$controller->tpldir = $this->tpldir;
@@ -283,8 +281,8 @@ var $table_bezeichner = 'bezeichner';
 	function index($visible = false) {
 		$data = '';
 		if($visible === true) {
-			require_once($this->classdir.'bestandsverwaltung.recording.form.index.controller.class.php');
-			$controller = new bestandsverwaltung_recording_form_index_controller($this);
+			require_once($this->classdir.'formbuilder.index.controller.class.php');
+			$controller = new formbuilder_index_controller($this);
 			$controller->tpldir = $this->tpldir;
 			$controller->lang  = $this->lang;
 			$controller->table_prefix = $this->table_prefix;
@@ -313,8 +311,8 @@ var $table_bezeichner = 'bezeichner';
 	function identifiers($visible = false) {
 		$data = '';
 		if($visible === true) {
-			require_once($this->classdir.'bestandsverwaltung.recording.form.identifiers.class.php');
-			$controller = new bestandsverwaltung_recording_form_identifiers($this);
+			require_once($this->classdir.'formbuilder.identifiers.class.php');
+			$controller = new formbuilder_identifiers($this);
 			$controller->actions_name = $this->actions_name;
 			$controller->message_param = $this->message_param;
 			$controller->tpldir = $this->tpldir;

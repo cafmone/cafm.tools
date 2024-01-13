@@ -152,8 +152,8 @@ var $__delimiter = '[~]';
 			$this->response->add('bestand_select',$this->response->html->request()->get('bestand_select'));
 		}
 
-		require_once(CLASSDIR.'plugins/bestandsverwaltung/class/bestandsverwaltung.class.php');
-		$this->bestandsverwaltung = new bestandsverwaltung($this->db);
+		require_once(CLASSDIR.'lib/formbuilder/formbuilder.class.php');
+		$this->formbuilder = new formbuilder($this->db);
 
 		$this->plugins = $this->file->get_ini(PROFILESDIR.'/plugins.ini');
 	}
@@ -724,7 +724,7 @@ var $__delimiter = '[~]';
 						} else {
 							$table = 'bestand_';
 						}
-						$d = array_merge($d, $this->bestandsverwaltung->element($r, $k, $k, $fields, $table, $addempty));
+						$d = array_merge($d, $this->formbuilder->element($r, $k, $k, $fields, $table, $addempty));
 					}
 				} else {
 					if(is_string($v) && $v !== '') {

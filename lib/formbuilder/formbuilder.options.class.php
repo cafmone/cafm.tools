@@ -1,6 +1,6 @@
 <?php
 /**
- * bestandsverwaltung_recording_form_options
+ * formbuilder_options
  *
  * This file is part of plugin bestandsverwaltung
  *
@@ -14,20 +14,19 @@
  *  GNU General Public License for more details.
  *
  *  You should have received a copy of the GNU General Public License
- *  along with this file (see ../LICENSE.TXT) If not, see 
+ *  along with this file (see ../../LICENSE.TXT) If not, see 
  *  <http://www.gnu.org/licenses/>.
  *
- *  Copyright (c) 2015-2016, Alexander Kuballa
+ *  Copyright (c) 2015-2024, Alexander Kuballa
  *
  * @package phppublisher
  * @author Alexander Kuballa [akuballa@users.sourceforge.net]
- * @author Uwe Pochadt
- * @copyright Copyright (c) 2008 - 2016, Alexander Kuballa
- * @license GNU GENERAL PUBLIC LICENSE Version 2 (see ../LICENSE.TXT)
+ * @copyright Copyright (c) 2008 - 2024, Alexander Kuballa
+ * @license GNU GENERAL PUBLIC LICENSE Version 2 (see ../../LICENSE.TXT)
  * @version 1.0
  */
 
-class bestandsverwaltung_recording_form_options
+class formbuilder_options
 {
 
 var $lang = array();
@@ -85,7 +84,7 @@ var $table_bezeichner;
 		$response = $this->options();
 		$new = $this->get_new_form();
 
-		$t = $this->response->html->template($this->tpldir.'/bestandsverwaltung.recording.form.options.html');
+		$t = $this->response->html->template($this->tpldir.'/formbuilder.options.html');
 		$t->add($this->response->html->thisfile, 'thisfile');
 		$t->add($response, 'data');
 		$t->add($this->lang['headline_new_option'], 'label');
@@ -117,7 +116,7 @@ var $table_bezeichner;
 			}
 			foreach($data as $options) {
 				$form = $this->get_form($options);
-				$t = $this->response->html->template($this->tpldir.'/bestandsverwaltung.recording.form.options.form.html');
+				$t = $this->response->html->template($this->tpldir.'/formbuilder.options.form.html');
 				$t->add($this->response->html->thisfile,'thisfile');
 				$t->add($options[0]['option'],'id');
 

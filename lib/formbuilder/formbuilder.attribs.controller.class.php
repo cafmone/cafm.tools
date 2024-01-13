@@ -1,6 +1,6 @@
 <?php
 /**
- * bestandsverwaltung_recording_form_index_controller
+ * formbuilder_attribs_controller
  *
  * This file is part of plugin bestandsverwaltung
  *
@@ -14,33 +14,38 @@
  *  GNU General Public License for more details.
  *
  *  You should have received a copy of the GNU General Public License
- *  along with this file (see ../LICENSE.TXT) If not, see 
+ *  along with this file (see ../../LICENSE.TXT) If not, see 
  *  <http://www.gnu.org/licenses/>.
  *
- *  Copyright (c) 2015-2022, Alexander Kuballa
+ *  Copyright (c) 2015-2024, Alexander Kuballa
  *
  * @package phppublisher
  * @author Alexander Kuballa [akuballa@users.sourceforge.net]
- * @author Uwe Pochadt
- * @copyright Copyright (c) 2008 - 2022, Alexander Kuballa
- * @license GNU GENERAL PUBLIC LICENSE Version 2 (see ../LICENSE.TXT)
+ * @copyright Copyright (c) 2008 - 2024, Alexander Kuballa
+ * @license GNU GENERAL PUBLIC LICENSE Version 2 (see ../../LICENSE.TXT)
  * @version 1.0
  */
 
-class bestandsverwaltung_recording_form_index_controller
+class formbuilder_attribs_controller
 {
 /**
 * name of action buttons
 * @access public
 * @var string
 */
-var $actions_name = 'form_index_action';
+var $actions_name = 'form_attribs_action';
 /**
 * message param
 * @access public
 * @var string
 */
-var $message_param = 'form_index_msg';
+var $message_param = 'form_attribs_msg';
+/**
+* identifier
+* @access public
+* @var string
+*/
+var $identifier_name = 'form_attribs_ident';
 /**
 * path to tpldir
 * @access public
@@ -77,7 +82,7 @@ var $table_bezeichner;
 		$this->db = $controller->db;
 		$this->user = $controller->user;
 		$this->profilesdir = PROFILESDIR;
-		$this->classdir = CLASSDIR.'plugins/bestandsverwaltung/class/';
+		$this->classdir = CLASSDIR.'lib/formbuilder/';
 	}
 
 	//--------------------------------------------
@@ -100,22 +105,25 @@ var $table_bezeichner;
 		}
 
 		if($this->response->cancel()) {
-			$this->action = 'sort';
+			$this->action = 'select';
 		}
 
 		if(!isset($this->db->type)) {
 			$data  = '<div style="margin: 80px auto 50px auto;width:200px;"><b>Error:</b> Check your db settings</div>';
 		} else {
-			#$this->response->add($this->actions_name, $this->action);
+			$this->response->add($this->actions_name, $this->action);
 			$data = array();
 			switch( $this->action ) {
 				case '':
 				default:
-				case 'sort':
-					$data = $this->sort(true);
+				case 'select':
+					$data = $this->select(true);
 				break;
-				case 'edit':
-					$data = $this->edit(true);
+				case 'insert':
+					$data = $this->insert(true);
+				break;
+				case 'move':
+					$data = $this->move(true);
 				break;
 			}
 		}
@@ -124,11 +132,11 @@ var $table_bezeichner;
 		$content['hidden']  = true;
 		$content['value']   = $data;
 		$content['target']  = $this->response->html->thisfile;
-		$content['request'] = $this->response->get_array($this->actions_name, 'sort' );
+		$content['request'] = $this->response->get_array($this->actions_name, 'select' );
 		$content['onclick'] = false;
 		$content['active']  = true;
 
-		$tab = $this->response->html->tabmenu('form_index_tab');
+		$tab = $this->response->html->tabmenu('form_attribs_tab');
 		$tab->message_param = $this->message_param;
 		$tab->css = 'htmlobject_tabs';
 		$tab->boxcss = 'tab-content noborder';
@@ -139,16 +147,16 @@ var $table_bezeichner;
 
 	//--------------------------------------------
 	/**
-	 * Sort
+	 * Select
 	 *
 	 * @access public
 	 * @return htmlobject_template
 	 */
 	//--------------------------------------------
-	function sort( $visible = false ) {
+	function select( $visible = false ) {
 		if($visible === true) {
-			require_once($this->classdir.'bestandsverwaltung.recording.form.index.sort.class.php');
-			$controller = new bestandsverwaltung_recording_form_index_sort($this);
+			require_once($this->classdir.'formbuilder.attribs.select.class.php');
+			$controller = new formbuilder_attribs_select($this);
 			$controller->tpldir = $this->tpldir;
 			$controller->lang = $this->lang;
 			$controller->actions_name = $this->actions_name;
@@ -159,19 +167,42 @@ var $table_bezeichner;
 			return $data;
 		}
 	}
-
+	
 	//--------------------------------------------
 	/**
-	 * Edit
+	 * Insert
 	 *
 	 * @access public
 	 * @return htmlobject_template
 	 */
 	//--------------------------------------------
-	function edit( $visible = false ) {
+	function insert( $visible = false ) {
 		if($visible === true) {
-			require_once($this->classdir.'bestandsverwaltung.recording.form.index.edit.class.php');
-			$controller = new bestandsverwaltung_recording_form_index_edit($this);
+			require_once($this->classdir.'formbuilder.attribs.insert.class.php');
+			$controller = new formbuilder_attribs_insert($this);
+			$controller->tpldir = $this->tpldir;
+			$controller->lang = $this->lang;
+			$controller->actions_name = $this->actions_name;
+			$controller->message_param = $this->message_param;
+			$controller->table_prefix = $this->table_prefix;
+			$controller->table_bezeichner = $this->table_bezeichner;
+			$data = $controller->action();
+			return $data;
+		}
+	}
+	
+	//--------------------------------------------
+	/**
+	 * Move
+	 *
+	 * @access public
+	 * @return htmlobject_template
+	 */
+	//--------------------------------------------
+	function move( $visible = false ) {
+		if($visible === true) {
+			require_once($this->classdir.'formbuilder.attribs.move.class.php');
+			$controller = new formbuilder_attribs_move($this);
 			$controller->tpldir = $this->tpldir;
 			$controller->lang = $this->lang;
 			$controller->actions_name = $this->actions_name;

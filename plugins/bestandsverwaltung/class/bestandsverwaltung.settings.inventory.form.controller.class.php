@@ -26,8 +26,9 @@
  * @license GNU GENERAL PUBLIC LICENSE Version 2 (see ../LICENSE.TXT)
  * @version 1.0
  */
+require_once(CLASSDIR.'lib/formbuilder/formbuilder.controller.class.php');
 
-class bestandsverwaltung_settings_inventory_form_controller
+class bestandsverwaltung_settings_inventory_form_controller extends formbuilder_controller
 {
 /**
 * name of action buttons
@@ -48,11 +49,6 @@ var $message_param = 'settings_form_msg';
 */
 var $identifier_name = 'settings_form_ident';
 
-var $tpldir;
-
-var $lang = array();
-
-
 	//--------------------------------------------
 	/**
 	 * Constructor
@@ -65,33 +61,24 @@ var $lang = array();
 	 */
 	//--------------------------------------------
 	function __construct($controller) {
+		$this->controller = $controller;
 		$this->file = $controller->file;
-		$this->response = $controller->response->response();
+		$this->response = $controller->response;
 		$this->db = $controller->db;
 		$this->user = $controller->user;
-		$this->controller = $controller;
-		$this->classdir = $controller->classdir;
-		$this->profilesdir = $controller->profilesdir;
 		$this->settings = $controller->settings;
-		#$this->ini = $this->file->get_ini( $this->settings, true, true );
-	}
+		$this->classdir = CLASSDIR.'lib/formbuilder/';
+		$this->tpldir = CLASSDIR.'lib/formbuilder/templates/';
+		
+		$this->table_prefix = 'bestand_';
+		$this->table_bezeichner = 'bezeichner';
 
-	//--------------------------------------------
-	/**
-	 * Action
-	 *
-	 * @access public
-	 * @param string $action
-	 * @return htmlobject_tabmenu
-	 */
-	//--------------------------------------------
-	function action($action = null) {
-		require_once($this->classdir.'bestandsverwaltung.recording.form.controller.class.php');
-		$controller = new bestandsverwaltung_recording_form_controller($this);
-		$controller->tpldir = $this->tpldir;
-		$data = $controller->action();
-
-		return $data;
+		// Validate user
+		#$groups = array();
+		#if(isset($this->controller->settings['settings']['supervisor'])) {
+		#	$groups[] = $this->controller->settings['settings']['supervisor']; 
+		#}
+		#$this->is_valid = $this->controller->user->is_valid($groups);
 	}
 
 }

@@ -1,0 +1,53 @@
+<div id="settings_identifiers">
+
+
+
+	<div style="margin: 10px 10px 20px 0;" class="noprint">
+		<form action="{thisfile}" method="GET" enctype="multipart/form-data" id="identifiers_form" class="form-horizontal">
+		{form}
+
+		<div class="float-left" style="padding: 7px 0 0 0;">{counter}</div>
+		<div class="float-right">
+			<div class="buttons">{submit}</div>
+		</div>
+		<div class="float-right" style="width: 500px; margin: 0 20px 0 30px;">
+			{tables}
+			{filter}
+		</div>
+		</form>
+		<div style="clear:both;" class="floatbreaker">&#160;</div>
+	</div>
+	<div style="clear:both;" class="floatbreaker">&#160;</div>
+
+	<form class="form-horizontal">
+		{data}
+	</form>
+
+</div>
+<script type="text/javascript">
+var remove = {
+	confirm : function( element, identifier, attrib ) {
+		var modalid = phppublisher.modal.init('');
+		var c = document.createElement("div");
+		c.style.textAlign = 'center';
+		c.style.margin = '30px';
+		var t = document.createElement("div");
+		t.innerHTML = 'Remove '+identifier+' from attribute '+attrib+'?<br><br>';
+		var b = document.createElement("button");
+		b.className = 'btn btn-sm btn-default';
+		b.innerHTML = 'ok';
+		b.type = 'button';
+		b.onclick = function() {
+			$('#'+modalid).modal('hide');
+			phppublisher.wait();
+			location.href = element.href;
+		}
+		c.appendChild(t);
+		c.appendChild(b);
+
+		$('#'+modalid).modal('show');
+ 		phppublisher.modal.print(c);
+		b.focus();
+	}
+}
+</script>

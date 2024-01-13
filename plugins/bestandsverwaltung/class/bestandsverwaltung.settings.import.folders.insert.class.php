@@ -201,9 +201,9 @@ var $lang = array();
 				$i++;
 			}
 			// handle prozess table to form
-			require_once(CLASSDIR.'plugins/bestandsverwaltung/class/bestandsverwaltung.class.php');
+			require_once(CLASSDIR.'lib/formbuilder/formbuilder.class.php');
 			$ARRAYprozesses = $this->db->select('bestand_prozess', array('merkmal_lang','merkmal_kurz','datentyp'), array('bezeichner_kurz' => '*'));
-			$OBJbestandsverwaltung = new bestandsverwaltung($this->db);
+			$OBJbestandsverwaltung = new formbuilder($this->db);
 			if(is_array($ARRAYprozesses)) {
 				foreach( $ARRAYprozesses as $k => $r ) {
 					$d = array_merge($d, $OBJbestandsverwaltung->element($r, 'process', 'prozess'));
