@@ -311,7 +311,7 @@ var $tpldir;
 		if($visible === true) {
 			require_once($this->classdir.'standort.settings.form.controller.class.php');
 			$controller = new standort_settings_form_controller($this);
-			$controller->tpldir = $this->tpldir;
+			#$controller->tpldir = $this->tpldir;
 			$data = $controller->action();
 		}
 		$content['label']   = $this->lang['tab_form'];

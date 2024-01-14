@@ -42,7 +42,15 @@ var $hide_empty = false;
 		$this->settings   = $controller->settings;
 		$this->fields     = array();
 		$this->datadir    = $this->controller->datadir;
-		$this->tables     = $this->db->select($this->settings['query']['prefix'].'index',array('tabelle_kurz','tabelle_lang'));
+
+		$tables     = $this->db->select($this->settings['query']['prefix'].'index',array('tabelle_kurz','tabelle_lang'));
+		if(is_array($tables)) {
+			foreach($tables as $table) {
+				$this->tables[$table['tabelle_kurz']] = $table['tabelle_lang'];
+			}
+		} else {
+			$this->tables = array();
+		}
 		
 		$this->standort   = $controller->standort;
 
@@ -83,6 +91,9 @@ var $hide_empty = false;
 		if( $table !== '') {
 			$this->response->add('standort_select', $table);
 		}
+
+		require_once(CLASSDIR.'lib/formbuilder/formbuilder.class.php');
+		$this->formbuilder = new formbuilder($this->db);
 	}
 
 	//--------------------------------------------
@@ -118,6 +129,48 @@ var $hide_empty = false;
 			$t->add($GLOBALS['settings']['config']['baseurl'],'baseurl');
 			$t->add($response->form);
 			$t->group_elements(array('param_' => 'form'));
+
+### TODO no elements when in prolog
+			
+			// group custom form elements
+			$data = NULL;
+			foreach($this->tables as $k => $table) {
+				$t->group_elements(array($k.'_' => $k));
+				$element = $t->get_elements($k);
+				if(isset($element)) {
+					$field = $this->response->html->customtag('fieldset');
+					$field->css = 'fieldset';
+					$field->add('<legend>'.$table.'</legend>');
+					$field->add($element);
+					$data[] = $field;
+				}
+				$t->remove($k);
+			}
+			if(isset($data)) {
+				$t->add($data,'CUSTOM');
+			} else {
+				$t->add('','CUSTOM');
+			}
+			
+			// group lost form elements
+			$data = NULL;
+			$t->group_elements(array('lost_' => 'LOST'));
+			$element = $t->get_elements('LOST');
+			if(isset($element)) {
+				$field = $this->response->html->customtag('fieldset');
+				$field->css = 'fieldset';
+				$field->add('<legend style="color:red;">Lost&amp;Found</legend>');
+				$field->add($element);
+				$data[] = $field;
+			}
+			$t->remove('LOST');
+			if(isset($data)) {
+				$t->add($data,'LOST');
+			} else {
+				$t->add('','LOST');
+			}
+			
+			
 			$t->group_elements(array('merkmal_' => 'merkmale'));
 
 			if(isset($this->id)) {
@@ -496,132 +549,82 @@ var $hide_empty = false;
 				$d['parent'] = '';
 			}
 
+			// Get attribs from tables
 			$result = array();
 			if(is_array($this->tables)) {
-				foreach($this->tables as $table) {
-				
-					# TODO handle wildcard *
-				
-					$result[$table['tabelle_kurz']]['data'] = $this->db->select($this->settings['query']['prefix'].''.$table['tabelle_kurz'],'*',array('bezeichner_kurz', $this->ebene));
-					$result[$table['tabelle_kurz']]['title'] = $table['tabelle_lang'];
+				foreach($this->tables as $k => $t) {
+					$sql  = 'SELECT * ';
+					$sql .= 'FROM '.$this->settings['query']['prefix'].$k.' ';
+					$sql .= 'WHERE `bezeichner_kurz`=\''.$this->ebene.'\' ';
+					$sql .= 'OR `bezeichner_kurz`LIKE \'%,'.$this->ebene.'\' ';
+					$sql .= 'OR `bezeichner_kurz`LIKE \'%,'.$this->ebene.',%\' ';
+					$sql .= 'OR `bezeichner_kurz`LIKE \''.$this->ebene.',%\' ' ;
+		 			// Wildcard *
+					$sql .= 'OR `bezeichner_kurz`=\'*\' ';
+					$sql .= 'ORDER BY `row` ';
+					$result[$k] = $this->db->handler()->query($sql);
 				}
 			}
 			if(is_array($result) && count($result) > 0) {
 				foreach ( $result as $k => $v ) {
-					if(is_array($v) && isset($v['data']) && is_array($v['data']) && $v['data'] !== '') {
-
-						$h = $this->response->html->customtag('legend');
-
-						$h->add($v['title']);
-						$d['merkmal_'.$k.'_head']['object'] = $h;
-						$i = 0;
-						foreach ( $v['data'] as $r ) {
-							switch($r['datentyp']) {
-								default:
-								case '':
-								case 'text':
-									$d['merkmal_'.$k.'_'.$i]['label']                     = $r['merkmal_lang'];
-									$d['merkmal_'.$k.'_'.$i]['object']['type']            = 'htmlobject_input';
-									$d['merkmal_'.$k.'_'.$i]['object']['attrib']['name']  = $k.'['.$r['merkmal_kurz'].']';
-									$d['merkmal_'.$k.'_'.$i]['object']['attrib']['value'] = '';
-									$d['merkmal_'.$k.'_'.$i]['object']['attrib']['title'] = $r['merkmal_kurz'];
-									if(
-										isset($fields[$k]) && 
-										array_key_exists($r['merkmal_kurz'], $fields[$k])
-									) {
-										$d['merkmal_'.$k.'_'.$i]['object']['attrib']['value'] = $fields[$k][$r['merkmal_kurz']]['wert'];
-									}
-									else if($this->hide_empty === true) {
-										$d['merkmal_'.$k.'_'.$i] = '';
-									}
-								break;
-								case 'bool':
-									$d['merkmal_'.$k.'_'.$i]['label']                     = $r['merkmal_lang'];
-									$d['merkmal_'.$k.'_'.$i]['object']['type']            = 'htmlobject_input';
-									$d['merkmal_'.$k.'_'.$i]['object']['attrib']['type']  = 'checkbox';
-									$d['merkmal_'.$k.'_'.$i]['object']['attrib']['name']  = $k.'['.$r['merkmal_kurz'].']';
-									$d['merkmal_'.$k.'_'.$i]['object']['attrib']['value'] = '1';
-									$d['merkmal_'.$k.'_'.$i]['object']['attrib']['title'] = $r['merkmal_kurz'];
-									if(
-										isset($fields[$k]) && 
-										array_key_exists($r['merkmal_kurz'], $fields[$k])
-									) {
-										$d['merkmal_'.$k.'_'.$i]['object']['attrib']['checked'] = true;
-									}
-									else if($this->hide_empty === true) {
-										$d['merkmal_'.$k.'_'.$i] = '';
-									}
-								break;
-								case 'int':
-								case 'integer':
-									$d['merkmal_'.$k.'_'.$i]['label']                     = $r['merkmal_lang'];
-									$d['merkmal_'.$k.'_'.$i]['validate']['regex']         = '/^[0-9]+$/i';
-									$d['merkmal_'.$k.'_'.$i]['validate']['errormsg']      = sprintf('%s must be number', $r['merkmal_lang']);
-									$d['merkmal_'.$k.'_'.$i]['object']['type']            = 'htmlobject_input';
-									$d['merkmal_'.$k.'_'.$i]['object']['attrib']['name']  = $k.'['.$r['merkmal_kurz'].']';
-									$d['merkmal_'.$k.'_'.$i]['object']['attrib']['title'] = $r['merkmal_kurz'];
-									if(
-										isset($fields[$k]) && 
-										array_key_exists($r['merkmal_kurz'], $fields[$k])
-									) {
-										$d['merkmal_'.$k.'_'.$i]['object']['attrib']['value'] = $fields[$k][$r['merkmal_kurz']]['wert'];
-									}
-									else if($this->hide_empty === true) {
-										$d['merkmal_'.$k.'_'.$i] = '';
-									}
-								break;
-
-#### TODO change katalog to select
-
-								case 'katalog':
-									$merkmal = $this->db->handler()->escape($r['merkmal_kurz']);
-									$where   = '`bezeichner_kurz`=\''.$r['bezeichner_kurz'].'\' AND `merkmal_kurz`=\''.$merkmal.'\'';
-									$options = $this->db->select($this->settings['query']['content'].'_katalog','wert', $where);
-									if($options === ''){
-										$where   = '`merkmal_kurz`=\''.$merkmal.'\'';
-										$options = $this->db->select($this->settings['query']['content'].'_katalog','wert', $where);
-									}
-									$options = $this->db->select($this->settings['query']['content'].'_katalog','wert', array('merkmal_kurz', $r['merkmal_kurz']));
-									$d['merkmal_'.$k.'_'.$i]['label']                     = $r['merkmal_lang'];
-									$d['merkmal_'.$k.'_'.$i]['object']['type']            = 'htmlobject_select';
-									$d['merkmal_'.$k.'_'.$i]['object']['attrib']['index'] = array('wert','wert');
-									$d['merkmal_'.$k.'_'.$i]['object']['attrib']['name']  = $k.'['.$r['merkmal_kurz'].']';
-									$d['merkmal_'.$k.'_'.$i]['object']['attrib']['options'] = $options;
-									$d['merkmal_'.$k.'_'.$i]['object']['attrib']['title'] = $r['merkmal_kurz'];
-									if(
-										isset($fields[$k]) && 
-										array_key_exists($r['merkmal_kurz'], $fields[$k])
-									) {
-										$d['merkmal_'.$k.'_'.$i]['object']['attrib']['selected'] = array($fields[$k][$r['merkmal_kurz']]['wert']);
-									}
-									else if($this->hide_empty === true) {
-										$d['merkmal_'.$k.'_'.$i] = '';
-									}
-								break;
+					$fields = array();
+					$found  = array();
+					if(is_array($v)) {
+						// handle fields
+						if(isset($this->fields[$k])) {
+							$fields = $this->fields[$k];
+							// unset field to find lost tables
+							unset($this->lost[$k]);
+						}
+						foreach ( $v as $r ) {
+							// handle lost
+							$found[$r['merkmal_kurz']] = '';
+							$addempty = true;
+							if($k === 'prozess') {
+								$addempty = false;
 							}
-
-							if($d['merkmal_'.$k.'_'.$i] !== '') {
-								if(isset($r['pflichtfeld']) && $r['pflichtfeld'] == 1) {
-									$d['merkmal_'.$k.'_'.$i]['required'] = true;
-								}
-								if(isset($r['minimum']) && $r['minimum'] !== '') {
-									$d['merkmal_'.$k.'_'.$i]['object']['attrib']['minlength'] = $r['minimum'];
-								}
-								if(isset($r['maximum']) && $r['maximum'] !== '') {
-									$d['merkmal_'.$k.'_'.$i]['object']['attrib']['maxlength'] = $r['maximum'];
-								}
-							}
-							$i++;
+							
+							$table = $this->settings['query']['prefix'];
+							
+							
+							$d = array_merge($d, $this->formbuilder->element($r, $k, $k, $fields, $table, $addempty));
 						}
 					} else {
 						if(is_string($v) && $v !== '') {
-							$d['merkmal_'.$k.'_0'] = $v;
-						} else {
-							$d['merkmal_'.$k.'_0'] = '';
+							$d[$k.'_0'] = $v;
+						}
+					}
+					// handle lost
+					$lost[$k] = array_diff_key($fields, $found);
+					if(count($lost[$k]) < 1) {
+						unset($lost[$k]);
+					}
+				}
+			}
+
+			#### TODO
+			// handle lost
+			if(isset($this->lost)) {
+				unset($this->lost['TODO']);
+				unset($this->lost['SYSTEM']);
+				$lost = array_merge($lost, $this->lost);
+			}
+			if(isset($lost) && count($lost) > 0) {
+				foreach($lost as $key => $l) {
+					if(is_array($l)) {
+						foreach($l as $k => $v) {
+							$d['lost_'.$key.''.$k]['label']                     = $k;
+							$d['lost_'.$key.''.$k]['object']['type']            = 'htmlobject_input';
+							$d['lost_'.$key.''.$k]['object']['attrib']['name']  = $key.'['.$k.']';
+							$d['lost_'.$key.''.$k]['object']['attrib']['value'] = $v['wert'];
+							$d['lost_'.$key.''.$k]['object']['attrib']['title'] = 'row: '.$v['row'].' - tabelle: '.$key;
 						}
 					}
 				}
 			}
+			
+			
+			
 		} else {
 			$d['bezeichner'] = 'Error: Missing Bezeichner';
 			$d['parent'] = '';
