@@ -29,7 +29,7 @@ var $date_format = "Y-m-d H:i";
 	function __construct($file, $response, $db = null, $user = null) {
 		$this->file     = $file;
 		$this->response = $response;
-		#$this->db       = $db;
+		$this->db       = $db;
 		$this->user     = $user;
 		$this->ini      = $this->file->get_ini(PROFILESDIR.'cafm.one.ini');
 		if(isset($this->ini['login']['url']) && $this->ini['login']['url'] === 'localhost') {

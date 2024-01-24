@@ -8,13 +8,13 @@
 }
 .icon {
 	position: relative;
-	top: 2px;
+	top: 0;
 	display: inline-block;
 	font-family: 'Glyphicons Halflings';
 	font-style: normal;
 	font-weight: normal;
 	line-height: inherit;
-
+	font-size: 0.8rem;
 	-webkit-font-smoothing: antialiased;
 	-moz-osx-font-smoothing: grayscale;
 }
