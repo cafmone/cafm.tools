@@ -435,8 +435,13 @@ var $changelog;
 	 */
 	//--------------------------------------------	
 	function __log() {
-		(@touch($this->changelog) === true) ? $return = '' : $return = 'Error: Failed to write db log to '.$this->changelog;
-		return $return;
+		$handle = @fopen($this->changelog, "w");
+		if($handle) {
+			(@fwrite($handle, time()) !== false) ? $return = '' : $return = 'Error: Failed to write query log to '.$this->changelog;
+			return $return;
+		} else {
+			return 'Error: Failed to open query log '.$this->changelog;
+		}
 	}
 
 }
