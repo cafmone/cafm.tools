@@ -357,8 +357,8 @@ var $__attribs;
 		$table = $response->html->tablebuilder( 'bestand_select', $response->get_array() );
 		## TODO handle first impact
 		if(isset($this->filter['group']) && $this->filter['group'] !== 'single') {
-			$table->sort  = 'bezeichner';
-			$table->order = 'ASC';
+			$table->sort  = 'SUMM';
+			$table->order = 'DESC';
 		} else {
 			$table->sort  = 'date';
 			$table->order = 'DESC';
@@ -1087,6 +1087,9 @@ var $__attribs;
 		$d['export_table']['object']['attrib']['multiple'] = true;
 		$d['export_table']['object']['attrib']['options']  = $tables;
 		$d['export_table']['object']['attrib']['style']    = 'width:150px; height: 115px;';
+		if(isset($this->filter['group']) && $this->filter['group'] !== 'single') {
+			$d['export_table']['object']['attrib']['disabled'] = true;
+		}
 
 		$d['bom']['label']                     = 'BOM';
 		$d['bom']['css']                       = 'autosize';
@@ -1697,7 +1700,7 @@ var $__attribs;
 		$settings['table']     = $this->response->html->request()->get('export[table]');
 		$settings['inline']    = $this->response->html->request()->get('export[inline]', true);
 
-		if($settings['delimiter'] === '' || $settings['table'] === '') {
+		if($settings['delimiter'] === '') {
 			echo 'nothing to do';
 			exit(0);
 		}
@@ -1730,7 +1733,12 @@ var $__attribs;
 			}
 		}
 
-		$name = 'bestand.'.implode('.',$settings['table']).'.'.date('Y-m-d',time()).'.csv';
+		// handle no table selected
+		if($settings['table'] !== '') {
+			$name = 'bestand.'.implode('.',$settings['table']).'.'.date('Y-m-d',time()).'.csv';
+		} else {
+			$name = 'bestand.'.date('Y-m-d',time()).'.csv';
+		}
 
 		if(isset($settings['inline'])) {
 			echo '<!DOCTYPE html>';
