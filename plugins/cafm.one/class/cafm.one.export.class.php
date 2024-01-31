@@ -64,10 +64,8 @@ var $lang = array();
 		$this->db = $controller->db;
 		$this->user = $controller->user;
 
-		### TODO
+		### TODO inject?
 		$this->tables = array();
-
-
 
 		$prefix = $this->response->html->request()->get('prefix');
 		// handle empty prefix
@@ -96,9 +94,12 @@ var $lang = array();
 
 		#$this->response->html->help($_REQUEST);
 
+		require_once(CLASSDIR.'plugins/bestandsverwaltung/class/gewerke.class.php');
+		$this->gewerke = new gewerke($this->db);
 
+#$this->response->html->help($this->gewerke);
 
-
+		$this->plugins = $this->file->get_ini(PROFILESDIR.'/plugins.ini');
 /*
 		$this->controller = $controller;
 
@@ -209,9 +210,10 @@ var $lang = array();
 					$strbez = $tmp[0]['bezeichner_lang'].' ('.$bezeichner.')'."\n\n";
 				}
 				if(isset($this->gewerke)) {
-					$gewerke = $this->gewerke;
+					$gewerke = $this->gewerke->bezeichner2gewerk($bezeichner);
 				}
 			}
+	
 			$id = $this->response->html->request()->get('id');
 			if($id !== '') {
 				$strid .= 'ID: '.$id."\n\n";
@@ -474,20 +476,15 @@ $result = array();
 			$strbez = '';
 			$strid  = '';
 			$interval = $this->response->html->request()->get('interval');
-			$hide_disabled = $this->response->html->request()->get('hide_disabled');
-
 			$bezeichner = $this->db->handler()->escape($this->response->html->request()->get('bezeichner'));
-
+			$hide_disabled = $this->response->html->request()->get('hide_disabled');
 			if($bezeichner !== '') {
 				$tmp = $this->db->select('bezeichner','bezeichner_lang',array('bezeichner_kurz'=>$bezeichner));
 				if(isset($tmp[0]['bezeichner_lang'])) {
 					$strbez = $tmp[0]['bezeichner_lang'].' ('.$bezeichner.')'."\n\n";
 				}
-				if(isset($this->gewerke)) {
-					$gewerke = $this->gewerke;
-				}
+				$gewerke = $this->gewerke->bezeichner2gewerk($bezeichner);
 			}
-
 			$id = $this->response->html->request()->get('id');
 			if($id !== '') {
 				$strid .= 'ID: '.$id."\n\n";
@@ -555,18 +552,20 @@ $result = array();
 				$pdf->Write(5, date('Y-m-d H:i:s',$now)."\n");
 
 				// Standort
-				$standort = $this->response->html->request()->get('SYSTEM', true);
-				if(isset($standort['RAUMBUCHID'])) {
-					require_once(CLASSDIR.'plugins/bestandsverwaltung/class/raumbuch.class.php');
-					$raumbuch = new raumbuch($this->db);
-					$raumbuch->options = $raumbuch->options();
-					$pdf->SetFont('', 'B', 10);
-					$pdf->Write(5, 'Standort: ');
-					$pdf->SetFont('', '', 10);
-					if(isset($raumbuch->options[$raumbuch->indexprefix.$standort['RAUMBUCHID']])) {
-						$pdf->Write(5, $raumbuch->options[$raumbuch->indexprefix.$standort['RAUMBUCHID']]['label'].' ('.$standort['RAUMBUCHID'].')'."\n");
-					} else {
-						$pdf->Write(5, $standort['RAUMBUCHID']."\n");
+				if(in_array('standort', $this->plugins)) {
+					$standort = $this->response->html->request()->get('SYSTEM', true);
+					if(isset($standort['RAUMBUCHID'])) {
+						require_once(CLASSDIR.'plugins/standort/class/standort.class.php');
+						$raumbuch = new standort($this->db, $this->file);
+						$raumbuch->options = $raumbuch->options();
+						$pdf->SetFont('', 'B', 10);
+						$pdf->Write(5, 'Standort: ');
+						$pdf->SetFont('', '', 10);
+						if(isset($raumbuch->options[$raumbuch->indexprefix.$standort['RAUMBUCHID']])) {
+							$pdf->Write(5, $raumbuch->options[$raumbuch->indexprefix.$standort['RAUMBUCHID']]['label'].' ('.$standort['RAUMBUCHID'].')'."\n");
+						} else {
+							$pdf->Write(5, $standort['RAUMBUCHID']."\n");
+						}
 					}
 				}
 				$pdf->Write(5, "\n");
@@ -574,9 +573,38 @@ $result = array();
 				// Id
 				$pdf->Write(5, $strid);
 
-#### TODO
-				$tables = $this->__attribs($bezeichner);
+				// handle attribs - only available
+				foreach($this->tables as $k => $t) {
+					$sql  = 'SELECT `merkmal_kurz`,`merkmal_lang`, `datentyp` ';
+					$sql .= 'FROM `bestand_'.$k.'` ';
+					$sql .= 'WHERE (';
+					$sql .= '`bezeichner_kurz` = \'*\' ';
+					$sql .= 'OR `bezeichner_kurz` = \''.$bezeichner.'\' ';
+					$sql .= 'OR `bezeichner_kurz` LIKE \'%,'.$bezeichner.'\' ';
+					$sql .= 'OR `bezeichner_kurz` LIKE \'%,'.$bezeichner.',%\' ';
+					$sql .= 'OR `bezeichner_kurz` LIKE \''.$bezeichner.',%\') ';
+					$res = $this->db->handler->query($sql);
+					if(is_array($res)) {
+						foreach($res as $r) {
+							if(isset($r['merkmal_lang']) && $r['merkmal_lang'] !== ''){ 
+								$table[$k][$r['merkmal_kurz']]['label'] = $r['merkmal_lang'];
+							} else {
+								$table[$k][$r['merkmal_kurz']]['label'] = $r['merkmal_kurz'];
+							}
+							$table[$k][$r['merkmal_kurz']]['type'] = $r['datentyp'];
+						}
+					}
+				}
 
+				// handle options
+				$opts = $this->db->select('bestand_options',array('row','value'));
+				if(is_array($opts)) {
+					$options = array();
+					foreach($opts as $option) {
+						$options[$option['row']] = $option['value'];
+					}
+					unset($opts);
+				}
 
 				foreach($attribs as $key => $value) {
 					if(is_array($value)) {
@@ -597,8 +625,16 @@ $result = array();
 									$v = implode(', ', $v);
 								}
 								if( isset($table[$key]) && isset($table[$key][$k]) ) {
-									$label = $table[$key][$k];
-									$pdf->Write(5, $label.': '.$v."\n");
+									$label = $table[$key][$k]['label'];
+									$value = $v;
+									if(isset($options)) {
+										if($table[$key][$k]['type'] === 'select') {
+											if(is_numeric($value) && isset($options[$value])) {
+												$value = $options[$value];
+											}
+										}
+									}
+									$pdf->Write(5, $label.': '.$value."\n");
 								}
 								else if($key === 'TODO') {
 									$pdf->Write(5, $k.': '.$v."\n");
@@ -618,11 +654,11 @@ $result = array();
 					$pdf->Write(5, str_replace('<br>',"\n",$gewerke)."\n");
 				}
 
-### TODO configure files link
+
 
 				// Files
 				if($id !== '') {
-					$path = $this->profilesdir.'/bestand/devices/'.$id;
+					$path = $this->profilesdir.'/webdav/bestand/devices/'.$id;
 					$f = $this->file->get_files($path);
 					if(is_array($f)) {
 						$url  = $_SERVER['REQUEST_SCHEME'].'://';
@@ -630,8 +666,9 @@ $result = array();
 						$url .= $this->response->html->thisurl.'/';
 						$url .= '?index_action=plugin';
 						$url .= '&index_action_plugin=bestandsverwaltung';
-						$url .= '&'.$this->controller->controller->actions_name.'=download';
-						$url .= '&path=/bestand/devices/'.$id.'/';
+### TODO configure files link
+						$url .= '&bestandsverwaltung_action=download';
+						$url .= '&path=/devices/'.$id.'/';
 
 						$pdf->setColor('text',0,0,255);
 						$pdf->setFont('','U');
@@ -647,8 +684,8 @@ $result = array();
 				$qrcodeini = $this->file->get_ini($this->profilesdir.'bestandsverwaltung.qrcode.ini');
 				$style = array(
 					'border' => true,
-					'vpadding' => 'auto',
-					'hpadding' => 'auto',
+					'vpadding' => '2',
+					'hpadding' => '2',
 					'fgcolor' => array(0,0,0),
 					'bgcolor' => array(255,255,255),
 					'module_width' => 1,
@@ -670,6 +707,7 @@ $result = array();
 							$url .= $this->response->html->thisurl.'/';
 							$url .= '?index_action=plugin';
 							$url .= '&index_action_plugin=bestandsverwaltung';
+### TODO configure files link
 							$url .= '&'.$this->controller->controller->actions_name.'=inventory';
 							$url .= '&'.$this->controller->actions_name.'=select';
 							$url .= '&filter[id]='.$id;
@@ -682,9 +720,9 @@ $result = array();
 						$pdf->write1DBarcode($id, 'C39', '125', '58', '70', 10, 0.5, $style, 'N');
 					}
 					else if($qtype === 'qrcode') {
-						$pdf->write2DBarcode($url, 'QRCODE,H', 160, 56, 40, 40, $style, 'N');
-						$pdf->SetY(93);
-						$pdf->SetX(168);
+						$pdf->write2DBarcode($url, 'QRCODE,H', 165, 49, 40, 40, $style, 'N');
+						$pdf->SetY(80);
+						$pdf->SetX(172);
 						$pdf->setColor('text',0,0,255);
 						$pdf->setFont('','U',9);
 						$pdf->Write(5,'bearbeiten', $url, false, 'L', false);
@@ -697,7 +735,8 @@ $result = array();
 						$backlink .= $_SERVER['SERVER_NAME'];
 						$backlink .= $this->response->html->thisurl.'/';
 						$backlink .= '?index_action=plugin';
-						$backlink .= '&index_action_plugin=arbeitskarte';
+### TODO configure files link
+						$backlink .= '&index_action_plugin=checkliste';
 						$backlink .= '&'.$this->actions_name.'=step3';
 						$backlink .= '&interval='.$interval;
 						$backlink .= '&bezeichner='.$bezeichner;
@@ -796,13 +835,13 @@ $result = array();
 								$pdf->SetFont('', 'B', 10);
 								$pdf->Write(5, $todos['label']."\n\n");
 							}
-
+							
 							// timestamp
-							if(isset($todos['time'])){
+							if(isset($todos['time']) && $todos['time'] !== '' && $todos['time'] !== 0){
 								$pdf->SetFont('', '', 8);
 								$pdf->Write(4, 'Last Update '.date($this->date_format, $todos['time'])."\n\n");
 							}
-
+							
 							// copyright
 							if(isset($todos['copyright']) && $todos['copyright'] !== ''){
 								$pdf->setX(PDF_MARGIN_LEFT+3);
@@ -895,8 +934,10 @@ $result = array();
 															$pdf->AddPage();
 															$pdf->useTemplate($pdf->importPage(2));
 														}
-
-														$interval = '('.$value['interval'].' / '.$value['period'].' / '.$value['person'].')';
+														$interval = '';
+														if($value['interval'] !== '0' && $value['period'] !== '0' && $value['person'] !== '0') {
+															$interval = '('.$value['interval'].' / '.$value['period'].' / '.$value['person'].')';
+														}
 														// replace \n by <br>
 														$text = str_replace("\n", '<br>', $value['label']).' '.$interval;
 														// check disabled
@@ -1001,6 +1042,7 @@ $result = array();
 			}
 		}
 	}
+
 
 	//--------------------------------------------
 	/**
