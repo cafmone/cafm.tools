@@ -145,6 +145,7 @@ var $table_bezeichner;
 	function identifiers() {
 		$str = '';
 		$response = $this->response;
+		$form = $response->get_form($this->actions_name, 'identifiers');
 
 		#$sql  = 'SELECT bezeichner_kurz, COUNT(*) FROM bezeichner GROUP BY bezeichner_kurz HAVING COUNT(*) > 1';
 
@@ -163,8 +164,18 @@ var $table_bezeichner;
 		$sql .= 'ORDER BY label';
 
 		$bezeichner = $this->db->handler()->query($sql);
-
-		$form = $response->get_form($this->actions_name, 'identifiers');
+		if(!is_array($bezeichner)) {
+			$_REQUEST[$this->message_param]['error'] = $bezeichner;
+			$f['tables'] = '';
+			$f['filter_empty'] = '';
+			$f['counter'] = '';
+			$f['data_0'] = '';
+			$form->add($f);
+			$form->add('','submit');
+			$response->form = $form;
+			$response->dataform = '';
+			return $response;
+		}
 
 		$f = array();
 		$d = array();

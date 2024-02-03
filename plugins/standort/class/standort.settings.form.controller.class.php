@@ -52,7 +52,11 @@ var $message_param = 'standort_form_msg';
 			$this->prefix = '';
 		}
 		$this->table_prefix = $this->prefix.'';
-		$this->table_bezeichner = $this->prefix.'bezeichner';
+		if(isset($this->settings['query']['identifiers'])) {
+			$this->table_bezeichner = $this->settings['query']['identifiers'];
+		} else {
+			$this->table_bezeichner = $this->prefix.'identifiers';
+		}
 	}
 
 }
