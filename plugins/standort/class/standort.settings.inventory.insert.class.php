@@ -317,7 +317,7 @@ var $hide_empty = false;
 		$form     = $response->form;
 		if(!$form->get_errors() && $response->submit()) {
 			foreach($this->tables as $table) {
-				$f[$table['tabelle_kurz']] = $form->get_request($table['tabelle_kurz']);
+				$f[$table] = $form->get_request($table);
 			}
 			$user = $this->controller->user->get();
 			if(isset($error) && $error !== '') {
