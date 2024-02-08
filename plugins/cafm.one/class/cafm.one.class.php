@@ -369,7 +369,12 @@ var $date_format = "Y-m-d H:i";
 						if(isset($gewerk['link']) && $gewerk['link'] !== '') {
 							$gwlink = ' <a href="'.$gewerk['link'].'" target="_blank" class="icon icon-link"></a>';
 						}
-						$gw = '<div class="head" style="margin: 10px 0 10px 0;"><b>'.$gewerk['label'].'</b>'.$gwlink.'</div>'."\n";
+						$gwnotice = '';
+						if(isset($gewerk['notice']) && $gewerk['notice'] !== '') {
+							$gwnotice = '<div><small>'.$gewerk['notice'].'</small></div>'."\n";
+						}
+						$gw = '<div class="head" style="margin: 10px 0 10px 0;"><b>'.$gewerk['label'].'</b>'.$gwlink.$gwnotice.'</div>'."\n";
+
 						$gwtmp = '';
 						if(isset($gewerk['groups']) && is_array($gewerk['groups'])){
 							foreach($gewerk['groups'] as $group) {
@@ -377,8 +382,22 @@ var $date_format = "Y-m-d H:i";
 								if(isset($group['link']) && $group['link'] !== '') {
 									$oblink = ' <a href="'.$group['link'].'" target="_blank" class="icon icon-link"></a>';
 								}
+
+								// handle linefeed
+								$group['label'] = str_replace("\r\n","\n",$group['label']);
+								$group['label'] = str_replace("\n","<br>",$group['label']);
+
+								// first line bold
+								$firstline = strpos($group['label'], '<br>');
+								if($firstline === false) {
+									$group['label'] = '<b>'.$group['label'].'</b>'.$oblink;
+								} else {
+									$substr = substr($group['label'], 0, $firstline);
+									$group['label'] = preg_replace('~('.$substr.')~','<b>$1</b>'.$oblink,$group['label'], 1);
+								}
+
 								$gwtmp .= '<div class="box" style="margin: 0 0 0 15px;">'."\n";
-								$obergruppe = '<div class="head" style="margin: 10px 0 10px 0;"><b>'.$group['label'].'</b>'.$oblink.'</div>'."\n";
+								$obergruppe = '<div class="head" style="margin: 10px 0 10px 0;">'.$group['label'].'</div>'."\n";
 								$tmp = '';
 								if(isset($group['groups']) && is_array($group['groups'])){
 									foreach($group['groups'] as $bk => $bgroup) {
@@ -387,11 +406,23 @@ var $date_format = "Y-m-d H:i";
 											$bglink = ' <a href="'.$bgroup['link'].'" target="_blank" class="icon icon-link"></a>';
 										}
 
-										$blockid = uniqid('p');
+										// handle linefeed
+										$bgroup['label'] = str_replace("\r\n","\n",$bgroup['label']);
+										$bgroup['label'] = str_replace("\n","<br>",$bgroup['label']);
 
+										// first line bold
+										$firstline = strpos($bgroup['label'], '<br>');
+										if($firstline === false) {
+											$bgroup['label'] = '<b>'.$bgroup['label'].'</b>'.$bglink ;
+										} else {
+											$substr = substr($bgroup['label'], 0, $firstline);
+											$bgroup['label'] = preg_replace('~('.$substr.')~','<b>$1</b>'.$bglink,$bgroup['label'], 1);
+										}
+
+										$blockid = uniqid('p');
 										$tmp .= '<div class="box" style="margin: 0 0 0 15px;" id="'.$blockid.'">'."\n";
 										$tmp .= '<div class="head" style="margin: 0 0 10px 0;">';
-										$tmp .= '<b>'.$bgroup['label'].'</b>'.$bglink;
+										$tmp .= $bgroup['label'];
 
 										// only init js when device available
 										if(isset($disablemode) && $disablemode !== '') {

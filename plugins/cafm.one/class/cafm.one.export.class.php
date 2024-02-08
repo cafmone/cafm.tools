@@ -705,12 +705,14 @@ $result = array();
 							$url  = $_SERVER['REQUEST_SCHEME'].'://';
 							$url .= $_SERVER['SERVER_NAME'];
 							$url .= $this->response->html->thisurl.'/';
-							$url .= '?index_action=plugin';
-							$url .= '&index_action_plugin=bestandsverwaltung';
+							$url .= 'shorturl/filter/bezeichner/'.$id;
+#							$url .= $this->response->html->thisurl.'/';
+#							$url .= '?index_action=plugin';
+#							$url .= '&index_action_plugin=bestandsverwaltung';
 ### TODO configure files link
-							$url .= '&'.$this->controller->controller->actions_name.'=inventory';
-							$url .= '&'.$this->controller->actions_name.'=select';
-							$url .= '&filter[id]='.$id;
+#							$url .= '&'.$this->controller->controller->actions_name.'=inventory';
+#							$url .= '&'.$this->controller->actions_name.'=select';
+#							$url .= '&filter[id]='.$id;
 						}
 						if($qrcodeini['url']['type'] === 'custom' && isset($qrcodeini['url']['path'])) {
 							$url = str_replace('{id}', $id, $qrcodeini['url']['path']);
