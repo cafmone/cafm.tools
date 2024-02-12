@@ -56,7 +56,6 @@ var $lang = array();
 	//--------------------------------------------
 	function __construct($controller) {
 
-
 		$this->taetigkeiten = $controller;
 
 		$this->file = $controller->file;
@@ -92,64 +91,12 @@ var $lang = array();
 		$this->profilesdir = PROFILESDIR;
 		$this->pdftpl = PROFILESDIR.'cafm.one/templates/Checklist.pdf';
 
-		#$this->response->html->help($_REQUEST);
-
 		require_once(CLASSDIR.'plugins/bestandsverwaltung/class/gewerke.class.php');
 		$this->gewerke = new gewerke($this->db);
 
-#$this->response->html->help($this->gewerke);
+		$this->settings = $this->file->get_ini(PROFILESDIR.'/settings.ini');
 
 		$this->plugins = $this->file->get_ini(PROFILESDIR.'/plugins.ini');
-/*
-		$this->controller = $controller;
-
-		$this->settings = $controller->settings;
-		$this->classdir = $controller->classdir;
-		$this->profilesdir = $controller->profilesdir;
-
-		$tables = $this->db->select('bestand_index', array('tabelle_kurz','tabelle_lang'), null, 'pos');
-		if(is_array($tables)) {
-			foreach($tables as $table) {
-				$this->tables[$table['tabelle_kurz']] = $table['tabelle_lang'];
-			}
-		} else {
-			$this->tables = array();
-		}
-
-		require_once(CLASSDIR.'plugins/cafm.one/class/cafm.one.class.php');
-		$this->taetigkeiten = new cafm_one
-($this->file, $this->response);
-
-### TODO diffrent path
-
-		$this->pdftpl = $this->profilesdir.'taetigkeiten/templates/Arbeitskarte.pdf';
-
-		require_once(CLASSDIR.'plugins/bestandsverwaltung/class/gewerke.class.php');
-		$this->gewerke = new gewerke($this->db);
-
-		$prefix = $this->response->html->request()->get('prefix');
-		// handle empty prefix
-		if($prefix === '') {
-			$tables = $this->taetigkeiten->tables();
-			// no tables => this should not happen
-			if(is_array($tables)) {
-				$this->prefix = implode(',',array_keys($tables));
-			} else {
-				if(is_string($tables)) {
-					echo $tables;
-				} else {
-					var_dump($tables);
-				}
-				exit;
-			}
-		}
-		else if (is_array($prefix)) {
-			$this->prefix = implode(',',array_keys($prefix));
-		} else {
-			$this->prefix = $prefix;
-		}
-*/
-
 	}
 
 	//--------------------------------------------
@@ -481,7 +428,7 @@ $result = array();
 			if($bezeichner !== '') {
 				$tmp = $this->db->select('bezeichner','bezeichner_lang',array('bezeichner_kurz'=>$bezeichner));
 				if(isset($tmp[0]['bezeichner_lang'])) {
-					$strbez = $tmp[0]['bezeichner_lang'].' ('.$bezeichner.')'."\n\n";
+					$strbez = $tmp[0]['bezeichner_lang'].' ['.$bezeichner.']'."\n\n";
 				}
 				$gewerke = $this->gewerke->bezeichner2gewerk($bezeichner);
 			}
@@ -572,6 +519,14 @@ $result = array();
 
 				// Id
 				$pdf->Write(5, $strid);
+				
+				// Gewerke
+				if(isset($gewerke) && $gewerke !== '') {
+					$pdf->SetFont('', 'B', 10);
+					$pdf->Write(5, "\nGewerk: ");
+					$pdf->SetFont('', '', 10);
+					$pdf->Write(5, str_replace('<br>',"\n",$gewerke)."\n");
+				}
 
 				// handle attribs - only available
 				foreach($this->tables as $k => $t) {
@@ -646,16 +601,6 @@ $result = array();
 
 ### TODO List todo attribs
 
-				// Gewerke
-				if(isset($gewerke) && $gewerke !== '') {
-					$pdf->SetFont('', 'B', 10);
-					$pdf->Write(5, "\nGewerk\n");
-					$pdf->SetFont('', '', 10);
-					$pdf->Write(5, str_replace('<br>',"\n",$gewerke)."\n");
-				}
-
-
-
 				// Files
 				if($id !== '') {
 					$path = $this->profilesdir.'/webdav/bestand/devices/'.$id;
@@ -704,15 +649,8 @@ $result = array();
 						if($qrcodeini['url']['type'] === 'auto') {
 							$url  = $_SERVER['REQUEST_SCHEME'].'://';
 							$url .= $_SERVER['SERVER_NAME'];
-							$url .= $this->response->html->thisurl.'/';
-							$url .= 'shorturl/filter/bezeichner/'.$id;
-#							$url .= $this->response->html->thisurl.'/';
-#							$url .= '?index_action=plugin';
-#							$url .= '&index_action_plugin=bestandsverwaltung';
-### TODO configure files link
-#							$url .= '&'.$this->controller->controller->actions_name.'=inventory';
-#							$url .= '&'.$this->controller->actions_name.'=select';
-#							$url .= '&filter[id]='.$id;
+							$url .= $this->settings['config']['baseurl'].'';
+							$url .= 'shorturl/bestand/filter/id/'.$id;
 						}
 						if($qrcodeini['url']['type'] === 'custom' && isset($qrcodeini['url']['path'])) {
 							$url = str_replace('{id}', $id, $qrcodeini['url']['path']);
@@ -727,7 +665,9 @@ $result = array();
 						$pdf->SetX(172);
 						$pdf->setColor('text',0,0,255);
 						$pdf->setFont('','U',9);
-						$pdf->Write(5,'bearbeiten', $url, false, 'L', false);
+						if($url !== $id) {
+							$pdf->Write(5,'bearbeiten', $url, false, 'L', false);
+						}
 					}
 				} else { 
 					// handle backlink
@@ -737,7 +677,7 @@ $result = array();
 						$backlink .= $_SERVER['SERVER_NAME'];
 						$backlink .= $this->response->html->thisurl.'/';
 						$backlink .= '?index_action=plugin';
-### TODO configure files link
+						### TODO configure link
 						$backlink .= '&index_action_plugin=checkliste';
 						$backlink .= '&'.$this->actions_name.'=step3';
 						$backlink .= '&interval='.$interval;
@@ -769,8 +709,6 @@ $result = array();
 								}
 							}
 						}
-						#$pdf->write2DBarcode($backlink, 'QRCODE,H', 160, 56, 40, 40, $style, 'N');
-
 						$pdf->SetY(45);
 						$pdf->SetX(172);
 						$pdf->setColor('text',0,0,255);
@@ -886,47 +824,81 @@ $result = array();
 										$pdf->setFont('','U',8);
 										$pdf->Write(5,'link', $gewerk['link'], false, 'L', false);
 									}
+									if(isset($gewerk['notice']) && $gewerk['notice'] !== '') {
+										$pdf->setFont('','',7);
+										$pdf->Write(5, "\n");
+										$pdf->setColor('text',0,0,0);
+										$pdf->Write(5, $gewerk['notice']);
+									}
 									$pdf->setColor('text',0,0,0);
-									$pdf->Write(5, "\n");
+									$pdf->Write(8, "\n");
 
 									if(isset($gewerk['groups']) && is_array($gewerk['groups'])){
 										foreach($gewerk['groups'] as $group) {
-
-											if($pdf->getY() > 230) {
+											if($pdf->getY() > 240) {
 												$pdf->AddPage();
 												$pdf->useTemplate($pdf->importPage(2));
 											}
-
-											$pdf->SetFont('', 'B', 9);
-											$pdf->Write(5, $group['label']);
-											if(isset($group['link']) && $group['link'] !== '') {
-												$pdf->Write(5,' ');
-												$pdf->setColor('text',0,0,255);
-												$pdf->setFont('','U',8);
-												$pdf->Write(5,'link', $group['link'], false, 'L', false);
+											$lines = explode("\n", $group['label']);
+											foreach($lines as $k => $line) {
+												if( $k === 0) {
+													$pdf->SetFont('', 'B', 9);
+													$pdf->Write(5, $line);
+													if(isset($group['link']) && $group['link'] !== '') {
+														$pdf->Write(5,' ');
+														$pdf->setColor('text',0,0,255);
+														$pdf->setFont('','U',8);
+														$pdf->Write(5,'link', $group['link'], false, 'L', false);
+														$pdf->Write(5, "\n");
+													}
+												} else {
+													$pdf->setColor('text',0,0,0);
+													$pdf->SetFont('', '', 8);
+													$pdf->Write(5, $line);
+													$pdf->Write(5, "\n");
+												}
+												if($pdf->getY() > 240) {
+													$pdf->AddPage();
+													$pdf->useTemplate($pdf->importPage(2));
+												}
 											}
+											$pdf->SetFont('', '', 8);
 											$pdf->setColor('text',0,0,0);
-											$pdf->Write(5, "\n");
+											$pdf->Write(8, "\n");
 
 											if(isset($group['groups']) && is_array($group['groups'])){
 												foreach($group['groups'] as $bau) {
 
-													if($pdf->getY() > 230) {
+													if($pdf->getY() > 240) {
 														$pdf->AddPage();
 														$pdf->useTemplate($pdf->importPage(2));
 													}
-
-													$pdf->SetFont('', 'B', 8);
-													$pdf->Write(5, '  '.$bau['label']);
-													if(isset($bau['link']) && $bau['link'] !== '') {
-														$pdf->Write(5,' ');
-														$pdf->setColor('text',0,0,255);
-														$pdf->setFont('','U',8);
-														$pdf->Write(5,'link', $bau['link'], false, 'L', false);
+													$lines = explode("\n", $bau['label']);
+													foreach($lines as $k => $line) {
+														if( $k === 0) {
+															$pdf->SetFont('', 'B', 9);
+															$pdf->Write(5, $line);
+															if(isset($bau['link']) && $bau['link'] !== '') {
+																$pdf->Write(5,' ');
+																$pdf->setColor('text',0,0,255);
+																$pdf->setFont('','U',8);
+																$pdf->Write(5,'link', $bau['link'], false, 'L', false);
+																$pdf->Write(5, "\n");
+															}
+														} else {
+															$pdf->setColor('text',0,0,0);
+															$pdf->SetFont('', '', 8);
+															$pdf->Write(5, $line);
+															$pdf->Write(5, "\n");
+														}
+														if($pdf->getY() > 240) {
+															$pdf->AddPage();
+															$pdf->useTemplate($pdf->importPage(2));
+														}
 													}
+													$pdf->SetFont('', '', 8);
 													$pdf->setColor('text',0,0,0);
 													$pdf->Write(5, "\n\n");
-													$pdf->SetFont('', '', 8);
 
 													$i = 1;
 													foreach($bau['todos'] as $key => $value) {
@@ -938,7 +910,7 @@ $result = array();
 														}
 														$interval = '';
 														if($value['interval'] !== '0' && $value['period'] !== '0' && $value['person'] !== '0') {
-															$interval = '('.$value['interval'].' / '.$value['period'].' / '.$value['person'].')';
+															$interval = '[ '.$value['interval'].' / '.$value['period'].' / '.$value['person'].' ]';
 														}
 														// replace \n by <br>
 														$text = str_replace("\n", '<br>', $value['label']).' '.$interval;
