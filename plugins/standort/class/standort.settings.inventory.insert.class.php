@@ -381,7 +381,7 @@ var $hide_empty = false;
 		$form     = $response->form;
 		if(!$form->get_errors() && $response->submit()) {
 			foreach($this->tables as $table) {
-				$r[$table['tabelle_kurz']] = $form->get_request($table['tabelle_kurz'], true);
+				$r[$table] = $form->get_request($table, true);
 			}
 			$user   = $this->controller->user->get();
 			$parent = $form->get_static('parent');
