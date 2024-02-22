@@ -176,7 +176,7 @@ var $lang = array(
 					}
 				}
 
-				if(is_array($device) && count($device) > 0 && $mode === '') {
+				if(is_array($device) && $mode === '') {
 					$index = 'index.php';
 					if(isset($GLOBALS['settings']['config']['index'])) {
 						$index = $GLOBALS['settings']['config']['index'];
@@ -189,7 +189,9 @@ var $lang = array(
 					echo '<input type="hidden" name="bezeichner" value="'.$bezeichner.'">';
 					echo '<input type="hidden" name="prefix" value="'.$prefix.'">';
 					echo '<input type="hidden" name="interval" value="'.$interval.'">';
-					echo implode('', $form);
+					if(isset($form) && is_array($form)) {
+						echo implode('', $form);
+					}
 					echo '<div class="clearfix" style="margin-bottom: 15px;width: 100%;">';
 					echo ' <div class="float-left">';
 					echo '  <label class="" style="border: 0 none;margin: 5px 0 0 0;"><b>Arbeitskarte</b></label>';
