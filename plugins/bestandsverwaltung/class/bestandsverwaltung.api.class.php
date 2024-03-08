@@ -190,7 +190,15 @@ var $lang = array(
 			if($id !== '') {
 				require_once(CLASSDIR.'plugins/standort/class/standort.class.php');
 				$this->raumbuch = new standort($this->db, $this->file);
-				$this->response->html->help($this->raumbuch->parents($id));
+				$tree = $this->raumbuch->tree($id);
+				if(is_array($tree)) {
+					$tree = array_reverse($tree);
+					foreach($tree as $t) {
+						if(isset($t['label'])) {
+							echo $t['label'].'<br>';
+						}
+					}
+				}
 			}
 		}
 	}

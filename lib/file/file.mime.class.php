@@ -157,6 +157,8 @@
 			case ".wmv":		$m="video/x-ms-wmv"; 					break;
 			case ".wvx":		$m="video/x-ms-wvx"; 					break;
 			case ".ice":		$m="x-conference/x-cooltalk"; 			break;
+			case ".heif":		$m="image/heif";						break;
+			case ".heic":		$m="image/heif";						break;
 		}
 	return $m;
 	}

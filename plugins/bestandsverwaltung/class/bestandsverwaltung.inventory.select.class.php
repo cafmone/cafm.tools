@@ -360,8 +360,8 @@ var $__attribs;
 			$table->sort  = 'SUMM';
 			$table->order = 'DESC';
 		} else {
-			$table->sort  = 'date';
-			$table->order = 'DESC';
+			$table->sort  = 'id';
+			$table->order = 'ASC';
 		}
 		$table->limit           = 50;
 		$table->offset          = 0;
